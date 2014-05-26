@@ -7,9 +7,9 @@ Both "ends", parsing and machine code, were relatively clear cut. Now it is into
 I had ported the Kaleidescope llvm tutorial language to ruby-llvm last year, so thee were some ideas floating.
 
 The idea of basic blocks, as the smallest unit of code without branches was pretty clear. Using those as jump
-targets was also straight forward. But how to get fromthe AST to arm Intructions was not, and took some trying out.
+targets was also straight forward. But how to get from the AST to arm Intructions was not, and took some trying out.
 
-In the end, or rather now, it is that AST layer that "compiles" itself into the Vm layer. The Vm layer then assembles
+In the end, or rather now, it is the AST layer that "compiles" itself into the Vm layer. The Vm layer then assembles
    itself into Instructions. 
 
 General instructions are part of the Vm layer, but the code picks up derived classes and thus makes machine
@@ -26,4 +26,4 @@ To summarise, function definition and calling (including recursion) works.
 If and and while structures work and also some operators and now it's easy to add more. 
 
 So we have a Fibonacchi in ruby using a while implementation that can be executed by crystal and outputs the
-   correct result. After a total of 7 weeks this is much further than expected!
+   correct result. After a total of 7 weeks this is much more than expected!

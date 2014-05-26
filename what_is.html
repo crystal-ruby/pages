@@ -1,0 +1,64 @@
+---
+layout: site
+title: Crystal
+---
+
+
+
+<div class="content">
+	<div class="container theme">
+
+		<div class="row vspace30">
+			<div class="span2 center">
+			</div>
+			<div class="span4 center">
+				<h3><span>The three Rubies</span></h3>
+			</div>
+			<div class="span4 center">
+				<h3><span>and Crystal</span></h3>
+			</div>
+		</div>
+
+		<div class="row vspace10">
+			<div class="span4">
+				<h4>Syntax</h4>
+				<h5>and meaning</h5>
+				<blockquote><p> Pure OO, blocks, closures, often no need for braces, simple but consistant, open classes<br/></p></blockquote>
+        <p> Just to name a few of the great features of the ruby syntax and it's programming model. <br/>
+          Syntax is an abstract thing, as far as i know there is no ebnf or similar definition of it.
+          Also as far as i know there is only the mri is considered (by matz and co) the only source of how ruby works. <br/>
+          With more vm's appearing this is changing and the mpsec is apparently catching up. <br/>
+          As we are just starting we focus on oo consistency and implement only essential features. 
+        </p>
+			</div>
+
+			<div class="span4">
+				<h4>Vm</h4>
+				<h5>Crystal</h5>
+				<blockquote><p> The heart of the ruby-in-ruby project is crystal, the virtual machine <br /></p></blockquote>
+        <p>Crystal is written in 100% ruby</p>
+        <p>Crystal uses an existing ruby to bootstrap itself</p>
+        <p>Crystal generates native code, and ( with 1+2) creates a native ruby (virtual) machine that is able to
+        generate code on the fly and thus alter itself.</p>
+        <p>Crystal does not interpret, it parses and compiles (just making sure that's clear)</p>
+			</div>
+
+			<div class="span4">
+				<h4>Core - Library </h4>
+				<h5>Parfait</h5>
+				<blockquote><p> Ruby has core and std lib, with a slightly unclear distinction.
+                  Parfait is a minimalistic core library on which this could be built. 
+          </p></blockquote>
+          <p>
+            Stdlib, as Libc , have grown over the decades to provide overlapping and sometimes inconsistant features, most 
+            of which can and should be outside such a standard component. 
+          </p>
+          <p> Crystal considers only that core which can not be suplied though an external gem, this is called
+            Parfait. It only provides Array and String and an ability to access 
+            the operating system, in 100% ruby.</p>
+          <p>Full ruby stdlib compliance is not an initial project goal, but may be achieved through external libraries</p>
+			</div>
+
+		</div>
+	</div>
+</div>
