@@ -1,3 +1,8 @@
+---
+layout: site
+title: How to configure Qemu
+---
+
 Target Pi on Mac
 ----------------
 

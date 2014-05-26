@@ -1,3 +1,8 @@
+---
+layout: news
+author: Torsten
+---
+
 The c machine
 -------------
 

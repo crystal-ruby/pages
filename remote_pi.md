@@ -1,7 +1,12 @@
+---
+layout: site
+title: How to use a remote pi
+---
+
 Headless
 --------
 
-The pi is a strange mix, development board and pull pc in one. Some people use it as a pc, but not me.
+The pi is a strange mix, development board and full pc in one. Some people use it as a pc, but not me.
 
 I use the pi because it is the same price as an Arduino, but much more powerful.
 
