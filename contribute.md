@@ -1,15 +1,25 @@
-Good Principles
----------------
+---
+layout: site
+title: Join the fun
+---
 
-Good principles, or rules of thumb, are not so easy to formulate. They come from experience and abstract it.
-If they don't come from, or not enough, experience they easily become just abstract and who really can tell
- the difference (only one with more experience off course, and he/she does not need to read about principles). 
-A conundrum.
+###Join the fun
 
-- Microkernel
-  Or "leave it out if you can", is definately something i go by. A variation of make it as simple as you can,
-  but not more simple.
-  
+I am very open for people to join. 
+
+I just want to mention that this is my hobby, something i do in my spare time, for fun. I don't get any money and in fact,
+running 2 companies, have to carve the time to do this.
+
+As such i want it to stay fun. So i am looking for friendly, constructive, positive contact. 
+
+Please read the pages and the code and find something that interests you, possibly from the todo list.
+Then talk to me what you are planning. Issues can be good to capture topic conversations, as there is no list.
+
+Then fork and work on a branch before sending pull request.
+
+
+I wrote some ideas in the about page, but here some more code related guidelines
+
 - Walk the straight line
   Or "No futureproof" means not to design before you code. Not to anticipate, only to do the job that
   needs doing. Better design should be extracted from working code.
@@ -18,13 +28,6 @@ A conundrum.
   Having suffered from broken software (small feature add breaks whole software) so many times, the new tdd
   wind is not just nice, it is essential. Software size is measured in tests passed, not lines written. Any
   new feature is only accepted with enough tests, bugs fixed after a failed test is written.
-
-- Layers represent an interface, not an implementation
-  It is said that every problem in computing can be solved by adding anohter layer of indirection. And so 
-  we have many layers, which, when done right, help us to understand the system. (Read, layers are for us,
-  not the computer)
-  But implementing each layer comes with added cost, often unneccessary. Layers can and should be collapsed
-  in the implementation. Inlining, is a good example, a Jit another.
   
 - Use names rightly
   or the principle of least surprise. Programming is so much naming, so if done right will lead to a 
