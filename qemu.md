@@ -19,11 +19,11 @@ Even if you have a Pi, [this explains](/remote_pi.html) a nice way to develop wi
 
 Written April 2014: as of writing the latest and greatest llvm based gcc (5.1) on Maverick (10.9) has a bug that makes qemu hang.
 
-So type gcc -v and if the output contains "LLVM version 5.1", you must install gcc4.2. Easily donw with homebrew:
+So type gcc -v and if the output contains "LLVM version 5.1", you must install gcc4.2. Easily done with homebrew:
 
     brew install https://raw.github.com/Homebrew/homebrew-dupes/master/apple-gcc42.rb
 
-This will not interfere with the systems compiler as the gcc4.3 has postfixed executables (ie gcc-4.2) 
+This will not interfere with the systems compiler as the gcc4.2 has postfixed executables (ie gcc-4.2) 
 
 ###Qemu
 

@@ -39,8 +39,10 @@ title: Crystal, a simple and minimal oo machine
       If only. Ruby is full of niceties that actually make parsing it quite difficult. But at the moment that story hasn't
       even started.
       <br/>
-      Parslet lets us use modules for parts of the parser, so those files are pretty self explanitory. Not all is done, but 
-      a good start. Parslet also has a seperate Transformation pass, and that creates the AST. Those class names are also
+      Parslet lets us use modules for parts of the parser, so those files are pretty self-explanitory. Not all is done, but 
+      a good start. 
+      <br/>
+      Parslet also has a seperate Transformation pass, and that creates the AST. Those class names are also
       easy, so you can guess what an IfExpression represents.
       <br/>
     </p>
@@ -53,11 +55,12 @@ title: Crystal, a simple and minimal oo machine
     <p>
       The Virtual machine layer (vm) is where it gets interesting, but also more fuzzy.
       <br/>
-      Currently still quite simple, we have Classes for things we know, like program and function. Also hings we need 
+      Currently still quite simple, we have Classes for things we know, like program and function. Also things we need 
       to create the code, like Blocks and Instructions.
       <br/>
-      The most interesting thing is maybe the idea of a Value, which are a bit like Variables, just constant. And so to 
-      change value of what we think of as a variable, we create a new Value (of possibly different basic type). Thus
+      The most interesting thing is maybe the idea of a Value. If you think of Variables, Values are what a variable may 
+      be assigned, but it may carry a storage place (register). Values are constant, and so to 
+      change a value, we have to create a new Value (of possibly different basic type). Thus
       all machine instructions are the trasformation of values into new ones.
       <br/>
       Also interesting is the slightly unripe Basic Type system. We have a set of machine-word size types and do not 
