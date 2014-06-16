@@ -38,7 +38,7 @@ That leaves the length open and we can use the 8th 4bits to store it. That gives
 But (i hear), ruby is dynamic, we must be able to add variables and methods to an object at any time. So the layout can't 
 be fixed. Ok, we can change the Layout every time, but when any empty slots have been used up, what then. 
 
-Then we use Continuations, so instead of adding a new variable to the end of the object, we use a new object and store 
+Then we use Continuations, so instead of adding a new variable to the end of the object, we use a new object and store it
 in the original object. Thus extending the object.
 
 Continuations are pretty normal objects and it is just up to the layout to manage the redirection.
