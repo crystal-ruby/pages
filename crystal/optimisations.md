@@ -33,14 +33,14 @@ Well, yes it does, but maybe not more than once: We can conceivably store the re
 structure as that would defeat the purpose.
 
 In fact there could be several caching strategies, possibly for different use cases, possibly determined by actual run-time
-measurements, but for now I just destribe a simeple one using Data-Blocks, Dlocks.
+measurements, but for now I just destribe a simeple one using Data-Blocks, Plocks.
 
 So at a call-site, we know the name of the function we want to call, and the object we want to call it on, and so have to 
 find the actual function object, and by that the actual call address. In abstract terms we want to create a switch with 
 3 cases and a default.
 
 So the code is something like, if first cache hit, call first cache , .. times three and if not do the dynamic lookup. 
-The Dlock can store those cache hits inside the code. So then we "just" need to get the cache loaded.
+The Plock can store those cache hits inside the code. So then we "just" need to get the cache loaded.
 
 Initializing the cached values is by normal lazy initialization. Ie we check for nil and if so we do the dynamic lookup, and store the result. 
 
