@@ -36,8 +36,12 @@ title: Crystal, a simple and minimal oo machine
     <p>
       Parsing is relatively straightforward too. We all know ruby, so it's just a matter of getting the rules right.
       <br/>
-      If only. Ruby is full of niceties that actually make parsing it quite difficult. But at the moment that story hasn't
+      If only! Ruby is full of niceties that actually make parsing it quite difficult. But at the moment that story hasn't
       even started.
+      <br/>
+      Traditionally, yacc or bison or talk of lr or ll would come in here and all but a few would zone out. But llvm has 
+      proven that recursive descent parsing is a viable alternative, also for big projects. And Parslet puts that into a nice
+      ruby framework for us.
       <br/>
       Parslet lets us use modules for parts of the parser, so those files are pretty self-explanitory. Not all is done, but 
       a good start. 
@@ -53,7 +57,32 @@ title: Crystal, a simple and minimal oo machine
   <div class="span12">
     <h5>Virtual Machine</h5>
     <p>
-      The Virtual machine layer (vm) is where it gets interesting, but also more fuzzy.
+      The Virtual machine layer is where it gets interesting, but also a little fuzzy.
+      <br/>
+      After some trying around the virtual machine layer has become a completely self contained layer to describe and
+      implement an oo machine. In other words it has no reference to any physical machine, that is the next layer down.
+      <br/>
+      One can get headaches quite easily while thinking about implementing an oo machine in oo, it's just so difficult to 
+      find the boundaries. To determine those, i like to talk of types (not classes) for the objects (values) in which the 
+      vm is implemented. Also it is neccessary to remove ambiguity about what message sending means. 
+      <br/>
+      One way to think of this (helps to keep sane) is to think of the types of the system known at compile time. In the 
+      simplest case this could be object reference and integer. The whole vm functionality can be made to work with only
+      those two types, and it is not specified how the type information is stored. but off course there needs to be a 
+      way to check it at run-time.
+      <br/>
+      The vm has an instruction set that, apart from basic integer manipulation, only alows for memory access into an   
+      object. Instead of an implicit stack, we use activation frames and store all variables explicitly.
+    </p>
+  </p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="span12">
+    <h5>Neumann Machine</h5>
+    <p>
+      The von Neumann machine layer is a relatively close abstraction of hardware.
       <br/>
       Currently still quite simple, we have Classes for things we know, like program and function. Also things we need 
       to create the code, like Blocks and Instructions.
@@ -61,7 +90,7 @@ title: Crystal, a simple and minimal oo machine
       The most interesting thing is maybe the idea of a Value. If you think of Variables, Values are what a variable may 
       be assigned, but it may carry a storage place (register). Values are constant, and so to 
       change a value, we have to create a new Value (of possibly different basic type). Thus
-      all machine instructions are the trasformation of values into new ones.
+      all machine instructions are the transformation of values into new ones.
       <br/>
       Also interesting is the slightly unripe Basic Type system. We have a set of machine-word size types and do not 
       tag them (like mri or BB), but keep type info seperate. These types include integer (signed/unsigned) object reference

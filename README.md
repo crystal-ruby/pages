@@ -1,7 +1,7 @@
-# ruby-in-ruby.github.io
+# crystal-vm.github.io
 
 
-Crystal webpage is done with github pages: https://help.github.com/categories/20/articles
+Crystals webpage is done with github pages: https://help.github.com/categories/20/articles
 
 ###Contribute
 
