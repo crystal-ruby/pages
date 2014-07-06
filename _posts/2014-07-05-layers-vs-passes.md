@@ -5,9 +5,9 @@ author: Torsten
 
 I am not stuck. I know i'm not. Just because there is little visible progress doesn't mean i'm stuck. It may just feel like it though.
 
-But like little cogweels in the clock, i can hear the background process ticking away and sometime there is a gong.
+But like little cogwheels in the clock, i can hear the background process ticking away and sometimes there is a gong.
 
-What i wasn't stuck with is where to draw the layer for the vm.
+What i wasn't stuck with, is where to draw the layer for the vm.
 
 ### Layers
 
@@ -35,16 +35,16 @@ where it surfaced from.
 So we can have as high of a degree of abstraction as possible when going from ast to code. And then have as many passes 
 over that as we want / need. 
 
-Passes can be order dependend, and create more an more datail. To solve the above layer conundrum, we just do a pass for each
-of those options.
+Passes can be order dependent, and create more and more datail. To solve the above layer conundrum, we just do a pass
+for each of those options.
 
 The two main benefits that come from this are:
 
 1 - At each point, ie after and during each pass we can analyse the data. Imagine for example that we would have picked the 
 second layer option, that means there would never have been a representation where the sends would have been explicit. Thus
-any analasis of them would be impossible or need reverse engineering (eg call graph analysis)
+any analasis of them would be impossible or need reverse engineering (eg call graph analysis, or class caching)
 
-2 - Passes can be gems or come from other sources. The mechanism can be relatively oblivious to explicit passes. And they 
+2 - Passes can be gems or come from other sources. The mechanism can be relatively oblivious to specific passes. And they 
 make the transformation explicit, ie easier to understand. In the example of having picked the second layer level, one
 would have to patch the implementation of that transformation to achieve a different result. With pases it would be a matter
 of replacing a pass, thus explicitly stating "i want a non-standard send implementation"
