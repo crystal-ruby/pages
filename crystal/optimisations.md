@@ -17,13 +17,13 @@ But this can easily lead to a dictionary/hash type of implementation. As variabl
 common thing an OO system does, that leads to bad performance (unneccessarily). 
 
 So instead we keep variables layed out c++ style, continous, array style, at the address of the object. Then we have 
-to manage that in a dynamic manner. This (as i mentioned elsewhere) is done by the indirection of the Layout. A Layout is 
+to manage that in a dynamic manner. This (as i mentioned [here](memory.html)) is done by the indirection of the Layout. A Layout is 
 a dynamic structure mapping names to indexes (actually implemented as an array too, but the api is hash-like).
 
 When a new variable is added, we create a *new* Layout and change the Layout of the object. We can do this as the Layout will
 determine the Class of the object, which stays the same. The memory page mentions how this works with constant sized objects.
 
-So, Problem one fixed: instance variable access at o(0)
+So, Problem one fixed: instance variable access at O(1)
 
 #### II - Method lookup
 
