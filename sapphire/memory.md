@@ -1,5 +1,5 @@
 ---
-layout: crystal
+layout: sapphire
 title: Memory layout and management
 ---
 

@@ -54,7 +54,7 @@ I noticed that quite quickly after i started the project, i was diverging radica
 is not just from my old ideas, which is nice in itself. A certain freshness and the fact that i am not just going over
 old ground. No, it's from any old ideas that i am aware of.
 
-I just noticed another crystal project with similar goals, but sort of more traditional choices. Ie llvm to generate binaries
+I just noticed another sapphire project with similar goals, but sort of more traditional choices. Ie llvm to generate binaries
 and a more static aproach. And that would have been me as a younger version. Now i go the long way because i know i have
  all the time i need, and what matters is direction, not speed.
 

@@ -1,7 +1,7 @@
-# crystal-vm.github.io
+# sapphire-vm.github.io
 
 
-Crystals webpage is done with github pages: https://help.github.com/categories/20/articles
+Sapphires webpage is done with github pages: https://help.github.com/categories/20/articles
 
 ###Contribute
 

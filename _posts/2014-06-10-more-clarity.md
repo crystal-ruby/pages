@@ -24,7 +24,7 @@ And what are these funtions? get_instance_variable or set too. Same for function
 
 This functionality, ie getting the n'th data in an object, is essential, but c makes such a good point of of it having no place in a public api. So it needs to be implemented in a "private" part and used in a save manner. More on the layers emerging below.
 
-The Kernel is a module in crystal that defines functions which return function objects. So the code is generated, instead of parsed. An essential destinction.
+The Kernel is a module in sapphire that defines functions which return function objects. So the code is generated, instead of parsed. An essential destinction.
 
 #### System
 
@@ -50,7 +50,7 @@ Some few machine functions return Blocks, or append their instructions to blocks
 
 The Kernel functions return function objects. Kernel functions have the same name as the function they implement, so Kernel::putstring defines a function called putstring. Function objects (Vm::Function) carry entry/exit/body code, receiver/return/argurmt types and a little more. 
 
-The important thing is that these functions are callable from ruby code. Thus they form the glue from the next layer up, which is coded in ruby, to the machine layer. In a way the Kernel "exports" the machine functionality to crystal.
+The important thing is that these functions are callable from ruby code. Thus they form the glue from the next layer up, which is coded in ruby, to the machine layer. In a way the Kernel "exports" the machine functionality to sapphire.
 
 ##### Parfait
 
@@ -60,22 +60,22 @@ Parfait is heavy on Object/Class/Metaclass functionality, object instance and me
 
 Stdlib would be the next layer up, implementing the whole of ruby functionality in terms of what Parfait provides. 
 
-The important thing here is that Parfait is written completely in ruby. Meaning it get's parsed by crystal like any other code, and then transformed into executable form and written. 
+The important thing here is that Parfait is written completely in ruby. Meaning it get's parsed by sapphire like any other code, and then transformed into executable form and written. 
 
-Any executable that crystal generates will have Parfait in it. But only the final version of crystal as a ruby vm, will have the whole stdlib and parser along.
+Any executable that sapphire generates will have Parfait in it. But only the final version of sapphire as a ruby vm, will have the whole stdlib and parser along.
 
-#### Crystal
+#### Sapphire
 
-Crystal uses the Kernel and Machine layers straight when creating code. Off course. 
-The closest equivalent to crystal would be a compiler and so it is it's job to create code (machine layer objects).
+Sapphire uses the Kernel and Machine layers straight when creating code. Off course. 
+The closest equivalent to sapphire would be a compiler and so it is it's job to create code (machine layer objects).
 
 But it is my intention to keep that as small as possible. And the good news is it's all ruby :-)
 
 ##### Extensions
 
-I just want to mention the idea of extensions that is a logical step for a minimal system. Off course they would be gems, but the integesting thing is they (like crystal) could:
+I just want to mention the idea of extensions that is a logical step for a minimal system. Off course they would be gems, but the integesting thing is they (like sapphire) could:
 
-- use crystals existing kernel/machine abstraction to define new functionality that is not possible in ruby
+- use sapphires existing kernel/machine abstraction to define new functionality that is not possible in ruby
 - define new machine functionality, adding kernel type api's, to create wholly new, possibly hardware specific functionality
 
 I am thinking graphic accellaration, GPU usage, vector api's, that kind of thing. In fact i aim to implement the whole floating point functionality as an extensions (as it clearly not essential for OO).

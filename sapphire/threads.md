@@ -68,7 +68,7 @@ In an oo system this can be enforced by strict pass-by-value over thread borders
 The itc (inter thread communication) objects are the only ones that need current thread synchronization techniques.
 The one mechanism that could cover all needs could be a simple lists.
 
-### Crystal
+### Sapphire
 
 The original problem of what a program does during a kernel call could be solved by a very small number of kernel threads.
 Any kernel call would be listed and "c" threads would pick them up to execute them and return the result.
