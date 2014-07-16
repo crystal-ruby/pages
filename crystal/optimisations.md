@@ -81,5 +81,5 @@ This only really makes sense if the register shuffling information is encoded in
 to be passed).
 
 Negotiators could do some counting and do the recompiling when it seems worth it. The Negotiator would remove itself from 
-the chain and connect called and new callee directly. How much is in this i couldn't say though.
+the chain and connect called and new receiver directly. How much is in this i couldn't say though.
  
