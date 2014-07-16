@@ -25,5 +25,5 @@ assmbler i found a fibonachi in 10 or so instructions.
 To summarise, function definition and calling (including recursion) works. 
 If and and while structures work and also some operators and now it's easy to add more. 
 
-So we have a Fibonacchi in ruby using a while implementation that can be executed by sapphire and outputs the
+So we have a Fibonacchi in ruby using a while implementation that can be executed by kide and outputs the
    correct result. After a total of 7 weeks this is much more than expected!

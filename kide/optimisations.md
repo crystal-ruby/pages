@@ -1,5 +1,5 @@
 ---
-layout: sapphire
+layout: kide
 title: Optimisation ideas
 ---
 

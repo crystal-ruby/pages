@@ -1,5 +1,5 @@
 ---
-layout: sapphire
+layout: kide
 title: Memory layout and management
 ---
 

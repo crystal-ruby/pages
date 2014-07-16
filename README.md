@@ -1,7 +1,7 @@
-# sapphire-vm.github.io
+# kide-vm.github.io
 
 
-Sapphires webpage is done with github pages: https://help.github.com/categories/20/articles
+Kides webpage is done with github pages: https://help.github.com/categories/20/articles
 
 ###Contribute
 
