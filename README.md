@@ -1,4 +1,4 @@
-# kide-vm.github.io
+# kide.github.io
 
 
 Kides webpage is done with github pages: https://help.github.com/categories/20/articles
