@@ -1,5 +1,6 @@
 ---
-layout: site
+layout: kide
+title: Threads are broken
 author: Torsten
 ---
 
