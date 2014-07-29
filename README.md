@@ -1,7 +1,7 @@
-# kide.github.io
+# salama.github.io
 
 
-Kides webpage is done with github pages: https://help.github.com/categories/20/articles
+Salamas webpage is done with github pages: https://help.github.com/categories/20/articles
 
 ###Contribute
 

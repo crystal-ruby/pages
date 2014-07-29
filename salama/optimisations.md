@@ -1,5 +1,5 @@
 ---
-layout: kide
+layout: salama
 title: Optimisation ideas
 ---
 

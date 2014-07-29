@@ -31,7 +31,7 @@ ruby core/std-lib
 
 Off course the ruby-core and std libs were designed to do for ruby what libc does for c. Unfortunately they are badly designed and suffer from above brainwash (designed around c calls)
 
-Since kide is pure ruby there is a fair amount of functionality that would be nicer to provide straight in ruby. As gems off course, for everybody to see and fix. 
+Since salama is pure ruby there is a fair amount of functionality that would be nicer to provide straight in ruby. As gems off course, for everybody to see and fix. 
 For example, even if there were to be a printf (which i dislike) , it would be easy to code in ruby. 
 
 What is needed is the underlying write to stdout.
@@ -39,7 +39,7 @@ What is needed is the underlying write to stdout.
 Solution
 --------
 
-To get kide up and running, ie to have a "ruby" executable, there are really very few kernel calls needed. File open, read and stdout write, brk.
+To get salama up and running, ie to have a "ruby" executable, there are really very few kernel calls needed. File open, read and stdout write, brk.
 
 So the way this will go is to write syscalls where needed. 
 

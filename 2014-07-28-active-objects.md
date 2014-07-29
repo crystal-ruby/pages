@@ -34,7 +34,7 @@ Off course Celluloid needs native threads, so you'll need to run rubinius or jru
 a fix for the problem, if we use celluloid.
 
 But it is a fix, it is not part of the system. The system has sequetial calls per thread and threads. Threads are evil as
-i explain (rant about?) [here](/kide/threads.html), mainly because of the shared global memory. 
+i explain (rant about?) [here](/salama/threads.html), mainly because of the shared global memory. 
 
 ### Messaging with inboxes
 
