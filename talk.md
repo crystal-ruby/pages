@@ -3,7 +3,7 @@ layout: light
 title: 5 minute talk
 ---
 
-### ruby in ruby
+### ruby in ruby (3 rubies)
 
 - speed
 - parallelism
