@@ -97,7 +97,7 @@ title: 5 minute talk
 
 ### Understand the language at a new level, new possibilities
 
-### Ruby makes eaven a vm easy & understandable
+### Ruby makes even a vm easy & understandable
 
 ### Gems / bundler make parts independent
 
