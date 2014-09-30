@@ -3,7 +3,7 @@ layout: news
 author: Torsten
 ---
 
-While trying to figure out what i am coding i had to attac this storage format before i wanted to. The 
+While trying to figure out what i am coding i had to attack this storage format before i wanted to. The 
 immediate need is for code dumps, that are concise but readable. I started with yaml but that just takes 
 too many lines, so it's too difficult to see what is going on.
 
@@ -50,7 +50,7 @@ switches, more and more effort could be exerted on critical regions. Possibly al
 super-optimisation.
 
 But even if we did this, and a program would improve/jit itself, the fruits of this work are only usable
-during that run of tah program. Future invocations, just like future versions of that program do not
+during that run of that program. Future invocations, just like future versions of that program do not
 benefit. And thus start again, just like in Groundhog day.
 
 ### Storage
@@ -60,12 +60,12 @@ change it's own executable/object files, in ruby even it's source. Theoretically
 representation of the code to work on.
 
 In salama we do have an internal representation, both at the code level (ast) and the compiled code 
-(MethodDefinition, Intructions and friends).
+(CompiledMethod, Intructions and friends).
 
 #### Storage Format
 
 Going back to the Image we can ask why was it doomed to fail: because of the binary, 
-propriotary implementation. Not because of the idea as such.
+proprietary implementation. Not because of the idea as such.
 
 Binary data needs either a rigourous specification and/or software to work on it. Work, what work?
 We need to merge the data between installations, maintain versions and branches. That sounds a lot like
@@ -75,14 +75,14 @@ people, but wasn't. I think it's fair to say that git was the first system to so
 And git off course works with diff, and so for a 3-way merge to be successful we need a text format. 
 Which is why i started with yaml, and which is why also sof is text-based.
 
-The other benefit is off course human readbility.
+The other benefit is off course human readability.
 
 So now we have an object file * format in text, and we have git. What we do with it is up to us.
 (* well, i only finished the writer. reading/parsing is "left as an excercise for the reader":-)
 
 #### Sof as object file format
 
-Ok, i'll scetch it a little: Salama would use sof as it's object file format, and only sof would ever be
+Ok, i'll sketch it a little: Salama would use sof as it's object file format, and only sof would ever be
 stored in git. For developers to work, tools would create source and when that is edited compile it to sof.
 
 A program would be a repository of sof and resource files. Some convention for load order would be helpful
