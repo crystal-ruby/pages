@@ -70,3 +70,32 @@ which i am guessing is quite a lot in the *ruby* community.
 
 In implementation terms it is a relatively small step from the vm layer to the register layer. And an even smaller 
 one to the arm layer. But small steps are good, easy to take, easy to understand, no stumbling.
+
+### Extra Benefits
+
+As i am doing this for my own sanity, any additional benefits are really extra, for free as it were. And those extra
+benefits clearly exist.
+
+##### Clean interface for cpu specific implementation
+
+That really says it all. That interface was a bit messy, as the RegisterMachine was used in Vm code, but was actually
+an Arm implementation. So no seperation. Also as mentioned the instruction set was arm heavy, with the quirks 
+even arm has.
+
+So in the future any specific cpu implementation can be quite self sufficient. The classes it uses don't need to 
+derive from anything specific and need only implement the very small code interface (position/length/assemble).
+And to hook in, all that is needed is to provide a translation from RegisterMachine instructions, which can be
+done very nicely by providing a Pass for every instruction. So that layer of code is quite seperate from the actual
+assembler, so it should be easy to reuse existing code (like wilson or metasm).
+
+##### Reusable optimisations
+
+Clearly the better seperation allows for better optimisations. Concretely Passes can be written to optimize the
+RegiterMachine's workings. For example register use, constant extraction from loops, or folding of double
+moves (when a value is moved from reg1 to reg2, and then from reg2 to reg3, and reg2 never being used).
+
+Such optimisations are very general and should then be reusable for specific cpu implementations. They are still
+usefull at RegiterMachine level mind, as the code is "cleaner" there and it is easier to detect fluff. But the same
+code may be run after a cpu translation, removing any "fluff" the translation introduced. Thus the translation
+process may be kept simpler too, as that doesn't need to check for possible optimisations at the same time
+as translating. Everyone wins :-)
