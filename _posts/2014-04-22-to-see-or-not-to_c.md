@@ -10,7 +10,7 @@ Software engineers have clean brains, scrubbed into full c alignment through dec
 
 In other words, since all programming ultimately boils down to c, libc makes the bridge to the kernel/machine. All ....  all but a small village in the northern (cold) parts of europe (Antskog) where ...
  
-So i had a look what we are talkng about.
+So i had a look what we are talking about.
 
 The issue 
 ----------
