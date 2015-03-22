@@ -7,14 +7,16 @@ title: Salama, a simple and minimal oo machine
 <div class="row vspace10">
   <div class="span12 center">
     <h3><span>Salama layers</span></h3>
-    <p>Map pretty much to top level directories.</p>
+    <p>Just a small primer (left over from the start), really <a href="http://dancinglightning.gitbooks.io/the-object-machine/content/">the book</a> is the best starting point</p>
   </div>
 </div>
 <div class="row vspace20">
   <div class="span11">
     <h5>Machine Code, bare metal</h5>
     <p>
-      This is the code in arm directory. It creates binary code according to the arm specs. All about shifting bits in the 
+      This is the easy to understand part, that's why it's first, it's the code 
+      from <a href="https://github.com/salama/salama-arm"> salama-arm </a>, which is quite stable.
+      It creates binary code according to the arm specs. All about shifting bits in the 
       right way.
       <br/>
       As an abstraction it is not far away from assembler. I mapped the memnonics to function calls and the registers
@@ -25,6 +27,8 @@ title: Salama, a simple and minimal oo machine
       <br/>
       There is an intel directory which contains an expanded version of wilson, but it has yet to be made to fit into
       the architecture. So for now salama produces arm code.  
+      <br/>
+      There is an elf directory wich builds actual executables, a mini implementation of the elf standard.  
     </p>
   </div>
 </div>
@@ -34,17 +38,20 @@ title: Salama, a simple and minimal oo machine
   <div class="span12">
     <h5>Parsing, forever descending</h5>
     <p>
-      Parsing is relatively straightforward too. We all know ruby, so it's just a matter of getting the rules right.
+      Parsing is relatively straightforward too, it's code is found in <a href="https://github.com/salama/salama-reader">
+        it's own repository </a>. 
+      It parses more than can be processed, but much less than ruby is.
       <br/>
-      If only! Ruby is full of niceties that actually make parsing it quite difficult. But at the moment that story hasn't
-      even started.
+      We all know ruby, so it's just a matter of getting the rules right.
+      If only! Ruby is full of niceties that actually make parsing it quite difficult. But at the moment that story 
+      hasn't even started.
       <br/>
       Traditionally, yacc or bison or talk of lr or ll would come in here and all but a few would zone out. But llvm has 
-      proven that recursive descent parsing is a viable alternative, also for big projects. And Parslet puts that into a nice
-      ruby framework for us.
+      proven that recursive descent parsing is a viable alternative, also for big projects. And Parslet puts that into
+      a nice ruby framework for us.
       <br/>
-      Parslet lets us use modules for parts of the parser, so those files are pretty self-explanitory. Not all is done, but 
-      a good start. 
+      Parslet lets us use modules for parts of the parser, so those files are pretty self-explanitory. 
+      Not all is done, but a good start. 
       <br/>
       Parslet also has a seperate Transformation pass, and that creates the AST. Those class names are also
       easy, so you can guess what an IfExpression represents.
@@ -80,22 +87,14 @@ title: Salama, a simple and minimal oo machine
 
 <div class="row">
   <div class="span12">
-    <h5>Neumann Machine</h5>
+    <h5>Compilation in passes</h5>
     <p>
-      The von Neumann machine layer is a relatively close abstraction of hardware.
+      Compilation happens in Passes. A single pass is a small piece of code to do just a very small part of the 
+      whole compilation.
       <br/>
-      Currently still quite simple, we have Classes for things we know, like program and function. Also things we need 
-      to create the code, like Blocks and Instructions.
-      <br/>
-      The most interesting thing is maybe the idea of a Value. If you think of Variables, Values are what a variable may 
-      be assigned, but it may carry a storage place (register). Values are constant, and so to 
-      change a value, we have to create a new Value (of possibly different basic type). Thus
-      all machine instructions are the transformation of values into new ones.
-      <br/>
-      Also interesting is the slightly unripe Basic Type system. We have a set of machine-word size types and do not 
-      tag them (like mri or BB), but keep type info seperate. These types include integer (signed/unsigned) object reference
-      and function. Most of the oo machine will build on object references. To make that clearer: The (virtual)machine is
-      strongly typed (with rtti) and the dynamic ruby behaviour it implemented using that basic type system.
+      Logically there are four distinct steps. From the parsed AST we compile a datastructure that includes instructions 
+      for an object machine. The next step is a (still abstract) register machine, before the actual binary for the
+      arm is generated.
     </p>
   </p>
   </div>
@@ -103,18 +102,46 @@ title: Salama, a simple and minimal oo machine
 
 <div class="row">
   <div class="span12">
-    <h5>The flux</h5>
+    <h5>Register Machine</h5>
     <p>
-      This is just a section of things that are unclear, in flux as it were. This does not included undone things, those
-      are plenty too.
-      <ul>
-        <li> the whole type system, more of values, for object types its quite clear</li>
-        <li> booting. There is this Dichotomy of writing code, and figuring out what it should do when it executes, 
-            that works ok, until i try to think of both, like for booting. </li>
-        <li> the oo machine abstraction. Currently non-existant i feel like there is a whole layer missing. Possibly
-          with it's own intruction set</li>
-        <li> where the core ends, parfait starts and what can be external. </li>
-      </ul>
+      The Register machine layer is a relatively close abstraction of hardware.
+      <br/>
+      The step from OO machine to Arm had proved to large, also partially due to the cryptic arm names.
+      <br/>
+      The register machine has registers, indexed addressing, a pc and all the sort of normal things one would expect.
+      The machine has it's own (abstract) instruction set, which serves mainly to give understandable names.
+      <br/>
+      The mapping to arm is quite straightforward.
+    </p>
+  </p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="span12">
+    <h5>Parfait</h5>
+    <p>
+      Ruby is very dynamic, and so it has a relatively large run-time. Parfait is that Run-time.
+      <br/>
+      Parfait includes all the functionality a ruby program could not do without, Array, Hash, Object, Class, etc.
+      <br/>
+      Parfait does not include any stdlib or indeed core functionality if it doesn't have too.
+      <br/>
+      Parfait is coded in ruby, but not all functionality can be coded in ruby, so there is Builtin
+    </p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="span12">
+    <h5>Builtin</h5>
+    <p>
+      Builtin is the part of the vm that can not be coded in ruby. It is not, as may be imagined, a set of instructions,
+      but rather a set of modules.
+      <br/>
+      Modules of Builtin have functions that implement functionality that can not be coded in ruby. Ie array access.
+      The functions take a VM::Method and provide the code as a set of instructions. This may be seen as the assembler
+      layer if the vm.
     </p>
   </div>
 </div>
