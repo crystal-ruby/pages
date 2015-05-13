@@ -14,6 +14,14 @@ layout: site
   		<ul class="nav nav-list">
         <li><a href="/index.html">  Ideas whence it started </a> </li>
         <li><a href="/ideas.html"> Effective programming </a> </li>
+				<li>
+					Last news: &nbsp;&nbsp;&nbsp;
+					<small><small>{{ site.posts.first.date | date: "%d.%m.%y"  }} </small></small>
+				</li>
+				<li>
+					<a href="{{ site.posts.first.url }}">{{ site.posts.first.title }}
+					</a>
+				</li>
   		</ul>
 		</div>
 	</div>
