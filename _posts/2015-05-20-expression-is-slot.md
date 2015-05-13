@@ -1,5 +1,5 @@
 ---
-layout: site
+layout: news
 author: Torsten
 ---
 
