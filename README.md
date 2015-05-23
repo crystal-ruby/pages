@@ -1,4 +1,4 @@
-# (Salama webpages)[http://salama-vm.org]
+# [Salama webpages](http://salama-vm.org)
 
 
 Salamas webpage is done with github pages: https://help.github.com/categories/20/articles
