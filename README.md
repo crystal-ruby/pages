@@ -1,4 +1,4 @@
-# salama.github.io
+# (Salama webpages)[http://salama-vm.org]
 
 
 Salamas webpage is done with github pages: https://help.github.com/categories/20/articles
@@ -22,5 +22,3 @@ bundle exec jekyll serve --watch
 (watch will update changes on the fly)
 
 go to localhost:4000
-
-
