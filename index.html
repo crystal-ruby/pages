@@ -79,14 +79,8 @@ layout: site
       fresh, which you can read in the <a href="{{ site.posts.first.url }}">news</a> section.
     </p>
     <p>
-      Last news: &nbsp;&nbsp;{{ site.posts.first.date | date: "%d.%m.%y"  }}
-
-    <li>
-      <a href="{{ site.posts.first.url }}">{{ site.posts.first.title }}
-      </a>
-    </li>
-
-
+      {{ site.posts.first.date | date: "%d.%m.%y"  }}:
+			<a href="{{ site.posts.first.url }}">{{ site.posts.first.title }}   </a>
     </p>
   </div>
 
