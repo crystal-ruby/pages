@@ -1,0 +1,93 @@
+---
+layout: site
+---
+<div class="row vspace10">
+	<div class="span12">
+		<h2 class="center">A completely object oriented virtual machine</h2>
+		<div>
+    <p class="center"><span>
+    Leaving the old (c) world behind to go where no machine has gone before (or something like that)
+   </span></p>
+		</div>
+	</div>
+</div>
+
+<div class="row vspace20">
+  <div class="span4">
+    <h2 class="center">Architecture</h2>
+    <p>
+      Salama is maybe the first successful attempt at writing a virtual machine without the use
+      of c or c tools.
+      It defines and implements an object virtual machine completely in object oriented terms,
+      using ruby to bootstrap itself.
+    </p>
+    <p>
+      Just some of the features, most of which would not be possible in c:
+      <ul>
+        <li> Linked-List, not stack, based </li>
+        <li> Multiple return addresses based on type  </li>
+        <li> Multiple implementations per function based on type  </li>
+        <li> Implicit type tracking using adaptive code</li>
+        <li> Explicit <a href="/2015/06/20/the-static-call-chain.html">message and frame objects</a></li>
+        <li> <a href="http://book.salama-vm.org/register/machine.html">Register machine abstraction</a></li>
+        <li> <a href="http://book.salama-vm.org/object/instructions.html">Extensible instruction set</a></li>
+      </ul>
+      Off course salama contains a parser (PEG based) and a binary executable generation
+      layer (in ruby)</li>
+    </p>
+  </div>
+
+  <div class="span4">
+    <h2 class="center">Status</h2>
+    <p>
+      While the project is just getting on two years, it is starting to settle conceptually,
+      progress smoothly, and produce <b>working binaries</b>.
+    </p>
+    <p>
+      In numbers, there are over <b>1000 commits</b>, 6 sub-projects, more than 10k lines of code
+      and well over 600 tests.
+    </p>
+    <p>
+      Maybe more importantly there is <a href"/book.html">good documentation</a> along with an
+      evolved idea of how most of the difficult issues are solved. So while the executables are
+      still of the "Hello world" quality, there are no coneptual problems anymore.
+    </p>
+    <p>
+      There is also an interpreter (mostly for testing) and a basic
+      <a href="https://github.com/salama/salama-debugger"> visual debugger</a> which not only helps
+      debugging, but also understanding of the machine.
+    </p>
+
+  </div>
+
+  <div class="span4">
+    <h2 class="center">Docs</h2>
+    <p>
+      The short introduction is under the <a href="/salama/layers.html">architecture</a> menu.
+    </p>
+    <p>
+      The full documentation is in form of a gitbook and can be <a href="/book.html">viewed</a> ,
+      and  <a href="https://github.com/salama/object-machine">edited</a>
+    </p>
+    <p>
+      The <a href="/project/motivation.html">about</a> section has some info of when and how this
+      started. If you feel like contributing <a href="/contribute.html">read this</a>.
+    </p>
+    <p>
+      Last but not least, i try to get recent developments down on paper when they are still
+      fresh, which you can read in the <a href="/news.html">news</a> section.
+    </p>
+    <p>
+      Last news: &nbsp;&nbsp;&nbsp;
+      <small><small>{{ site.posts.first.date | date: "%d.%m.%y"  }} </small></small>
+    </li>
+    <li>
+      <a href="{{ site.posts.first.url }}">{{ site.posts.first.title }}
+      </a>
+    </li>
+
+
+    </p>
+  </div>
+
+</div>
