@@ -18,6 +18,7 @@ The list is good for more general discussion.
 
 Then fork and work on a branch before sending pull request.
 
+If you don't have an arm, here are instructions to run an [emulator](/qemu.html) (on mac)
 
 I wrote some ideas in the about page, but here some more code related guidelines
 

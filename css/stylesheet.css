@@ -37,7 +37,7 @@ hr {
 }
 
 /*******************************
-    Twitter Bootstrap Override 
+    Twitter Bootstrap Override
 ********************************/
 .wrapper {
 	margin: 0 auto;
@@ -61,7 +61,7 @@ hr {
 
 .navbar .nav > li > a {
     color: #555555;
-    padding: 15px 20px;
+    padding: 15px 40px;
     text-shadow: none;
     text-transform: uppercase;
     font-size: 12px;
@@ -71,37 +71,37 @@ hr {
   color: #000000;
 }
 
-.navbar-inverse .nav .link1.active > a, 
-.navbar-inverse .nav .link1.active > a:hover, 
+.navbar-inverse .nav .link1.active > a,
+.navbar-inverse .nav .link1.active > a:hover,
 .navbar-inverse .nav .link1.active > a:focus {
     background-color: #00DEF5;
     box-shadow: none;
 }
 
-.navbar-inverse .nav .link2.active > a, 
-.navbar-inverse .nav .link2.active > a:hover, 
+.navbar-inverse .nav .link2.active > a,
+.navbar-inverse .nav .link2.active > a:hover,
 .navbar-inverse .nav .link2.active > a:focus {
     background-color: #C1D739;
     box-shadow: none;
 }
 
-.navbar-inverse .nav .link3.active > a, 
-.navbar-inverse .nav .link3.active > a:hover, 
+.navbar-inverse .nav .link3.active > a,
+.navbar-inverse .nav .link3.active > a:hover,
 .navbar-inverse .nav .link3.active > a:focus {
     background-color: #9B95D4;
     box-shadow: none;
 }
 
-.navbar-inverse .nav .link4.active > a, 
-.navbar-inverse .nav .link4.active > a:hover, 
+.navbar-inverse .nav .link4.active > a,
+.navbar-inverse .nav .link4.active > a:hover,
 .navbar-inverse .nav .link4.active > a:focus {
     background-color: #EF648D;
     border-bottom: 1px solid #EF648D;
     box-shadow: none;
 }
 
-.navbar-inverse .nav .link5.active > a, 
-.navbar-inverse .nav .link5.active > a:hover, 
+.navbar-inverse .nav .link5.active > a,
+.navbar-inverse .nav .link5.active > a:hover,
 .navbar-inverse .nav .link5.active > a:focus {
     background-color: #1581F5;
     border-bottom: 1px solid #1581F5;
@@ -112,7 +112,7 @@ hr {
     border: none;
 }
 
-.nav-pills > .active > a, 
+.nav-pills > .active > a,
 .nav-pills > .active > a:hover {
     color: #000000;
     background-color: #F1F1F1;
@@ -157,7 +157,7 @@ hr {
 
 .dropdown-menu li>a:hover,
 .dropdown-menu li>a:focus,
-.dropdown-submenu:hover>a { 
+.dropdown-submenu:hover>a {
   color: #333333;
 	text-decoration: none;
 	background-color: transparent;
@@ -175,7 +175,7 @@ hr {
 }
 
 /*******************************
-             Theme 
+             Theme
 ********************************/
 .theme {
   color: #5A5A5A;
