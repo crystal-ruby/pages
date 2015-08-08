@@ -1,0 +1,196 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Strict//EN">
+<html>
+<head>
+	<title>Synthesis: An Efficient Implementation of Fundamental Operating System Services - Abstract</title>
+	<link rel="stylesheet" type="text/css" href="../css/style.css">
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<!-- CUSTOM STYLE GOES HERE -->
+</head>
+<body>
+
+<div id="nav">
+	<a href="index.html">Title</a>
+	<a href="abs.html">Abstract</a>
+	<a href="ack.html">Acknowledgements</a>
+	<a class=here href="toc.html">Contents</a>
+	<a href="ch1.html">Chapter 1</a>
+	<a href="ch2.html">Chapter 2</a>
+	<a href="ch3.html">Chapter 3</a>
+	<a href="ch4.html">Chapter 4</a>
+	<a href="ch5.html">Chapter 5</a>
+	<a href="ch6.html">Chapter 6</a>
+	<a href="ch7.html">Chapter 7</a>
+	<a href="ch8.html">Chapter 8</a>
+	<a href="bib.html">Bibliography</a>
+	<a href="app-A.html">Appendix A</a>
+</div>
+
+<div id="running-title">
+	Synthesis: An Efficient Implementation of Fundamental Operating System Services - Abstract
+</div>
+
+<div id="content">
+<div class=toc>
+<h1>Contents</h1>
+<ul>
+<li><a href="ch1.html">1. Introduction</a>
+	<ul>
+	<li><a href="ch1.html">1.1 Purpose</a>
+	<li><a href="ch1.html">1.2 History and Motivation</a>
+	<li><a href="ch1.html">1.3 Synthesis Overview</a>
+		<ul>
+		<li><a href="ch1.html">1.3.1 Kernel Structure</a>
+		<li><a href="ch1.html">1.3.2 Implementation Ideas</a>
+		<li><a href="ch1.html">1.3.3 Implementation Language</a>
+		<li><a href="ch1.html">1.3.4 Target Hardware</a>
+		<li><a href="ch1.html">1.3.5 <span class=smallcaps>Unix</span> Emulator</a>
+		</ul>
+	</ul>
+<li><a href="ch2.html">2. Previous Work</a>
+	<ul>
+	<li><a href="ch2.html">2.1 Overview</a>
+	<li><a href="ch2.html">2.2 The Tradeoff Between Throughput and Latency</a>
+	<li><a href="ch2.html">2.3 Kernel Structure</a>
+		<ul>
+		<li><a href="ch2.html">2.3.1 The Trend from Monolithic to Diffuse</a>
+		<li><a href="ch2.html">2.3.2 Services and Interfaces</a>
+		<li><a href="ch2.html">2.3.3 Managing Diverse Types of I/O</a>
+		<li><a href="ch2.html">2.3.4 Managing Processes</a>
+		</ul>
+	</ul>
+<li><a href="ch3.html">3. Kernel Code Generator</a>
+	<ul>
+	<li><a href="ch3.html">3.1 Fundamentals</a>
+	<li><a href="ch3.html">3.2 Methods of Runtime Code Generation</a>
+		<ul>
+		<li><a href="ch3.html">3.2.1 Factoring Invariants</a>
+		<li><a href="ch3.html">3.2.2 Collapsing Layers</a>
+		<li><a href="ch3.html">3.2.3 Executable Data Structures</a>
+		<li><a href="ch3.html">3.2.4 Performance Gains</a>
+		</ul>
+	<li><a href="ch3.html">3.3 Uses of Code Synthesis in the Kernel</a>
+		<ul>
+		<li><a href="ch3.html">3.3.1 Buffers and Queues</a>
+		<li><a href="ch3.html">3.3.2 Context Switches</a>
+		<li><a href="ch3.html">3.3.3 Interrupt Handling</a>
+		<li><a href="ch3.html">3.3.4 System Calls</a>
+		</ul>
+	<li><a href="ch3.html">3.4 Other Issues 3.4.1 Kernel Size</a>
+		<ul>
+		<li><a href="ch3.html">3.4.2 Protecting Synthesized Code</a>
+		<li><a href="ch3.html">3.4.3 Non-coherent Instruction Cache</a>
+		</ul>
+	<li><a href="ch3.html">3.5 Summary</a>
+	</ul>
+<li><a href="ch4.html">4. Kernel Structure</a>
+	<ul>
+	<li><a href="ch4.html">4.1 Quajects</a>
+		<ul>
+		<li><a href="ch4.html">4.1.1 Quaject Interfaces</a>
+		<li><a href="ch4.html">4.1.2 Creating and Destroying Quajects</a>
+		<li><a href="ch4.html">4.1.3 Resolving References</a>
+		<li><a href="ch4.html">4.1.4 Building Services</a>
+		<li><a href="ch4.html">4.1.5 Summary</a>
+		</ul>
+	<li><a href="ch4.html">4.2 Procedure-Based Kernel</a>
+		<ul>
+		<li><a href="ch4.html">4.2.1 Calling Kernel Procedures</a>
+		<li><a href="ch4.html">4.2.2 Protection</a>
+		<li><a href="ch4.html">4.2.3 Dynamic Linking</a>
+		</ul>
+	<li><a href="ch4.html">4.3 Threads of Execution</a>
+		<ul>
+		<li><a href="ch4.html">4.3.1 Execution Modes</a>
+		<li><a href="ch4.html">4.3.2 Thread Operations</a>
+		<li><a href="ch4.html">4.3.3 Scheduling</a>
+		</ul>
+	<li><a href="ch4.html">4.4 Input and Output</a>
+		<ul>
+		<li><a href="ch4.html">4.4.1 Producer/Consumer</a>
+		<li><a href="ch4.html">4.4.2 Hardware Devices</a>
+		</ul>
+	<li><a href="ch4.html">4.5 Virtual Memory</a>
+	<li><a href="ch4.html">4.6 Summary</a>
+	</ul>
+<li><a href="ch5.html">5. Concurrency and Synchronization</a>
+	<ul>
+	<li><a href="ch5.html">5.1 Synchronization in OS Kernels</a>
+		<ul>
+		<li><a href="ch5.html">5.1.1 Disabling Interrupts</a>
+		<li><a href="ch5.html">5.1.2 Locking Synchronization Methods</a>
+		<li><a href="ch5.html">5.1.3 Lock-Free Synchronization Methods</a>
+		<li><a href="ch5.html">5.1.4 Synthesis Approach</a>
+		</ul>
+	<li><a href="ch5.html">5.2 Lock-Free Quajects</a>
+		<ul>
+		<li><a href="ch5.html">5.2.1 Simple Linked Lists</a>
+		<li><a href="ch5.html">5.2.2 Stacks and Queues</a>
+		<li><a href="ch5.html">5.2.3 General Linked Lists</a>
+		<li><a href="ch5.html">5.2.4 Lock-Free Synchronization Overhead</a>
+		</ul>
+	<li><a href="ch5.html">5.3 Threads</a>
+		<ul>
+		<li><a href="ch5.html">5.3.1 Scheduling and Dispatching</a>
+		<li><a href="ch5.html">5.3.2 Thread Operations</a>
+		<li><a href="ch5.html">5.3.3 Cost of Thread Operations</a>
+		</ul>
+	<li><a href="ch5.html">5.4 Summary</a>
+	</ul>
+<li><a href="ch6.html">6. Fine-Grain Scheduling</a>
+	<ul>
+	<li><a href="ch6.html">6.1 Scheduling Policies and Mechanisms</a>
+		<ul>
+		<li><a href="ch6.html">6.2.1 Hardware Phase Locked Loop</a>
+		<li><a href="ch6.html">6.2.2 Software Feedback</a>
+		<li><a href="ch6.html">6.2.3 FLL Example</a>
+		<li><a href="ch6.html">6.2.4 Application Domains</a>
+		</ul>
+	<li><a href="ch6.html">6.3 Uses of Feedback in Synthesis</a>
+		<ul>
+		<li><a href="ch6.html">6.3.1 Real-Time Signal Processing</a>
+		<li><a href="ch6.html">6.3.2 Rhythm Tracking and The Automatic Drummer</a>
+		<li><a href="ch6.html">6.3.3 Digital Oversampling Filter</a>
+		<li><a href="ch6.html">6.3.4 Discussion</a>
+		</ul>
+	<li><a href="ch6.html">6.4 Other Applications</a>
+		<ul>
+		<li><a href="ch6.html">6.4.1 Clocks</a>
+		<li><a href="ch6.html">6.4.2 Real-Time Scheduling</a>
+		<li><a href="ch6.html">6.4.3 Multiprocessor and Distributed Scheduling</a>
+		</ul>
+	<li><a href="ch6.html">6.5 Summary</a>
+	</ul>
+<li><a href="ch7.html">7. Measurements and Evaluation</a>
+	<ul>
+	<li><a href="ch7.html">7.1 Measurement Environment</a>
+		<ul>
+		<li><a href="ch7.html">7.1.1 Hardware</a>
+		<li><a href="ch7.html">7.1.2 Software</a>
+		</ul>
+	<li><a href="ch7.html">7.2 User-Level Measurements</a>
+		<ul>
+		<li><a href="ch7.html">7.2.1 Comparing Synthesis with SUNOS 3.5</a>
+		<li><a href="ch7.html">7.2.2 Comparing Window Systems</a>
+		</ul>
+	<li><a href="ch7.html">7.3 Detailed Measurements</a>
+		<ul>
+		<li><a href="ch7.html">7.3.1 File and Device I/O</a>
+		<li><a href="ch7.html">7.3.2 Virtual Memory</a>
+		<li><a href="ch7.html">7.3.3 Window System</a>
+		<li><a href="ch7.html">7.3.4 Other Figures</a>
+		</ul>
+	<li><a href="ch7.html">7.4 Experience</a>
+		<ul>
+		<li><a href="ch7.html">7.4.1 Assembly Language</a>
+		<li><a href="ch7.html">7.4.2 Porting Synthesis to the Sony NEWS Workstation</a>
+		<li><a href="ch7.html">7.4.3 Architecture Support</a>
+		</ul>
+	<li><a href="ch7.html">7.5 Other Opinions</a>
+	</ul>
+<li><a href="ch8.html">8. Conclusion</a>
+</ul>
+</div>
+</div>
+
+</body>
+</html>

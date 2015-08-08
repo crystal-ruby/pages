@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Strict//EN">
+<html>
+<head>
+	<title>Synthesis: An Efficient Implementation of Fundamental Operating System Services - Abstract</title>
+	<link rel="stylesheet" type="text/css" href="../css/style.css">
+	<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+<div id="nav">
+	<a class=home href="../index.html">Alexia's Home</a>
+	<a href="index.html">Dissertation</a>
+	<a class=here href="abs.html">Abstract</a>
+	<a href="ack.html">Acknowledgements</a>
+	<a href="toc.html">Contents</a>
+	<a href="ch1.html">Chapter 1</a>
+	<a href="ch2.html">Chapter 2</a>
+	<a href="ch3.html">Chapter 3</a>
+	<a href="ch4.html">Chapter 4</a>
+	<a href="ch5.html">Chapter 5</a>
+	<a href="ch6.html">Chapter 6</a>
+	<a href="ch7.html">Chapter 7</a>
+	<a href="ch8.html">Chapter 8</a>
+	<a href="bib.html">Bibliography</a>
+	<a href="app-A.html">Appendix A</a>
+</div>
+
+
+<div id="running-title">
+	Synthesis: An Efficient Implementation of Fundamental Operating System Services - Abstract
+</div>
+
+<div id="content">
+
+<h1>Abstract</h1>
+
+<p>This dissertation shows that operating systems can provide fundamental services an order of magnitude more efficiently than traditional implementations.  It describes the implementation of a new operating system kernel, Synthesis, that achieves this level of performance.
+
+<p>The Synthesis kernel combines several new techniques to provide high performance without sacrificing the expressive power or security of the system.  The new ideas include:
+<ul>
+<li>Run-time code synthesis - a systematic way of creating executable machine code at runtime to optimize frequently-used kernel routines - queues, buffers, context switchers, interrupt handlers, and system call dispatchers - for specific situations, greatly reducing their execution time.
+
+<li>Fine-grain scheduling - a new process-scheduling technique based on the idea of feedback that performs frequent scheduling actions and policy adjustments (at submillisecond intervals) resulting in an adaptive, self-tuning system that can support real-time data streams.
+
+<li>Lock-free optimistic synchronization is shown to be a practical, efficient alternative to lock-based synchronization methods for the implementation of multiprocessor operating system kernels.
+
+<li>An extensible kernel design that provides for simple expansion to support new kernel services and hardware devices while allowing a tight coupling between the kernel and the applications, blurring the distinction between user and kernel services.
+</ul>
+
+The result is a significant performance improvement over traditional operating system implementations in addition to providing new services.
+</div>
+
+</body>
+</html>

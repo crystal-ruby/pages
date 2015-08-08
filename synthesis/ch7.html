@@ -1,0 +1,293 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Strict//EN">
+<html>
+<head>
+	<title>Synthesis: An Efficient Implementation of Fundamental Operating System Services - Abstract</title>
+	<link rel="stylesheet" type="text/css" href="../css/style.css">
+	<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+<div id="nav">
+	<a class=home href="../index.html">Alexia's Home</a>
+	<a href="index.html">Dissertation</a>
+	<a href="abs.html">Abstract</a>
+	<a href="ack.html">Acknowledgements</a>
+	<a href="toc.html">Contents</a>
+	<a href="ch1.html">Chapter 1</a>
+	<a href="ch2.html">Chapter 2</a>
+	<a href="ch3.html">Chapter 3</a>
+	<a href="ch4.html">Chapter 4</a>
+	<a href="ch5.html">Chapter 5</a>
+	<a href="ch6.html">Chapter 6</a>
+	<a class=here href="ch7.html">Chapter 7</a>
+	<a href="ch8.html">Chapter 8</a>
+	<a href="bib.html">Bibliography</a>
+	<a href="app-A.html">Appendix A</a>
+</div>
+
+
+<div id="running-title">
+	Synthesis: An Efficient Implementation of Fundamental Operating System Services - Abstract
+</div>
+
+<div id="content">
+
+<h1>7. Measurements and Evaluation</h1>
+
+<div id="chapter-quote">
+15. Everything should be built top-down, except the first time.</br>
+-- Alan J. Perlis Epigrams on Programming
+</div>
+
+<h2>7.1 Measurement Environment</h2>
+
+<h3>7.1.1 Hardware</h3>
+
+<p>The current implementation of Synthesis runs on two machines: the Quamachine and the Sony NEWS 1860 workstation. As described in section 1.3.4, the Quamachine is a home-brew, experimental 68030-based computer system designed to aid systems research and measurement. Its measurement facilities include an instruction counter, a memory reference counter, hardware program tracing, and a memory-mapped clock with 20-nanosecond resolution. The processor can operate at any clock speed from 1 MHz up to 50 MHz. Normally it runs at 50 MHz. But by changing the processor speed and introducing waitstates into the main memory access, the Quamachine can closely emulate the performance characteristics of common workstations, simplifying measurements and comparisons. The Quamachine also has special I/O devices that support digital music and audio signal processing: stereo 16-bit analog output, stereo 16-bit analog input, and a compact disc (CD) player digital interface.
+
+<p>The Sony NEWS 1860 is a commercially-available workstation with two 68030 processors. Its architecture is not symmetric. One processor is meant to be the main processor and the other is meant to be the I/O processor. Synthesis tries to treat it as if it were a symmetric multiprocessor, scheduling most tasks on either processor without preference, except those that require something that is accessible from one processor and not the other. While this is not a large number of processors, it nevertheless helps demonstrate Synthesis multiprocessor support. But for measurement purposes of this chapter, only one processor -- the slower I/O processor -- was used. (With the kernel's multiprocessor support kept intact.)
+
+<h3>7.1.2 Software</h3>
+
+<p>A partial emulator for <span class=smallcaps>Unix</span> runs on top of the Synthesis kernel and emulates some of the SUNOS (version 3.5) kernel calls. This provides a direct way of measuring and comparing two otherwise very different operating systems. Since the executables are the same, the comparison is direct. The emulator further demonstrates the generality of Synthesis by setting the lower bound - Synthesis is at least as general as <span class=smallcaps>Unix</span> if it can emulate <span class=smallcaps>Unix</span>. It also helps with the problem of acquiring application software for a new operating system by allowing the use of SUN-3 binaries instead. Although the emulator supports a subset of the <span class=smallcaps>Unix</span> system calls - time constraints have forced an "implement-as-the-need-arises" strategy - the set supported is sufficiently rich to provide a good idea of what the relative times for the basic operations are.
+
+<h2>7.2 User-Level Measurements</h2>
+
+<h3>7.2.1 Comparing Synthesis with SUNOS 3.5</h3>
+
+<p>This section describes a comparison between Synthesis and SUNOS 3.5. The benchmark programs consist of simple loops that exercise a particular system function many times. The source code for the programs is in appendix A. All benchmark programs were compiled on the SUN 3/160, using <em>cc -O</em> under SUNOS release 3.5. The executable <em>a.out</em> was timed on the SUN, then brought over to the Quamachine and executed using the <span class=smallcaps>Unix</span> emulator.
+
+
+<table class=table>
+<caption>
+	Table 7.1: Measured <span class=smallcaps>Unix</span> System Calls (in seconds)
+</caption>
+<tr class=head><th rowspan=2>Program<th colspan=4>Raw Sun Data<th rowspan=2>Sun usr+sys<th rowspan=2>Synthesis Emulator<th rowspan=2>Ratio<th rowspan=2>I/O Rate (MB/Sec)
+<tr class=head><th>usr<th>sys<th>total<th>watch
+<tr><th>1 Compute<td class=number>19.8<td class=number>0.5<td class=number>20<td class=number>20.9<td class=number>20.3<td class=number>21.42<td class=number>0.95<td class=number>-
+<tr><th>2 R/W pipe (1)<td class=number>0.4<td class=number>9.6<td class=number>10<td class=number>10.2<td class=number>10.0<td class=number>0.18<td class=number>56.<td class=number>0.1
+<tr><th>3 R/W pipe (1024)<td class=number>0.5<td class=number>14.6<td class=number>15<td class=number>15.3<td class=number>15.1<td class=number>2.42<td class=number>6.2<td class=number>8
+<tr><th>4 R/W pipe (4096)<td class=number>0.7<td class=number>37.2<td class=number>38<td class=number>38.2<td class=number>37.9<td class=number>9.64<td class=number>3.9<td class=number>8
+<tr><th>5 R/W file<td class=number>0.5<td class=number>20.1<td class=number>21<td class=number>23.4<td class=number>20.6<td class=number>2.91<td class=number>7.1<td class=number>6
+<tr><th>6 open null/close<td class=number>0.5<td class=number>17.3<td class=number>17<td class=number>17.4<td class=number>17.8<td class=number>0.69<td class=number>26.<td class=number>-
+<tr><th>7 open tty/close<td class=number>0.5<td class=number>42.1<td class=number>43<td class=number>43.1<td class=number>42.6<td class=number>0.88<td class=number>48.<td class=number>-
+</table>
+
+
+<p>Ideally, we would want to run both Synthesis and SUNOS on the same hardware. Unfortunately, we could not obtain detailed information about the Sun-3 machine, so Synthesis has not been ported to the Sun. Instead, we closely emulate the hardware characteristics of a Sun-3 machine using the Quamachine. This involves three changes: replace the 68030 CPU with a 68020, set the CPU speed to 16MHz, and introduce one wait-state into the main-memory access. To validate faithfulness of the hardware emulation, the first benchmark program is a compute-bound test. This test program implements a function producing a chaotic sequence.<sup>1</sup> It touches a large array at non-contiguous points, which ensures that we are not just measuring the "in-the-cache" performance. Since it does not use any operating system resources, the measured times on the two machines should be the same.
+
+<div class=footnote><sup>1</sup> Pages 137-138 in Godel, Escher, Bach: An Eternal Golden Braid, by Douglas Hofstadter.</div>
+
+<p>Table 7.1 summarizes the results of the measurements. The columns under "Raw SUN data" were obtained using the <span class=smallcaps>Unix</span> time command and verified with a stopwatch. The SUN was unloaded during these measurements and time reported more than 99% CPU available for them. The columns labeled "usr," "sys," and "total" give the time spent in the user's program, in the SUNOS kernel, and the total elapsed time, as reported by the time command. The column labeled "usr+sys" is the sum of the user and system times, and is the number used for comparisons with Synthesis. The Synthesis emulator data were obtained by using the microsecond-resolution real-time clock on the Quamachine, rounded to hundredths of a second. These times were also verified with stopwatch, sometimes by running each test 10 times to obtain a more easily measured time interval. The column labeled "Ratio" gives the ratio of the preceding two columns. The last column, labeled "I/O Rate", gives the overall Synthesis I/O rate in megabytes per second for those test programs performing I/O.
+
+<p>The first program is a compute-intensive calibration function to validate the hardware emulation.
+
+<p>Programs 2, 3, and 4 write and then read back data from a <span class=smallcaps>Unix</span> pipe in chunks of 1, 1024, and 4096 bytes. Program 2 shows a remarkable speed advantage - 56 times - for the single-byte read/write operations. Here, the low overhead of the Synthesis kernel calls really makes a difference, since the amount of data moved is small and most of the time is spent in overhead. But even as the I/O size grows to the page size, the difference remains significant -- 4 to 6 times. Part of the reason is that the SUNOS overhead is still significant even when amortized over more data. Another reason is the fast synthesized routines that move data across address spaces. The generated code loads words from one address space into registers and stores them back in the other address space. With unrolled loops this achieves the data transfer rate of about 8MB per second.
+
+<p>Program 5 reads and writes a file (cached in main memory) in chunks of 1K bytes. It too shows a remarkable speed improvement over SUNOS.
+
+<p>Programs 6 and 7 repeatedly open and close /dev/null and /dev/tty. They show that Synthesis kernel code generation is very efficient. The open operations create executable code for later read and write, yet they are 20 to 40 times faster than the <span class=smallcaps>Unix</span> open that does not do code generation. Table 7.3 contains more details of file system operations that are discussed in the next section.
+
+<h3>7.2.2 Comparing Window Systems</h3>
+
+<p>A simple measurement gives an idea of the speed of interactive I/O on various machines running different window systems. We use "cat /etc/termcap" to a TTY window. The local termcap file is 110620 bytes long. The window size is 80 characters wide by 24 lines, using a 16 by 24 pixel font, and with scrollbars enabled.
+
+
+<table class=table>
+<caption>
+	Table 7.2: Time to "<em>cat /etc/termcap</em>" to a 80*24 TTY window
+</caption>
+<tr class=head><th>OS, Window System<th>Machine<th>CPU<th>Time (Seconds)
+<tr><th>Synthesis<td>Sony NEWS<td>68030, 25mhz<td class=number>2.9
+<tr><th><span class=smallcaps>Unix</span>, X11 R5<td>Sony NEWS<td>68030, 25mhz<td class=number>23
+<tr><th><span class=smallcaps>Unix</span>, console<td>Sony NEWS<td>68030, 25mhz<td class=number>127
+<tr><th>Mach, NextStep<td>NeXT<td>68030, 25mhz<td class=number>55
+<tr><th>Mach, NextStep<td>NeXT<td>68040, 25mhz<td class=number>13
+<tr><th>SUNOS, X11 R5<td>Sun SparcStation II<td>Sparc<td class=number>6.5
+</table>
+
+
+
+<p>Table 7.2 summarizes the times taken by the various machines and window systems. There are many good reasons why the other window systems are slow. The Sony console device driver, for example, scrolls the whole screen one line at a time, even when there are several lines of output waiting. The X window system uses RPC to communicate between client and server; no doubt this adds to the overhead. The NextStep window system is based on Postscript, which is overkill for the task at hand.
+
+<p>The point is not to parade Synthesis speed nor justify the other's slowness. It is to point out that that speed is possible through careful thought and program structuring that provides just the right level of abstraction for each application. For example, one application that runs under Synthesis reads music data from the CD player, computes its Fourier transform (1024 point), and displays the result in a window, all in real-time. It displays 88200 data points per second. This is impossible to do today using any other single-processor workstation and operating system because the abstractions provided are too expensive and just plain wrong for this particular task. This is true even though the newer Sparc-based workstations from SUN are more than four times faster then the machine running Synthesis. Section 7.3.3 shows detailed measurements for the Synthesis window system.
+
+
+<table class=table>
+<caption>
+	Table 7.3: File and Device I/O (in microseconds)
+</caption>
+<tr class=head><th>Operation<th>Native Time<th><span class=smallcaps>Unix</span> Emulation
+<tr><th>emulation trap<td>--<td>2
+<tr><th>open /dev/null<td>43<td>49
+<tr><th>open /dev/tty<td>62<td>68
+<tr><th>open (disk file)<td>73<td>85
+<tr><th>close<td>18<td>22
+<tr><th>read 1 byte from file<td>9<td>10
+<tr><th>read N bytes from file<td>9+N/8<td>10+N/8
+<tr><th>read N from /dev/null<td>6<td>8
+</table>
+
+
+<h2>7.3 Detailed Measurements</h2>
+
+<p>The Quamachine's 20-nanosecond resolution memory-mapped clock enables precise measurement of the time taken by each individual system call. To obtain direct timings in microseconds, we surround the system call to be measured with two "read clock" machine instructions and subtract to find the elapsed time.
+
+<h3>7.3.1 File and Device I/O</h3>
+
+<p>Table 7.3 gives the time taken by various file- and device-related I/O operations. It compares the timings measured for the native Synthesis system calls and for the equivalent call in SUNOS emulation mode. For these tests, the Quamachine was running at 25MHz using the 68030 CPU.
+
+<p>Worth noting is the cost of <em>open</em>. The simplest case, <em>open /dev/null</em>, takes 49 microseconds, of which about 70% are used to find the name in the directory structure and 30% for memory allocation and code synthesis to create the null read and write procedures. The additional 19 microseconds in opening /dev/tty come from generating more involved code to read and write the TTY device. Finally, opening a file requires synthesizing more sophisticated code and buffer allocations, costing 17 additional microseconds.
+
+
+<table class=table>
+<caption>
+	Table 7.4: Low-level Memory Management Overhead (Page Size = 4KB)
+</caption>
+<tr class=head><th>Operation<th>Time (&#181;s)
+<tr><th>Service Translation Fault<td>13.6
+<tr><th>Allocate page (pre-zeroed)<td>2.4 + 13.6 = 16.0
+<tr><th>Allocate page (needs zeroing)<td>152 + 13.6 = 166
+<tr><th>Allocate page (none free; replace)<td>154 + 13.6 + T<sub>replace</sub> = 168 + T<sub>replace</sub>
+<tr><th>Copy a page (4 Kbytes)<td>260 + 13.6 = 274
+<tr><th>Free page<td>1.6
+</table>
+
+
+<h3>7.3.2 Virtual Memory</h3>
+
+<p>Table 7.4 gives the time taken by various basic operations related to virtual memory. The first row, labeled "Service Translation Fault," gives the time taken to service a translation fault exception. It represents overhead that is always incurred, regardless of the reason for the fault. Translation faults happen whenever a memory reference can not be completed because the address could not be translated. The reasons are manifold: the page is not present, or it is copy-on-write, or it has not been allocated, or that reference is not allowed. This number includes the time taken by the hardware to detect the translation fault, save the machine state, and dispatch to the fault handler. It includes the time taken by the Synthesis fault handler to interpret the saved hardware state, determine the reason for the fault, and dispatch to the correct sub-handler. And it includes the time to re-load the machine state and retry the reference once the sub-handler has fixed the situation.
+
+<p>Subsequent rows give the additional time taken by the various sub-handlers, as a function of the cause of the fault. The numbers are shown in the form "X + 13.6 = Y ," where X is the time taken by the sub-handler alone, and Y the total time including the fault overhead. The second row of the table gives the time to allocate a zeroed page when one already exists. (Synthesis uses idle CPU time to maintain a pool of pre-zeroed pages for faster allocation.) The third row gives the time taken to allocate and zero a free page. If no page is free, one must be replaced, and this cost is given in the fourth row.
+
+
+<table class=table>
+<caption>
+	Table 7.5: Selected Window System Operations
+</caption>
+<tr class=head><th>Quaject<th>&#181;s to Create<th>&#181;s to Write
+<tr><th>TTY-Cooker<td>27<td>2.3 + 2.1/char
+<tr><th>VT-100 terminal emulator<td>532<td>14.2 + 1.3/char
+<tr><th>Text window <td>71<td>23.9 + 27.7/char
+</table>
+
+
+<h3>7.3.3 Window System</h3>
+
+<p>A terminal window is composed of a pipeline of three quajects: a TTY-Cooker, a VT100 Terminal Emulator, and a Text-Window. Each quaject has a fixed cost of invocation and a per-character cost that varies depending on the character being processed. These costs are summarized in Table 7.5. The numbers are show in the form "<em>X + Y/char</em>," where <em>X</em> is the invocation cost and <em>Y</em> the average per-character costs. The average is taken over the characters in <em>/etc/termcap</em>.
+
+<p>The numbers in Table 7.5 can be used to predict the elapsed time for the "<em>cat /etc/termcap</em>" measurement done in Section 7.2.2. Performing the calculation, we get 3.4 seconds if we ignore the invocation overhead and use only the per-character costs. Notice that this exceeds the elapsed time actually observed (Table 7.2). This unexpected result happens because Synthesis kernel can optimize the data flow, resulting in fewer calls and less actual work than a straight concatenation of the three quajects would indicate. For example, in a fast window system, many characters may be scrolled off the screen between the consecutive vertical scans of the monitor. Since these characters would never be seen by a user, they need not be drawn. The Synthesis window manager bypasses the drawing of those characters by using fine-grained scheduling. It samples the content of the virtual VT100 screen 60 times a second, synchronized to the vertical retrace of the monitor, and draws the parts of the screen that have changed since the last time. This is a good example of how fine-grain scheduling can streamline processing, bypassing I/O that does not affect the visible result. The data is not lost, however. All the data is available for review using the window's scrollbars.
+
+<h3>7.3.4 Other Figures</h3>
+
+<p>Other performance figures at the same level of detail were already given in the previous chapters. In Table 5.2 on page 85, we see that Synthesis kernel threads are lightweight, with less than 20 microsecond creation time; Table 5.3 on page 86 shows that thread context switching is fast. Table 3.4 on page 40 gives the time taken to handle the high-rate interrupts from the Sound-IO devices.
+
+<h2>7.4 Experience</h2>
+
+<h3>7.4.1 Assembly Language</h3>
+
+<p>The current version of Synthesis is written in 68030 macro assembly language. This section reports on the experience.
+
+<p>Perhaps the first question people ask is, "Why is Synthesis written in assembler?" This is soon followed by "How much of Synthesis could be re-written in a high-level language?" and "At what performance loss?".
+
+<p>There are several reasons why assembler language was chosen, some of them researchrelated, and some of them historical. One reason is I felt that it would be an interesting experiment to write a medium-size system in assembler, which allows unrestricted access to the machine's architecture, and perhaps discover new coding idioms that have not yet been captured in a higher-level language. Later paragraphs talk about these. Another reason is that much of the early work involved discovering the most efficient way of working with the machine and its devices. It was a fast prototyping language, one in which I could write and test simple I/O drivers without the trouble of supporting a complex language runtime environment.
+
+<p>But perhaps the biggest reason is that in 1984, at the time the seed ideas were being developed, I could not find a good, reliable (bug-free) C compiler for the 68000 processor. I had tried the compilers on several 68000-based <span class=smallcaps>Unix</span> machines and repeatedly found that compilation was slow, that the compilers were buggy, that they produced terrible machine code, and that their runtime libraries were not reentrant. These qualities interfered with my creativity and desire to experiment. Slow compilation dampens the enthusiasm of trying new ideas because the edit-compile-test cycle is lengthened. Buggy compilers makes it that much harder to write correct code. Poor code-generation makes my optimization efforts seem meaningless. And non-reentrant runtime libraries makes it harder to write a multithreaded kernel that can take advantage of multiprocessor architecture.
+
+<p>Having started coding in assembler, it was easier to continue that way than to change. I had written an extensive library of utilities, including a fully reentrant C-language runtime library and subroutines for music and signal processing. In particular, I found my signal processing algorithms difficult to express in C. To achieve the high performance necessary for real-time operation, I use fixed-point arithmetic for the calculations, not floating-point. The C language provides poor support for fixed-point math, particularly multiply and divide. The Synthesis "printf" output conversion and formatting function provides a stunning example of the performance improvements that result with carefully-coded fixedpoint math. This function converts a floating-point number into a fully-formatted ASCII string, <em>1.5 times faster than the machine instruction</em> on the 68882 floating-point coprocessor converts binary floating-point to unformatted BCD (binary-coded decimal).
+
+<p>Overall, the experience has been a positive one. A powerful macro facility helped minimize the difficulty of writing complex programs. The Synthesis assembler macro processor borrows heavily from the C-language macro processor, sharing much of the syntax and semantics. It provides important extensions, including macros that can define macros and quoting and "eval" mechanisms. Quaject definition, for example, is a declarative macro instruction in the assembler. It creates all the code and data structures needed by the kernel code generator, so the programmer need not worry about these details and can concentrate on the quaject's algorithms. Also, the Synthesis assembler (written in C, by the way) assembles 5000 lines per second. Complete system generation takes only 15 seconds. The elapsed time from making a change to the Synthesis source to having a new kernel booted and running is less than a minute. Since the turn-around time is so fast, I am much more likely to try different things.
+
+<p>To my surprise, I found that there are some things that were distinctly easier to do using Synthesis assembler than using C. In many of these, the powerful macro processor played an important role, and I believe that the C language could be usefully improved with this macro processor. One example is the procedure that interprets receiver status code bits in the driver for the LANCE Ethernet controller chip. Interpreting these bits is a little tricky because some of the error conditions are valid only when present in conjunction with certain other conditions. One could always use a deeply-nested if-then-else structure to separate out the cases. It would work and also be quite readable and maintainable. But a jump-table implementation is faster. Constructing this table is difficult and error-prone. So we use macros to do it. The idea is to define a macro that evaluates the jump-address corresponding to a constant status-value passed as its argument. This macro is defined using preprocessor "#if" statements to evaluate the complex conditionals, which is just as readable and maintainable as regular if statements. The jump-table is then constructed by passing this macro to a counting macro which repeatedly invokes it, passing it 0, 1, 2, ... and so on, up to the largest status register value (128).
+
+<p>The VT-100 terminal emulator is another place where assembly language made the job of coding easier. The VT-100 terminal emulator takes as input a buffer of data and interprets it, making changes to the virtual terminal screen. A problem arises when the input buffer runs out while in the middle of processing an escape sequence, for example, one which sets the cursor to an (X,Y ) position on the screen. When this happens, we must save enough state so that processing can resume where it left off when the emulator is called again with more data. Saving the state variables is easy. Saving the position within the program is harder. There is no way to access the program counter from the C language. This is a big problem because the VT-100 emulator is very complex, and there are many places where execution may be suspended. Using C, one must label all these places, and surround the whole piece of code with a huge switch statement to take execution flow to the right place when the function is called again. Using assembly language, this problem does not arise. We can encode the state machine directly, using the different program counter addresses to represent the different states.
+
+<p>I believe much of Synthesis could be re-written in C, or a C-like high-level language. Modern compilers now have much better code generators, and I feel that performance of the static runtime code would not degrade too much -- perhaps less than 50%. Runtime code-generation could be handled by writing machine instructions into integer arrays and this code would continue to be highly efficient but still unportable. However, with the code generator itself written in a high-level language, porting it might be easier.
+
+<p>I feel that adding a few new features to the C language can simplify the rewriting of Synthesis and help minimize the performance loss. Features I would like to see include:
+<ul>
+<li>A code-address data type to hold program-counter values, and an expanded "goto" to transfer control to such addresses. State machines in particular can benefit from a "<em>goto a[i]</em>" programming construct.
+<li>A concept of a subroutine within a procedure, analogous to the "<em>jsr...rts</em>" instructions in assembly language. These would allow direct language model of the underlying hardware stack. They are useful to separate out into subroutines common blocks of code within a procedure, without the argument passing and procedure call overhead of ordinary functions, since subroutines implicitly inherit all local variables. Among other things, I have found that LALR(1) context-free parsers can be implemented very efficiently by representing the parser stack using the hardware, and using jsr and rts to perform the state transitions.
+<li>Better support for fixed-point math. Even an efficient way of obtaining the full 64-bit result from a 32-bit integer multiplication would go a long way in this regard.
+</ul>
+
+<p>The inclusion of features like these does <em>not</em> mean that I encourage programmers to write spaghetti-code. Rather, these features are intended to supply the needed hooks for automatic program generators, for example, a state machine compiler, to take maximum benefit of the underlying hardware.
+
+
+<h3>7.4.2 Porting Synthesis to the Sony NEWS Workstation</h3>
+
+<p>Synthesis was first developed for the Quamachine, and like many substantial software systems, has gone through several revisions. The early kernel had several shortcomings. While the kernel showed impressive speed gains over conventional operating systems such as <span class=smallcaps>Unix</span>, its internal structure was not clean. The quaject structuring idea had come late in kernel development, so there were many parts that had been written in an ad hoc manner. Furthermore, the Quamachine kernel did not support virtual memory or networking.
+
+<p>The goal of the Synthesis port to the Sony workstation was to alleviate the shortcomings, for example, by cleaning up the kernel structure and adding virtual memory and networking support. In particular, we wanted to show that the additional functionality would not significantly slow down the Synthesis kernel. This section reports on the experience and discusses the problems encountered while porting.
+
+<p>The Synthesis port happened in three stages: first, a minimal Synthesis is ported to run under Sony's native <span class=smallcaps>Unix</span>. Then we wrote drivers for the keyboard and screen, and got minimal Synthesis to run on the raw hardware. This was followed by a full port, including all the devices.
+
+<p>The first step went fast, taking two to three weeks. The reason is that most of the quajects do not need to run in kernel mode in order to work. The difference between Synthesis under <span class=smallcaps>Unix</span> and native Synthesis is that instead of connecting the final-stage I/O quajects to I/O device driver quajects (which are the only quajects that must be in the kernel), we connect them to <span class=smallcaps>Unix</span> read and write system calls on appropriately opened file descriptors. This is ultimate proof that Synthesis services can run in user-level as well as kernel.
+
+<p>Porting to the raw machine was much harder, primarily because we chose to do our own device drivers. Some problems were caused by incomplete documentation on how to program the I/O devices on the Sony NEWS workstation. It was further complicated by the fact that each CPU has a different mapping of the I/O devices onto memory addresses and not everything is accessible by both CPUs. A simple program was written to patch the running <span class=smallcaps>Unix</span> kernel and install a new system call -- "execute function in kernel mode." Using this utility (carefully!), we were able to examine the running kernel and discover a few key addresses. After a bit more poking around, we discovered how to alter the page mappings so that sections of kernel and I/O memory were directly mapped into all user address spaces.<sup>2</sup> (The mmap system call on /dev/mem did not work.) Then using the Synthesis kernel monitor running on minimal Synthesis under a <span class=smallcaps>Unix</span> process, we were able to "hand access" the remaining I/O devices to verify their address and operation.
+
+<div class=footnote><sup>2</sup> Talk about security holes!</div>
+
+<p>(The Synthesis kernel monitor is basically a C-language parser front-end with direct access to the kernel code generators. It was crucial to both development and porting of Synthesis because it let us run and test sections of code without having the full kernel present. A typical debug cycle goes something like this: using the kernel monitor, we instantiate the quaject we want to test. We create a thread and point it at one of the quaject's callentries. We then single-step the thread and verify that the control flows where it is supposed to.)
+
+<p>But the most difficult porting problems were caused by timing sensitivities in the various I/O devices. Some devices would "freeze" when accessed twice in rapid succession. These problems never showed up in the <span class=smallcaps>Unix</span> code because <span class=smallcaps>Unix</span> encapsulates device access in procedures. Calling a procedure to read a status value or change a control register allows enough time for the device to "recover" from the previous operation. But with code synthesis, device access frequently consists of a single machine instruction. Often the same device is accessed twice in rapid succession by two consecutive instructions, causing the timing problem. Once the cause of the problem was found, it was easy to correct: I made the kernel code generator insert an appropriate number of "nop" instructions between consecutive accesses.
+
+<p>Once we had the minimal kernel running, getting the rest of the kernel and its associated libraries working was relatively easy. All of the code that did not involve the I/O devices ran without change. This includes the user-level shared runtime libraries, such as the C functions library and the signal-processing library. It also includes all the "intermediate" quajects that do not directly access the machine and its I/O devices, such as buffers, symbol tables (for name service), and mappers and translators (for file system mapping). Code involving I/O devices was harder, since that required writing new drivers. Finally, there are some unfinished drivers such as the SCSI disk driver.
+
+<p>The thread system needed some changes to support the two CPUs on the Sony workstation; these were discussed in Chapter 5. Most of the changes were in the scheduling and dispatching code, to synchronize between the processors. This involved developing efficient, lock-free data structures which were then used to implement the algorithms. The scheduling policy was also changed from a single round-robin queue to one that uses a multiple-level queue structure. This helped guarantee good response time to urgent events even when there are many threads running, making it feasible to run thousands of threads on Synthesis.
+
+<p>The most time-consuming part was implementing the new services: virtual memory, Ethernet driver, and window system. They were all implemented "from scratch," using all the performance-improving ideas discussed in this dissertation, such as kernel code generation. The measurements in this chapter show high performance gains in these areas as well. The Ethernet driver, for example, is fast enough to record all the packet traffic of a busy Ethernet (400 kilobytes/second, or about 4 megabits per second) into RAM using only 20% of a 25MHz, 68030 CPU's time. This is a problem that has been worked on and dismissed as impractical except when using special hardware.
+
+<p>Besides the Sony workstation, the new kernel runs on the Quamachine as well. Of course, each machine must use the appropriate I/O drivers, but all the new services added to the Sony version work on the Quamachine.
+
+<h3>7.4.3 Architecture Support</h3>
+
+<p>Having worked very close to the hardware for so long, I have acquired some insight of what kinds of things would be useful for better operating systems support in future CPUs. Rather than pour out everything I ever thought useful for a machine to have, I will keep my suggestions to those that fit reasonably well with the "RISC" idea of processor design.
+<ul>
+<li>Better cache control to support runtime code generation. Ideally, I would like to see fully coherent instruction caches. But I recognize the expense involved, both in silicon area and degraded signal propagation times. But full coherence is probably not necessary. A cheap, non-privileged instruction to invalidate changed cache lines provides very good support at minimal cost for both hardware and code-modifying software. After all, if you've just modified an instruction, you know it's address, and it is easy to issue a cache-line invalidate on that address.
+<li>Faster interrupt handling. Chapter 6 discussed the advantages of fine-grained handling of computation, particularly when it comes to interrupts. Further benefits result by also reducing the hardware-imposed overhead of interrupt handing. Perhaps this can be achieved at not-too-great expense by replicating the CPU pipeline registers much like register-windows enable much faster procedure call. I expect even a single level of duplication to really help, if we assume that interrupts are handled fast enough that the chances are small of receiving a second interrupt in the middle of processing the first.
+<li>Hardware support for lock-free synchronization. Chapter 5 discussed the virtues of lock-free synchronization. But lock-free synchronization requires hardware support in the form of machine instructions that are more powerful than the test-and-set instruction used to implement locking. I have found that double-word Compare-&amp;-Swap is sufficient to implement an operating system kernel, and I conjecture that single-word Compare-&amp;-Swap is too weak. There may also be other kinds of instructions that also work.
+<li>Hardware support for fast context switching. As processors become faster and more complex, they have increasing amounts of state that must be saved and restored on every context switch. Earlier sections had discussed the cost of switching the floating-point context, which is high because of the large amount of data that must be moved: 8 registers, each 96 bits long, requires 24 memory cycles to save them, and another 24 cycles to re-load them. Newer architectures, for example, one that supports hardware matrix multiply, can have even more state. I claim that a lot of this state does not change between switch-in and switch-out. I propose hardware support to efficiently save and restore only the part of the state that was used: a modified-bit on each register, and selective disabling of hardware function units. Modified-bits on each register lets the operating system save only those registers that have been changed since switch-in. Selective disabling of function units lets the operating system defer loading that unit's state until it is needed. If a functional unit goes unused between switch-in and the subsequent switch-out, its state will not have been loaded nor saved.
+<li>Faster byte-operations. Many I/O-related functions tend to be byte-oriented, whereas CPU and memory tends to be word-oriented. This means it costs no more to fetch a full 32-bit word as it does to fetch a byte. We can take advantage to this with two new instructions: "load-4-bytes" and "store-4-bytes". These would move a word from memory into four registers, one byte to a register. The program can then operate on the four bytes in registers without referencing memory again. Another suggestion, probably less useful, is a "carry-suppress" option for addition, to suppress carry-out at byte-boundaries, allowing four additions or subtractions to take place simultaneously on four bytes packed into a 32-bit integer. I foresee the primary use of this to be in low-level graphics routines that deal with 8-bit pixels.
+<li>Improved bit-wise operation support. The current complement of bitwise-logical operations and shifts are already pretty good, what is lacking is a perfect shuffle of bits in a register. This is very useful for bit-mapped graphics operations, particularly things like bit-matrix transpose, which is heavily used when unpacking byte-wide pixels into separate bit-planes, as is required by certain framebuffer architectures.
+</ul>
+
+<h2>7.5 Other Opinions</h2>
+
+<p>In any line of research, there are often significant differences of opinion over what assumptions and ideas are good ones. Synthesis is no exception, and it has its share of critics. I feel it is my duty to point out where differences of opinion exist, to allow readers to come to their own conclusions. In this section, I try to address some of the more frequently raised objections regarding Synthesis, and rebut those that are, in my opinion, ill-founded.
+
+<blockquote>Objection 1: "How much of the performance improvement is due to my ideas, and how much is due to writing in assembler, and tuning the hell out of the thing?"</blockquote>
+
+<p>This is often asked by people who believe it to be much more of the latter and much less of the former.
+
+<p>Section 3.3 outlined several places in the kernel where code synthesis was used to advantage. For data movement operations, it showed that code synthesis achieves 1.4 to 2.4 times better performance than the best assembly-language implementation not using code synthesis. For more specialized operations, such as context switching, code synthesis delivers as much as 10 times better performance. So, in a terse answer to the question, I would say "40% to 140%".
+
+<p>But those figures do not tell the whole story. They are detailed measurements, designed to compare two versions of the same thing, in the same execution environment. Missing from those measurements is a sense of how the interaction between larger pieces of a program changes when code synthesis is used. For example, in that same section, I show that a procedural implementation of "putchar" using code synthesis is slightly faster than the C-language "putchar" macro, which is in-line expanded into the user's code. The fact that enough savings could be had through code synthesis to more than amortize the cost of a procedure call -- even in a simple, not-easily-optimized operation such as "putchar" -- changes the nature of how data is passed between modules in a program. Many modules that process streams of data are currently written to take as input a buffer of data and produce as output a new buffer of data. Chaining several such modules involves calling each one in turn, passing it the previous module's output buffer as the input. With a fast "putchar" procedure, it is no longer necessary to pass buffers and pointers around; we can now pass the address of the downstream module for "putchar," and the address of the upstream module for "getchar." Each module makes direct calls to its neighbors to get the data, eliminating the memory copy and all consequent pointer and counter manipulations.
+
+<blockquote>Objection 2: "Self-modifying data structures are troublesome on pipelined machines, and code generation has problems with machines that don't allow finegrained control of the instruction cache. In other words, Synthesis techniques are dependent on hardware features that aren't present in all machines, and, worse, are becoming increasingly scarce."</blockquote>
+
+<p>Pipelined machines pose no special difficulties because Synthesis does not modify instructions ahead of the program counter. Code modification, when it happens, is restricted to patching just-executed code, or unrelated code. In both cases, even a long instruction pipeline is not a problem.
+
+<p>The presence of a non-coherent and hard-to-flush instruction cache is the harder problem. By "hard-to-flush," I mean a cache that must be flushed whole instead of line-ata-time, or one that cannot be flushed in user mode without taking a protection exception. Self-modifying code is still effective, but such a cache changes the breakeven point when it becomes more economical to interpret data than to modify code. For example, conditions that change frequently are best represented using a boolean flag, as is usually done. But for conditions that are tested much more frequently than changed, code modification remains the method of choice. The cost of flushing the cache determines at what ratio of testing to modification the decision is made.
+
+<p>Relief may come from advances in the design of multiprocessors. Recent studies show that, for a wide variety of workloads, software-controlled caches are nearly as effective as fully coherent hardware caches and much easier to build, as they require no hardware [23] [2]. Further extensions to this idea stem from the observation that full coherency is often not necessary, and that it is beneficial to rely on the compiler to maintain coherency in software only when required [2]. This line of thinking leads to cache designs that have the necessary control to efficiently support code-modifying programs.
+
+<p>But it is true that the assumption that code is read-only is increasingly common, and that hardware designs are more and more using this assumption. Hardware manufacturers design according to the needs of their market. Since nobody is doing runtime code generation, is it little wonder that it is not well supported. But then, isn't this what research is for? To open people's eyes and to point out possibilities, both new and overlooked. This dissertation points out certain techniques that increase performance. It happens that the techniques are unusual, and make demands of the hardware that are not commonly made. But just as virtual memory proved to be a useful idea and all new processors now support memory management, one can expect that if Synthesis ideas prove to be useful, they too will be better supported.
+
+<blockquote>Objection 3: "Does this matter? Hardware is getting faster, and anything that is slow today will probably be fast enough in two years."</blockquote>
+
+<p>Yes, it matters!
+
+<p>There is more to Synthesis than raw speed. Cutting the cost of services by a factor of 10 is the kind of change that can fundamentally alter the structure of those services. One example is the PLL-based process scheduling. You couldn't do that if context switch was expensive -- driving the time way below one millisecond is what made it possible to move to a radically different scheduler, with nice properties, besides speed.
+
+<p>For another example, I want to pose a question: if threads were as cheap as procedure calls, what would you do with them? One answer is found in the music synthesizer applications that run on Synthesis. Most of them create a new thread for every note! Driving the cost of threads to within a few factors of the cost of procedure call changes the way applications are structured. The programmer now only needs to be concerned that the waveform is synthesized correctly. The Synthesis thread scheduler ensures that each thread gets enough CPU time to perform its job. You could not do that if threads were expensive.
+
+<p>Finally, hardware may be getting faster, but it is not getting faster fast enough. Look at the window-system figures given in Table 7.2. Synthesis running on 5-year-old hardware technology outperforms conventional systems running on the latest hardware. Even with faster hardware, it is not fast enough to overtake Synthesis.
+
+<blockquote>Objection 4: "Why is Synthesis written in assembler? How much of the reason is that you wanted no extraneous instructions? How much of the reason is that code synthesis requires assembler? How much of Synthesis could be re-written in a high-level language?"</blockquote>
+
+<p>Section 7.4.1 answers these questions in detail.
+
+</div>
+
+</body>
+</html>

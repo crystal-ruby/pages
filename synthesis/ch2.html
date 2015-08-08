@@ -1,0 +1,175 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Strict//EN">
+<html>
+<head>
+	<title>Synthesis: An Efficient Implementation of Fundamental Operating System Services - Abstract</title>
+	<link rel="stylesheet" type="text/css" href="../css/style.css">
+	<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+<div id="nav">
+	<a class=home href="../index.html">Alexia's Home</a>
+	<a href="index.html">Dissertation</a>
+	<a href="abs.html">Abstract</a>
+	<a href="ack.html">Acknowledgements</a>
+	<a href="toc.html">Contents</a>
+	<a href="ch1.html">Chapter 1</a>
+	<a class=here href="ch2.html">Chapter 2</a>
+	<a href="ch3.html">Chapter 3</a>
+	<a href="ch4.html">Chapter 4</a>
+	<a href="ch5.html">Chapter 5</a>
+	<a href="ch6.html">Chapter 6</a>
+	<a href="ch7.html">Chapter 7</a>
+	<a href="ch8.html">Chapter 8</a>
+	<a href="bib.html">Bibliography</a>
+	<a href="app-A.html">Appendix A</a>
+</div>
+
+
+<div id="running-title">
+	Synthesis: An Efficient Implementation of Fundamental Operating System Services - Abstract
+</div>
+
+<div id="content">
+<h1>2. Previous Work</h1>
+
+<div id="chapter-quote">
+If I have seen farther than others, it is because<br>
+I was standing on the shoulders of giants.<br>
+-- Isaac Newton<br>
+<br>
+If I have not seen as far as others, it is because<br>
+giants were standing on my shoulders.<br>
+-- Hal Abelson<br>
+<br>
+In computer science, we stand on each other's feet.<br>
+-- Brian K. Reid
+</div>
+
+<h2>2.1 Overview</h2>
+
+<p>This chapter sketches an overview of some of the classical goals of operating system design and tells how existing designs have addressed them. This provides a background against which the new techniques in Synthesis can be contrasted. I argue that some of the classical goals need to be reconsidered in light of new requirements and point out the new goals that have steered the design of Synthesis.
+
+<p>There are four areas in which Synthesis makes strong departures from classical designs: overall kernel structure, the pervasive use of run-time code generation, the management of concurrency and synchronization, and novel use of feedback mechanisms in scheduling. The rest of this chapter discusses each of these four topics in turn, but first, it is useful to consider some broad design issues.
+
+<h2>2.2 The Tradeoff Between Throughput and Latency</h2>
+
+<p>The oldest goal in building operating systems has been to achieve high performance. There are two common measures of performance: throughput and latency. Throughput is a measure of how much useful work is done per unit time. Latency is a measure of how long it takes to finish an individual piece of work. Traditionally, high performance meant increasing the throughput - performing the most work in the minimum time. But traditional ways of increasing throughput also tend to increase latency.
+
+<p>The classic way of increasing throughput is by batching data into large chunks which are then processed together. This way, the high overhead of initiating the processing is amortized over a large quantity of data. But batching increases latency because data that could otherwise be output instead sits in a buffer, waiting while it fills, causing delays. This happens at all levels. The mainframe batch systems of the 1960's made efficient use of machines, achieving high throughput but at the expense of intolerable latency for users and grossly inefficient use of people's time. In the 1970's, the shift toward timesharing operating systems made for a slightly less efficient use of the machine, but personal productivity was enormously improved. However, calls to the operating system were expensive, which meant that data had to be passed in big, buffered chunks in order to amortize the overhead.
+
+<p>This is still true today. For example, the Sony NEWS workstation, running Sony's version of <span class=smallcaps>Unix</span> release 4.0C (a derivative of Berkeley <span class=smallcaps>Unix</span>), takes 260 microseconds to write a single character to an I/O pipe connecting to another program. But writing 1024 characters takes 450 microseconds - a little more than twice the cost of writing a single character. Looking at it another way, over 900 characters can be written in the time taken by the invocation overhead. The reasons for using buffering are obvious. In fact, Sony's program libraries use larger, 8192-character buffers to further amortize the overhead and increase throughput. Such large-scale buffering greatly increases latency and indeed the general trend has been to parcel systems into big pieces that communicate with high overhead, compounding the delays.
+
+<p>In light of these large overheads, it is interesting to examine the history of operating system performance, paying particular attention to the important, low-level operations that are exercised often, such as context switch and system call dispatch. We find that operating systems have historically exhibited large invocation overheads. Due to its popularity and wide availability, <span class=smallcaps>Unix</span> is one of the more-studied systems, and I use it here as a baseline for performance comparisons.
+
+<table class=table>
+<caption>
+	Table 2.1: Overhead of Various System Calls<br>
+	<small>Sony NEWS 1860 workstation, 68030 processor, 25MHz, 1 waitstate, <span class=smallcaps>Unix</span> Release 4.0C.</small>
+</caption>
+<tr class=head><th>System Function<th>Time for 1 char (&#181;s)<th>Time for 1024 chars (&#181;s)
+<tr><th>Write to a pipe<td class=number>260<td class=number>450
+<tr><th>Write to a file<td class=number>340<td class=number>420
+<tr><th>Read from a pipe<td class=number>190<td class=number>610
+<tr><th>Read from a file<td class=number>380<td class=number>460
+<tr class=head><th>System Function<th>Time (&#181;s)
+<tr><th>Dispatch system call (getpid)<td class=number>40
+<tr><th>Context Switch<td class=number>170
+</table>
+
+
+<table class=table>
+<caption>
+	Table 2.2: Overhead of Various System Calls, Mach<br>
+	<small>NeXT workstation, 68030 processor, 25MHz, 1 waitstate, Mach Release 2.1.</small>
+</caption>
+<tr class=head><th>System Function<th>Time for 1 char (&#181;s)<th>Time for 1024 chars (&#181;s)
+<tr><th>Write to a pipe<td class=number>470<td class=number>740
+<tr><th>Write to a file<td class=number>370<td class=number>600
+<tr><th>Read from a pipe<td class=number>550<td class=number>760
+<tr><th>Read from a file<td class=number>350<td class=number>580
+<tr class=head><th>System Function<th>Time (&#181;s)
+<tr><th>Dispatch system call (getpid)<td class=number>88
+<tr><th>Context Switch<td class=number>510
+</table>
+
+
+<p>In one study, Feder compares the evolution of <span class=smallcaps>Unix</span> system performance over time and over different machines [13]. He studies the AT&amp;T releases of <span class=smallcaps>Unix</span> - System 3 and System 5 - spanning a time period from the mid-70's to late 1982 and shows that <span class=smallcaps>Unix</span> performance had improved roughly 25% during this time. Among the measurements shown is the time taken to execute the getpid (get process id) system call. This system call fetches a tiny amount of information (one integer) from the kernel, and its speed is a good indicator of the cost of the system call mechanism. For the VAX-11/750 minicomputer, Feder reports a time of 420 microseconds for getpid and 1000 microseconds for context switch.
+
+<p>I have duplicated some of these experiments on the Sony NEWS workstation, a machine of roughly 10 times the performance of the VAX-11/750. Table 2.1 summarizes the results.<sup>1</sup> On this machine, getpid takes 40 microseconds, and a context switch takes 170 microseconds. These numbers suggest that, since 1982, the performance of <span class=smallcaps>Unix</span> has remained relatively constant compared to the speed of the hardware.
+
+<div class=footnote><sup>1</sup> Even though the Sony machine has two processors, one of them is dedicated exclusively to handling device I/O and does not run any <span class=smallcaps>Unix</span> code. This second processor does not affect the outcome of the tests, which are designed to measure <span class=smallcaps>Unix</span> system overhead, not device I/O capacity. The file read and write benchmarks were to an in-core file system. There was no disk activity.</div>
+
+<p>A study done by Ousterhout [22] shows that operating system speed has not kept pace with hardware speed. The reasons he finds are that memory bandwidth and disk speed have not kept up with the dramatic increases in processor speed. Since operating systems tend to make heavier use of these resources than the typical application, this has a negative effect on operating system performance relative to how the processor's speed is measured.
+
+<p>But I believe there are further reasons for the large overhead in existing systems. As new applications demand more functionality, the tendency has been simply to layer on more functions. This can slow down the whole system because often the mere existence of a feature forces extra processing steps, regardless of whether that feature is being used or not. New features often require extra code or more levels of indirection to select from among them. Kernels become larger and more complicated, leading designers to restructure their operating systems to manage the complexity and improve understandability and maintainability. This restructuring, if not carefully done, can reduce performance by introducing extra layers and overhead where there was none before.
+
+<p>For example, the Mach operating system offers a wide range of new features, such as threads and flexible virtual memory management, all packaged in a small, modular, easy-toport kernel [1]. But it does not perform very well compared to Sony's <span class=smallcaps>Unix</span>. Table 2.2 shows the results of the previous experiment, repeated under Mach on the NeXT machine. Both the NeXT machine and the Sony workstation use the Motorola 68030 processor, and both run at 25MHz. All but one of the measurements show reduced performance compared to Sony's <span class=smallcaps>Unix</span>. Crucial low-level functions, such as context switch and system call dispatch, are two to three times slower in this version of Mach.
+
+<p>Another reason for the large overheads might be that invocation overhead per se has not been subject to intense scrutiny. Designers tend to optimize the most frequently occurring special cases in the services offered, while the cases most frequently used tend to be those that were historically fast, since those are the ones people would have tended to use more. This self-reinforcing loop has the effect of encouraging optimizations that maintain the status quo with regard to relative performance, while eschewing optimizations that may have less immediate payoff but hold the promise of greater eventual return. Since large invocation overheads can usually be hidden with buffering, there has not been a large impetus to optimize in this direction.
+
+<p>Instead of attacking the problem of high kernel overhead directly, performance problems are being solved with more buffering, applied in ever more ingenious ways to a wider array of services. Look, for example, at recent advances in thread management. A number of researchers begin with the premise that kernel thread operations are necessarily expensive, and go on to describe the implementation of a user-level threads package [17] [5] [33] [3]. Since much of the work is now done at the user-level by subscheduling one or more kernelsupplied threads, they can avoid many kernel invocations and their associated overhead.
+
+<p>But there is a tradeoff: increased performance for operations at the user level come with increased overhead and latency when communicating with the kernel. One reason is that kernel calls no longer happen directly, but first go through the user-level code. Another reason could be that optimizing kernel invocations are no longer deemed to be as important, since they occur less often. For example, while Anderson reports order-of-magnitude performance improvement for user-level thread operations on the DEC CVAX multiprocessor compared to the native Topaz kernel threads implementation, the cost of invoking the kernel thread operations had been increased by a factor of 5 over Topaz threads [3].
+
+<p>The factor of 5 is significant because, ultimately, programs interact with the outside world through kernel invocations. Increasing the overhead limits the rate at which a program can invoke the kernel and therefore, interact with the outside world.
+
+<p>Taken to the limit, the things that remain fast are those local to an application, those that can be done at user-level without invoking the kernel often. But in a world of increasing interactions and communications between machines -- all of which require kernel intervention -- I do not think this is a wise optimization strategy. Distributed computing stresses the importance of low latency, both because throughput can actually suffer if machines spend time waiting for each others' responses rather than doing work, and because there are so many interactions with other machines that even a small delay in each is magnified, leading to uneven response time to the user.
+
+<p>Improvement is clearly required to ensure consistent performance and controlled latencies, particularly when processing richer media like interactive sound and video. For example, in an application involving 8-bit audio sampled at 8KHz, using a 4096-byte buffer leads to a 1=2-second delay per stage of processing. This is unacceptable for real-time, interactive audio work. The basic system overhead must be reduced so that time-sensitive applications can use smaller buffers, reducing latency while maintaining throughput. But there is little room for revolutionary increases in performance when the fundamental operating system mechanisms, such as system call dispatch and context switch, are slow, and furthermore, show no trend in becoming faster. In general, existing designs have not focused on lower-level, low-overhead mechanisms, preferring instead to solve performance problems with more buffering.
+
+<p>This dissertation shows that the unusual goal of providing high throughput with low latency can be achieved. There are many factors in the design of Synthesis that accomplish this result, which will be discussed at length in subsequent chapters. But let us now consider four important aspects of the Synthesis design that depart from common precedents and trends.
+
+<h2>2.3 Kernel Structure</h2>
+<h3>2.3.1 The Trend from Monolithic to Diffuse</h3>
+
+<p>Early kernels tended to be large, isolated, monolithic structures that were hard to maintain. IBM's MVS is a classic example [11]. <span class=smallcaps>Unix</span> initially embodied the "small is beautiful" ideal [28]. It captured some of the most elegant ideas of its day in a kernel design that, while still monolithic, was small, easy to understand and maintain, and provided a synergistic, productive, and highly portable set of system tools. However, its subsequent evolution and gradual accumulation of new services resulted in operating systems like System V and Berkeley's BSD 4.3, whose large, sprawling kernels hearken back to MVS.
+
+<p>These problems became apparent to several research teams, and a number of new system projects intended to address the problem were begun. For example, recognizing the need for clean, elegant services, the Mach group at CMU started with the BSD kernel and factored services into user-level tasks, leaving behind a very small kernel of common, central services [1]. Taking a different approach, the Plan 9 group at AT&amp;T Bell Laboratories chose to carve the monolithic kernel into three sub-kernels, one for managing files, one for computation, and one for user interfaces [24]. Their idea is to more accurately and flexibly fit the networks of heterogeneous machines that are common in large organizations today.
+
+<p>There are difficulties with all these approaches. In the case of Mach, the goal of kernelizing the system by placing different services into separate user-level tasks forces additional parameter passing and context switches, adding overhead to every kernel invocation. Communication between the pieces relies heavily on message passing and remote procedure call. This adds considerable overhead despite the research that has gone into making them fast [12]. While Mach has addressed the issues of monolithic design and maintainability, it exacerbates the overhead and latency of system services. Plan 9 has chosen to focus on a particular cut of the system: large networks of machines. While it addresses the chosen problem well and extends the productive virtues of <span class=smallcaps>Unix</span>, its arrangement may not be as suitable for other machine topologies or features, for example, the isolated workstation in a private residence, or those with richer forms of input and output, such as sound and video, which I believe will be common in the near future.
+
+<p>In a sense, kernelized systems can hide ugliness by partitioning it away. The kernel alone is not useful without a great deal of affiliated user-level service. Many papers publish numbers touting small kernel sizes but these hide the large amount of code that has been moved to user-level services. Some people argue that the size of user-level services does not count as much, because they are pageable and are not constrained to occupy real memory. But I argue: is it really a good idea to page out operating system services? This can only result in increased latency and unpredictable response time.
+
+<p>In general, I agree that the diffusion of the kernel structure is a good idea but find it unfortunate that current-generation kernelized systems tend to be slow, even in spite of ongoing efforts to make them faster. Perhaps people commonly accept that some loss of performance is the inevitable result of partitioning, and are willing to suffer that loss in return for greatly increased maintainability and extensibility.
+
+<p>My dissertation shows that this need not be the case: Synthesis addresses the issues of structuring and performance. Its quaject-based kernel structure keeps the modularity, protection, and extensibility demanded of modern-day operating systems. At the same time Synthesis delivers performance an order of magnitude better than existing systems, as evidenced by the experiments in Chapter 7. Its kernel services are subdivided into even finer chunks than kernelized systems like Mach. Any service can be composed of pieces that run at either user- or kernel-level: the distinction is blurred.
+
+<p>Synthesis breaks the batch-mode thinking that has led to systems that wait for all the data to arrive before any subsequent processing is allowed to take place, when in fact subsequent processing could proceed in parallel with the continuing arrival of data. Witness a typical system's handling of network packets: the whole packet is received, buffered, and checksummed before being handed over for further processing, when instead the address fields could be examined and lookups performed in parallel with the reception of the rest of the packet, reducing packet handling latency. Some network gateways do this type of cut-through routing for packet forwarding. But in a general-purpose operating system, the high overhead of system calls and context switches in existing systems discourage this type of thinking in preference to batching. By reconsidering the design, Synthesis compounds the savings. Low-overhead system calls and context switches encourage frequent use to better streamline processing and take advantage of the inherent parallelism achieved by a pipeline, reducing overhead and latency even further.
+
+<h3>2.3.2 Services and Interfaces</h3>
+
+<p>A good operating system provides numerous useful services to make applications easy to write and easy to interconnect. To this end, it establishes conventions for packaging applications so that formats and interfaces are reasonably well standardized. The conventions encompass two forms: the model, which refers to the set of abstractions that guide the overall thinking and design; and the interface, which refers to the set of operations supported and how they are invoked. Ideally, we want a simple model, a powerful interface, and high performance. But these three are often at odds.
+
+<p>Witness the MVS I/O system, which has a complex model but offers a powerful interface and high performance. Its numerous options offer the benefit of detailed, precise control over each device, but with the drawback that even simple I/O requires complex programming.
+
+<p><span class=smallcaps>Unix</span> is at the other end of the scale. <span class=smallcaps>Unix</span> promoted the idea of encapsulating I/O in terms of a single, simple abstraction. All common I/O is accomplished by reading or writing a stream of bytes to a file-like object, regardless of whether the I/O is meant to be viewed on the the user's terminal, stored as a file on disk, or used as input to another program. Treating I/O in a common manner offers great convenience and utility. It becomes trivial to write and test a new program, viewing its output on the screen. Once the program is working, the output can be sent to the intended file on disk without changing a line of code or recompiling.
+
+<p>But an oversimplified model of I/O brings with it a loss of precise control. This loss is not important for the great many <span class=smallcaps>Unix</span> tools -- it is more than compensated by the synergies of a diverse set of connectable programs. But other, more complex applications such as a database management system (DBMS) require more detailed control over I/O [30]. Minimally, for a DBMS to provide reasonable crash recovery, it must know when a write operation has successfully finished placing the data on disk; in <span class=smallcaps>Unix</span>, a write only copies the data to a kernel buffer, movement of data from there to disk occurs later, asynchronously, so in the event of an untimely crash, data waiting in the buffers will be lost. Furthermore, a well-written DBMS has a good idea as to which areas of a file are likely to be needed in the future and its performance improves if this knowledge can be communicated to the operating system; by contrast, <span class=smallcaps>Unix</span> hides the details of kernel buffering, impeding such optimizations in exchange for a simpler interface.
+
+<p>Later versions of <span class=smallcaps>Unix</span> extended the model, making up some of the loss, but these extensions were not "clean" in the sense of the original <span class=smallcaps>Unix</span> design. They were added piecemeal as the need arose. For example, ioctl (for I/O controls) and the select system call help support out-of-band stream controls and non-blocking (polled) I/O, but these solutions are neither general nor uniform. Furthermore, the granularity with which <span class=smallcaps>Unix</span> considers an operation "`non-blocking" is measured in tens of milliseconds. While this was acceptable for the person-typing-on-a-terminal mode of user interaction of the early 1980's, it is clearly inappropriate for handling higher rate interactive data, such as sound and video.
+
+<p>Interactive games and real-time processing are two examples of areas where the classic models are insufficient. <span class=smallcaps>Unix</span> and its variants have no asynchronous read, for example, that would allow a program to monitor the keyboard while also updating the player's screen. A conceptually simple application to record a user's typing along with its timing and later play it back with the correct timing takes several pages of code to accomplish under <span class=smallcaps>Unix</span>, and then it cannot be done well enough if, say, instead of a keyboard we have a musical instrument.
+
+<p>The newer systems, such as Mach, provide extensions and new capabilities but within the framework of the same basic model, hence the problems persist. The result is that the finer aspects of stream control, of real-time processing, or of the handling of time-sensitive data in general have not been satisfactorily addressed in existing systems.
+
+<h3>2.3.3 Managing Diverse Types of I/O</h3>
+
+<p>The multiplexing of I/O and handling of the machine's I/O devices is one of the three most important functions of an operating system. (Managing the processor and memory are the other two.) It is perhaps the most difficult function to perform well, because there can be many different types of I/O devices, each with its own special features and requirements.
+
+<p>Existing systems handle diverse types of I/O devices by defining a few common internal formats for I/O and mapping each device to the closest one. General-purpose routines in the kernel then operate on each format. <span class=smallcaps>Unix</span>, for example, has two major internal formats, which they call "I/O models": the block model for disk-like devices and the character model for terminal-like devices [26].
+
+<p>But common formats force compromise. There is a performance penalty paid when mismatches between the native device format and the internal format make translations necessary. These translations can be expensive if the "distance" between the internal format and a particular device is large. In addition, some functionality might be lost, because common formats, however general, cannot capture everything. There could be some features in a device that do not map well into the chosen format and those features become difficult if not impossible to access. Since operating systems tend to be structured around older formats, chosen at time when the prevalent I/O devices were terminals and disks, it is not surprising that they have difficulty handling the new rich media devices, such as music and video.
+
+<p>Synthesis breaks this tradeoff. The quaject structuring of the kernel allows new I/O formats to be created to suit the performance characteristics of unusual devices. Indeed, it is not inconceivable that every device has its own format, specially tailored to precisely fit its characteristics. Differences between a device format and what the application expects are spanned using translation, as in existing systems. But unlike existing systems, where translation is used to map into a common format, Synthesis maps directly from the device format to the needs of the application, eliminating the intermediate, internal format and its associated buffering and translation costs. This lets knowledgable applications use the highly efficient device-level interfaces when very high performance and detailed control are of utmost importance, but also preserves the ability of any application to work with any device, as in the <span class=smallcaps>Unix</span> common-I/O approach. Since the code is runtime-generated for each specific translation, performance is good. The efficient emulation of <span class=smallcaps>Unix</span> under Synthesis bears witness to this.
+
+<h3>2.3.4 Managing Processes</h3>
+
+<p>Managing the machine's processors is the second important function of an operating system. It involves two parts: multiplexing the processors among the tasks, and controlling task execution and querying its state. But in contrast to the many control and query functions offered for I/O, existing operating systems provide only limited control over task execution. For example, the <span class=smallcaps>Unix</span> system call for this purpose, ptrace, works only between a parent task and its children. It is archaic and terribly inefficient, meant solely for use by debuggers and apparently implemented as an afterthought. Mach threads, while supporting some rudimentary calls, sometimes lacks desirable generality: a Mach thread cannot suspend itself, for example, and the thread controls do not work between threads in different tasks.
+
+<p>In this sense, Mach threads only add parallelism to an existing abstraction - the <span class=smallcaps>Unix</span> process - Mach does not develop the thread idea to its fullest potential. Both these systems lack general functions to start, stop, query, and modify an arbitrary task's execution without arrangements having been made beforehand, for example, by starting the task from within a debugger.
+
+<p>In contrast, Synthesis provides detailed thread control, comparable to the level of control found for other operating system services, such as I/O. Section 4.3.2 lists the operations supported, which work between any pair of threads, even between unrelated threads in different address spaces and even on the kernel's threads, if there is sufficient privilege. Because of their exceptionally low overhead - only ten to twenty times the cost of a null procedure call - they provide unprecedented data collection and measurement abilities and unparalleled support for debuggers.
+</div>
+
+</body>
+</html>

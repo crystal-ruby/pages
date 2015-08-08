@@ -1,0 +1,137 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Strict//EN">
+<html>
+<head>
+	<title>Synthesis: An Efficient Implementation of Fundamental Operating System Services - Abstract</title>
+	<link rel="stylesheet" type="text/css" href="../css/style.css">
+	<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+<div id="nav">
+	<a class=home href="../index.html">Alexia's Home</a>
+	<a href="index.html">Dissertation</a>
+	<a href="abs.html">Abstract</a>
+	<a href="ack.html">Acknowledgements</a>
+	<a href="toc.html">Contents</a>
+	<a class=here href="ch1.html">Chapter 1</a>
+	<a href="ch2.html">Chapter 2</a>
+	<a href="ch3.html">Chapter 3</a>
+	<a href="ch4.html">Chapter 4</a>
+	<a href="ch5.html">Chapter 5</a>
+	<a href="ch6.html">Chapter 6</a>
+	<a href="ch7.html">Chapter 7</a>
+	<a href="ch8.html">Chapter 8</a>
+	<a href="bib.html">Bibliography</a>
+	<a href="app-A.html">Appendix A</a>
+</div>
+
+
+<div id="running-title">
+	Synthesis: An Efficient Implementation of Fundamental Operating System Services - Abstract
+</div>
+
+<div id="content">
+
+<h1>1. Introduction</h1>
+
+<div id="chapter-quote">
+I must Create a System, or be enslav'd by another Man's;<br>
+I will not Reason and Compare: my business is to Create.<br>
+-- William Blake Jerusalem
+</div>
+
+<h2>1.1 Purpose</h2>
+
+<p>This dissertation shows that operating systems can provide fundamental services an order of magnitude more efficiently than traditional implementations.  It describes the implementation of a new operating system kernel, Synthesis, that achieves this level of performance.
+
+<p>The Synthesis kernel combines several new techniques to provide high performance without sacrificing the expressive power or security of the system.  The new ideas include:
+
+<ul>
+<li><i>Run-time code synthesis</i> - a systematic way of creating executable machine code at runtime to optimize frequently-used kernel routines - queues, buffers, context switchers, interrupt handlers, and system call dispatchers - for specific situations, greatly reducing their execution time.
+
+<li><i>Fine-grain scheduling</i> - a new process-scheduling technique based on the idea of feedback that performs frequent scheduling actions and policy adjustments (at submillisecond intervals) resulting in an adaptive, self-tuning system that can support real-time data streams.
+
+<li><i>Lock-free optimistic synchronization</i> is shown to be a practical, efficient alternative to lock-based synchronization methods for the implementation of multiprocessor operating system kernels.
+
+<li>An extensible kernel design that provides for simple expansion to support new kernel services and hardware devices while allowing a tight coupling between the kernel and the applications, blurring the distinction between user and kernel services.
+</ul>
+
+The result is a significant performance improvement over traditional operating system implementations in addition to providing new services.
+
+<p>The text is structured as follows: The remainder of this chapter summarizes the project. It begins with a brief history, showing how my dissatisfaction with the performance of computer software led me to do this research. It ends with an overview of the Synthesis kernel and the hardware it runs on. The intent is to establish context for the remaining chapters and reduce the need for forward references in the text.
+
+<p>Chapter 2 examines the design decisions and tradeoffs in existing operating systems. It puts forth arguments telling why I believe some of these decisions and tradeoffs should be reconsidered, and points out how Synthesis addresses the issues.
+
+<p>The next four chapters present the new implementation techniques. Chapter 3 explains run-time kernel code synthesis. Chapter 4 describes the structure of the Synthesis kernel. Chapter 5 explains the lock-free data structures and algorithms used in Synthesis. Chapter 6 talks about fine-grain scheduling. Each chapter includes measurements that prove the effectiveness of each idea.
+
+<p>Application-level measurements of the system as a whole and comparisons with other systems are found in chapter 7. The dissertation closes with chapter 8, which contains conclusions and directions for further work.
+
+<h2>1.2 History and Motivation</h2>
+
+<p>This section gives a brief history of the Synthesis project. By giving the reader a glimpse of what was going through my mind while doing this research, I establish context and make the new ideas easier to grasp by showing the motivation behind them.
+
+<p>. . . In 1983, the first <span class=smallcaps>Unix</span>-based workstations were being introduced. I was unhappy with the performance of computers of that day, particularly that of workstations relative to what DOS-based PCs could deliver. Among other things, I found it hard to believe that the workstations could not drive even one serial line at a full 19,200 baud - approximately 2000 characters per second <sup>1</sup>.  I remember asking myself and others: "There is a full half-millisecond time between characters. What could the operating system possibly be doing for that long?" No one had a clear answer. Even at the relatively slow machine speed of that day - approximately one million machine instructions per second - the processor could execute 500 machine instructions in the time a character was transmitted. I could not understand why 500 instructions were not sufficient to read a character from a queue and have it available to write to the device's control register by the time the previous one had been transmitted.
+
+<div class=footnote><sup>1</sup> This is still true today despite an order-of-magnitude speed increase in the processor hardware, and attests to a comparable increase in operating system overhead. Specifically, the Sony NEWS 1860 workstation, running release 4.0 of Sony's version of UNIX, places a software limit of 9600 baud on the machine's serial lines. If I force the line to go faster through the use of kernel hackery, the operating system loses data each time a burst longer than about 200 characters arrives at high speed.</div>
+
+<p>That summer, I decided to try building a small computer system and writing some operating systems software. I thought it would be fun, and I wanted to see how far I could get. I teamed up with a fellow student, James Arleth, and together we built the precursor of what was later to become an experimental machine known as the Quamachine. It was a two-processor machine based on the 68000 CPU [4], but designed in such a way that it could be split into two independently-operating halves, so we each would have a computer to take with us after we graduated. Jim did most of the hardware design while I concentrated on software.
+
+<p>The first version of the software [19] consisted of drivers for the machine's serial ports and 8-bit analog I/O ports, a simple multi-tasker, and an unusual debug monitor that included a rudimentary C-language compiler / interpreter as its front end. It was quite small - everything fit into the machine's 16 kilobyte ROM, and ran comfortably in its 16 kilobyte RAM. And it did drive the serial ports at 19,200 baud. Not just one, but all four of them, concurrently. Even though it lacked many fundamental services, such as a filesystem, and could not be considered a "real" operating system in the sense of <span class=smallcaps>Unix</span>, it was the precursor of the Synthesis kernel, though I did not know it at the time.
+
+<p>After entering the PhD program at Columbia in the fall of 1984, I continued to develop the system in my spare time, improving both the hardware and the software, and also experimenting with other interests -- electronic music and signal processing. During this time, the CPU was upgraded several times as Motorola released new processors in the 68000 family. Currently, the Quamachine uses a 68030 processor rated for 33 MHz, but running at 50MHz, thanks to a homebrew clock circuit, special memory decoding tricks, a higher-than-spec operating voltage, and an ice-cube to cool the processor.
+
+<p>But as the software was fleshed out with more features and new services, it became slower. Each new service required new code and data structures that often interacted with other, unrelated, services, slowing them down. I saw my system slowly acquiring the ills of <span class=smallcaps>Unix</span>, going down the same road to inefficiency. This gave me insight into the inefficiency of <span class=smallcaps>Unix</span>. I noticed that, often, the mere presence of a feature or capability incurs some cost, even when not being used. For example, as the number of services and options multiply, extra code is required to select from among them, and to check for possible interference between them. This code does no useful work processing the application's data, yet it adds overhead to each and every call.
+
+<p>Suddenly, I had a glimmer of an idea of how to prevent this inefficiency from creeping into my system: runtime code generation! All along I had been using a monitor program with a C-language front end as my "shell." I could install and remove services as needed, so that no service would impose its overhead until it was used. I thought that perhaps there might be a way to automate the process, so that the correct code would be created and installed each time a service was used, and automatically removed when it was no longer needed. This is how the concept of creating code at runtime came to be. I hoped that this could provide relief from the inefficiencies that plague other full-featured operating systems.
+
+<p>I was dabbling with these ideas, still in my spare time, when Calton Pu joined the faculty at Columbia as I was entering my third year. I went to speak with him since I was still unsure of my research plans and looking for a new advisor. Calton brought with him some interesting research problems, among them the efficient implementation of object5 based systems. He had labored through his dissertation and knew where the problems were. Looking at my system, he thought that my ideas might solve that problem one day, and encouraged me to forge ahead.
+
+<p>The project took shape toward the end of that semester. Calton had gone home for Christmas, and came back with the name Synthesis, chosen for the main idea: run-time kernel code synthesis. He helped package the ideas into a coherent set of concepts, and we wrote our first paper in February of 1987.
+
+<p>I knew then what the topic of my dissertation would be. I started mapping out the structure of the basic services and slowly restructured the kernel to use code synthesis throughout. Every operation was subject to intense scrutiny. I recall the joy felt the day I discovered how to perform a "putchar" (place character into buffer) operation in four machine instructions rather than the five I had been using (or eight, using the common Clanguage macro). After all, "putchar" is a common operation, and I found it both satisfying and amusing that eliminating one machine instruction resulted in a 4% overall gain in performance for some of my music applications. I continued experimenting with electronic music, which by then had become more than a hobby, and, as shown in section 6.3, offered a convincing demonstration that Synthesis did deliver the kind of performance claimed.
+
+<p>Over time, this type of semi-playful, semi-serious work toward a fully functional kernel inspired the other features in Synthesis - fine-grained scheduling, lock-free synchronization, and the kernel structure.
+
+<p>Fine-grained scheduling was inspired by work in music and signal-processing. The early kernel's scheduler often needed tweaking in order to get a new music synthesis program to run in real-time. While early Synthesis was fast enough to make real-time signal processing possible by handling interrupts and context switches efficiently, it lacked a guarantee that real-time tasks got sufficient CPU as the machine load increased. I had considered the use of task priorities in scheduling, but decided against them, partly because of the programming effort involved, but mostly because I had observed other systems that used priorities, and they did not seem to fully solve the problem. Instead, I got the idea that the scheduler could deduce how much CPU time to give each stage of processing by measuring the data accumulation at each stage. That is how fine-grained scheduling was born. It seemed easy enough to do, and a few days later I had it working.
+
+<p>The overall structure of the kernel was another idea developed over time. Initially, the kernel was an ad-hoc mass of procedures, some of which created code, some of which didn't. Runtime code generation was not well understood, and I did not know the best way to structure such a system. For each place in the kernel where code-synthesis would be beneficial, I wrote special code to do the job. But even though the kernel was lacking in overall structure, I did not see that as negative. This was a period where freedom to experiment led to valuable insights, and, as I found myself repeating certain things, an overall structure gradually became clear.
+
+<p>Optimistic synchronization was a result of these experiments. I had started writing the kernel using disabled interrupts to implement critical sections, as is usually done in other single-processor operating systems. But the limitations of this method were soon brought out in my real-time signal processing work, which depends on the timely servicing of frequent interrupts, and therefore cannot run in a system that disables interrupts for too long. I therefore looked for alternatives to inter-process synchronization. I observed that in many cases, such as in a single-producer/single-consumer queue, the producer and consumer interact only when the queue is full or empty. During other times, they each work on different parts of the queue, and can do so independently, without synchronization. My interest in this area was further piqued when I read about the "Compare-and-Swap" instructions on the 68030 processor, which allows concurrent data structures to be implemented without using locks.
+
+<h2>1.3 Synthesis Overview</h2>
+<h3>1.3.1 Kernel Structure</h3>
+
+<p>The Synthesis kernel is designed to support a real, full-featured operating system with functionality on the level of <span class=smallcaps>Unix</span> [28] and Mach [1]. It is built out of many small, independent modules called quajects. A quaject is an abstract data type -- a collection of code and data with a well-defined interface that performs a specific function. The interface encompasses not just the quaject's entry points, but also all its external invocations, making it possible to dynamically link quajects, thereby building up kernel services. Some examples of quajects include various kinds of queues and buffers, threads, TTY input and output editors, terminal emulators, and text and graphics windows.
+
+<p>All higher-level kernel services are created by instantiating and linking two or more quajects through their interfaces. For example, a <span class=smallcaps>Unix</span>-like TTY device is built using the following quajects: a raw serial device driver, two queues, an input editor, an output format converter, and a system-call dispatcher. The wide choice of quajects and linkages allows Synthesis to support a wide range of different system interfaces at the user level. For example, Synthesis includes a (partial) <span class=smallcaps>Unix</span> emulator that runs some SUN-3 binaries. At the same time, a different application might use a different interface, for example, one that supports asynchronous I/O.
+
+<h3>1.3.2 Implementation Ideas</h3>
+
+<p>One of the ways Synthesis achieves order-of-magnitude gains in efficiency is through the technique of kernel code synthesis. Kernel code synthesis creates, on-the-fly, specialized (thus short and fast) kernel routines for specific situations, reducing the execution path for frequently used kernel calls. For example, queue quajects have their buffer and pointer addresses hard-coded using self-relative addressing; thread quajects have their system-call dispatch and context-switch code specially crafted to speed these operations. Section 3.3 illustrates the specific code created for these and other examples. This hard-coding eliminates indirection and reduces parameter passing, improving execution speed. Extensive use of the processor's self-relative addressing capability retains the benefits of relocatability and easy sharing. Shared libraries of non-specialized code handle less-frequently occurring cases and keep the memory requirements low. Chapter 3 explains this idea in detail and also introduces the idea of executable data structures, which are highly efficient "self-traversing" structures.
+
+<p>Synthesis handles real-time data streams with fine-grain scheduling. Fine-grain scheduling measures process progress and performs frequent scheduling actions and policy adjustments at sub-millisecond intervals resulting in an adaptive, self-tuning system usable in a real-time environment. This idea is explained in chapter 6, and is illustrated with various music-synthesizer and signal-processing applications, all of which run in real time under Synthesis.
+
+<p>Finally, lock-free optimistic synchronization increases concurrency within the multithreaded synthesis kernel and enhances Synthesis support for multiprocessors. Synthesis also includes a reentrant, optimistically-synchronized C-language runtime library suitable for use in multi-threaded and multi-processor applications written in C.
+
+<h3>1.3.3 Implementation Language</h3>
+
+<p>Synthesis is written in 68030 macro assembly language. Despite its obvious flaws - the lack of portability and the difficulty of writing complex programs - I chose assembler because no higher-level language provides both efficient execution and support for runtime code-generation. I also felt that it would be an interesting experiment to write a mediumsize system in assembler, which allows unrestricted access to the machine's architecture, and perhaps discover new coding idioms that have not yet been captured in a higher-level language. Section 7.4.1 reports on the experience.
+
+<p>A powerful macro facility helped minimize the difficulty of writing complex programs. It also let me postpone making some difficult system-wide design decisions, and let me easily change them after they were made. For example, quaject definition is a declarative macro in the language. The structure of this macro and the code it produced changed several times during the course of system development. Even the object-file ".o" format is defined entirely by source-code macros, not by the assembler itself, and allows for easy expansion to accommodate new ideas.
+
+<h3>1.3.4 Target Hardware</h3>
+
+<p>At the time of this writing, Synthesis runs on two machines: the Quamachine and the Sony NEWS 1860 workstation.
+
+<p>The Quamachine is a home-brew, experimental 68030-based computer system designed to aid systems research and measurement. Measurement facilities include an instruction counter, a memory reference counter, hardware program tracing, and an interval timer with 20-nanosecond resolution. As their names imply, the instruction counter keeps a count of machine instructions executed by the processor, and the memory reference counter keeps a count of memory references issued by the processor. The processor can operate at any clock speed from 1 MHz up to 50 MHz. Normally it runs at 50 MHz. But by setting the processor speed to 16 MHz and introducing 1 wait-state into the memory access, the Quamachine closely matches the performance characteristics of a the SUN-3/160, allowing direct measurements and comparisons with that machine and its operating system.
+
+<p>Other features of the Quamachine include 256 kilobytes of no-wait-state ROM that holds the entire Synthesis kernel, monitor, and runtime libraries; 2 12 megabytes of no-waitstate main memory; a 2Kx2Kx8-bit framebuffer with graphics co-processor; and audio I/O devices: stereo 16-bit analog output, stereo 16-bit analog input, and a compact disc (CD) player digital interface.
+
+<p>The Sony NEWS 1860 is a workstation with two 68030 processors. It is a commercially available machine, making Synthesis potentially accessible to other interested researchers. It has two processors, which, while not a large number, nevertheless demonstrates Synthesis multiprocessor support. While its architecture is not symmetric - one processor is the main processor and the other is the I/O processor - Synthesis treats it as if it were a symmetric multiprocessor, scheduling tasks on either processor without preference, except those that require something that is accessible from one processor and not the other.
+
+<h3>1.3.5 <span class=smallcaps>Unix</span> Emulator</h3>
+
+<p>A partial <span class=smallcaps>Unix</span> emulator runs on top of the Synthesis kernel and emulates certain SUNOS kernel calls [31]. Although the emulator supports only a subset of the <span class=smallcaps>Unix</span> system calls -- time constraints have forced an "implement-as-the-need-arises" strategy -- the set supported is sufficiently rich to provide many benefits. It helps with the problem of acquiring application software for a new operating system by allowing the use of SUN-3 binaries. It further demonstrates the generality of Synthesis by setting the lower bound -- emulating a widely used system. And, most important from the research point of view, it allows a direct comparison between Synthesis and <span class=smallcaps>Unix</span>. Section 7.2.1 presents measurements showing that the Synthesis emulation of <span class=smallcaps>Unix</span> is several times more efficient than native <span class=smallcaps>Unix</span> running the same set of programs on comparable hardware.
+</div>
+
+</body>
+</html>
