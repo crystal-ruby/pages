@@ -56,3 +56,13 @@ feedback, both driving the process at double speed.
 
 Now i "just" need a good way to visualize a static and running program. (implement breakpoints,
   build a class and object inpector, recompile on edit . . .)
+
+## Debugger rewritten, thrice
+
+Update: after trying around with a [2d graphics](https://github.com/orbitalimpact/opal-pixi)
+implementation i have rewritten the ui in [react](https://github.com/catprintlabs/react.rb) ,
+[Volt](https://github.com/voltrb/volt) and [OpalBrowser](https://github.com/opal/opal-browser).
+
+The last is what got the easiest to understand code. Also has the least dependencies, namely
+only opal and opal-browser. Opal-browser is a small opal wrapper around the browsers
+javascript functionality.
