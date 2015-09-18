@@ -49,7 +49,7 @@ is a tree, not a list, as demonstrated by the parse *tree*. Flattening it just c
 problems. Also as a metal model it is easier, as it is easy to imagine swapping out subtrees,
 expanding or collapsing nodes etc.
 
-## Saml - SalamA Machine Language
+## Bosl - Basic Object System Language
 
 ### Typed
 
@@ -65,12 +65,12 @@ all the time dynamic.
 
 The way i had the implementation figured was to have different versions of the same function. In
 each function we would have compile time types, everything known. I'll probably still do that,
-just written in saml.
+just written in bosl.
 
 ### Object c
 
 The language needs to be object based, off course. Just because it's typed and not dynamic
-and closer to assembler, doesn't mean we need to give up objects. In fact we mustn't. Saml (working
+and closer to assembler, doesn't mean we need to give up objects. In fact we mustn't. Bosl (working
   name) should be a little bit in like c++, ie compile time known variable arrangement and types,
   objects. But no classes (or inheritance), more like structs, with full access to everything.
 So a struct.variable syntax would mean grab that variable at that address, no functions, no possible
@@ -91,7 +91,7 @@ That can obviously read itself and anything else, so the start small approach is
 Also, when writing the debugger, i found that parslet is not opal compatible and that doesn't seem
 to be changing. So, casting the net, i found Citrus which is small and clean without *any* runtime
 dependency (a great feat). Citrus has a grammar, and i find at least it looks nicer than the ruby
-grammar code. So for saml it will probably be that and as small a syntax as i can get away with.
+grammar code. So for bosl it will probably be that and as small a syntax as i can get away with.
 
 ### Interoperability
 
@@ -138,8 +138,8 @@ So writing a ruby compiler by writing a ruby interpreter would mean
 writing the interpreter in c, and (worse) writing the partial evaluator *for* c, not for ruby.
 
 Ok, maybe it is not quite as bad as that makes it sound. As i do have the register layer ready
-and will be writing a c-ish language, it may even be possible to write an interpreter **in saml**,
-and then it would be ok to write an evaluator **for saml** too.
+and will be writing a c-ish language, it may even be possible to write an interpreter **in bosl**,
+and then it would be ok to write an evaluator **for bosl** too.
 
 I will nevertheless go the straighter route for now, ie write a compiler, and maybe return to the
 promised freebie later. It does feel like a lot of what the partial evaluator is, would be called
