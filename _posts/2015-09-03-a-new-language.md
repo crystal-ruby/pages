@@ -49,7 +49,7 @@ is a tree, not a list, as demonstrated by the parse *tree*. Flattening it just c
 problems. Also as a metal model it is easier, as it is easy to imagine swapping out subtrees,
 expanding or collapsing nodes etc.
 
-## Bosl - Basic Object System Language
+## Phisol - Phi System Object Language
 
 ### Typed
 
@@ -65,20 +65,32 @@ all the time dynamic.
 
 The way i had the implementation figured was to have different versions of the same function. In
 each function we would have compile time types, everything known. I'll probably still do that,
-just written in bosl.
+just written in Phisol.
+
+### Phi
+
+A phi node is probably the opposite of what you may imagine an if to be. If you think of an if as a
+branch point, the phi is where the branches lead together.
+
+In fact, there are only three structures in programming, linear code, the if and the phi. Even a
+while (for example) is constructured out of these, in case of the while by a phi and then an if node.
+
+Phisol changes the semantics of a function call. Whereas it is a linear construct (disregarding
+  exceptions) in other languages, it becomes an if. And the function decides which "branch" to take.
+In the higher level this is used to switch code paths depending on type.
 
 ### Object c
 
 The language needs to be object based, off course. Just because it's typed and not dynamic
-and closer to assembler, doesn't mean we need to give up objects. In fact we mustn't. Bosl (working
-  name) should be a little bit in like c++, ie compile time known variable arrangement and types,
+and closer to assembler, doesn't mean we need to give up objects. In fact we mustn't. Phisol
+should be a little bit in like c++, ie compile time known variable arrangement and types,
   objects. But no classes (or inheritance), more like structs, with full access to everything.
 So a struct.variable syntax would mean grab that variable at that address, no functions, no possible
 override, just get it. This is actually already implemented as i needed it for the slot access.  
 
 So objects without encapsulation or classes. A lower level object orientation.
 
-### Citrus (or treetop) and whitequark
+### Whitequark
 
 This new approach (and more experience) shed a new light on ruby parsing. The previous idea was to
 start small, write the necessary stuff in the parsable subset and with time expand that set.
@@ -87,11 +99,6 @@ Alas . . ruby is a beast to parse, and because of the **semantic gap** writing t
 even in a subset, is not viable. And it turns out the brave warriors of the ruby community have
 already produced a pure, production ready, [ruby parser](https://github.com/whitequark/parser).
 That can obviously read itself and anything else, so the start small approach is doubly out.
-
-Also, when writing the debugger, i found that parslet is not opal compatible and that doesn't seem
-to be changing. So, casting the net, i found Citrus which is small and clean without *any* runtime
-dependency (a great feat). Citrus has a grammar, and i find at least it looks nicer than the ruby
-grammar code. So for bosl it will probably be that and as small a syntax as i can get away with.
 
 ### Interoperability
 
@@ -138,8 +145,8 @@ So writing a ruby compiler by writing a ruby interpreter would mean
 writing the interpreter in c, and (worse) writing the partial evaluator *for* c, not for ruby.
 
 Ok, maybe it is not quite as bad as that makes it sound. As i do have the register layer ready
-and will be writing a c-ish language, it may even be possible to write an interpreter **in bosl**,
-and then it would be ok to write an evaluator **for bosl** too.
+and will be writing a c-ish language, it may even be possible to write an interpreter **in phisol**,
+and then it would be ok to write an evaluator **for phisol** too.
 
 I will nevertheless go the straighter route for now, ie write a compiler, and maybe return to the
 promised freebie later. It does feel like a lot of what the partial evaluator is, would be called
