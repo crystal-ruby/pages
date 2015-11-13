@@ -49,11 +49,11 @@ is a tree, not a list, as demonstrated by the parse *tree*. Flattening it just c
 problems. Also as a metal model it is easier, as it is easy to imagine swapping out subtrees,
 expanding or collapsing nodes etc.
 
-## Phisol - Phi System Object Language
+## Soml - Salama Object Machine Language
 
 ### Typed
 
-Quite a while before cristalizing into the idea of a new language, i already saw the need for a type
+Quite a while before crystallizing into the idea of a new language, i already saw the need for a type
 system. Off course, and this dates back to the first memory layouts. But i mean the need for a
 *strong typing* system, or maybe it's even clearer to call it compile time typing. The type that c
 and c++ have. It is essential (mentally, this is off course all for the programmer, not the computer)
@@ -65,25 +65,21 @@ all the time dynamic.
 
 The way i had the implementation figured was to have different versions of the same function. In
 each function we would have compile time types, everything known. I'll probably still do that,
-just written in Phisol.
+just written in Soml.
 
-### Phi
+### Machine language
 
-A phi node is probably the opposite of what you may imagine an if to be. If you think of an if as a
-branch point, the phi is where the branches lead together.
+Soml is a machine language for the Salama machine. As i tried to implement without this layer, i was
+essentially implementing in assembler. Too much.
 
-In fact, there are only three structures in programming, linear code, the if and the phi. Even a
-while (for example) is constructured out of these, in case of the while by a phi and then an if node.
-
-Phisol changes the semantics of a function call. Whereas it is a linear construct (disregarding
-  exceptions) in other languages, it becomes an if. And the function decides which "branch" to take.
-In the higher level this is used to switch code paths depending on type.
+There are two main feature we need from the machine language, one is typed a typed oo memory model,
+the other an oo call model.
 
 ### Object c
 
 The language needs to be object based, off course. Just because it's typed and not dynamic
-and closer to assembler, doesn't mean we need to give up objects. In fact we mustn't. Phisol
-should be a little bit in like c++, ie compile time known variable arrangement and types,
+and closer to assembler, doesn't mean we need to give up objects. In fact we mustn't. Soml
+should be a little bit like c++, ie compile time known variable arrangement and types,
   objects. But no classes (or inheritance), more like structs, with full access to everything.
 So a struct.variable syntax would mean grab that variable at that address, no functions, no possible
 override, just get it. This is actually already implemented as i needed it for the slot access.  
@@ -145,8 +141,8 @@ So writing a ruby compiler by writing a ruby interpreter would mean
 writing the interpreter in c, and (worse) writing the partial evaluator *for* c, not for ruby.
 
 Ok, maybe it is not quite as bad as that makes it sound. As i do have the register layer ready
-and will be writing a c-ish language, it may even be possible to write an interpreter **in phisol**,
-and then it would be ok to write an evaluator **for phisol** too.
+and will be writing a c-ish language, it may even be possible to write an interpreter **in soml**,
+and then it would be ok to write an evaluator **for soml** too.
 
 I will nevertheless go the straighter route for now, ie write a compiler, and maybe return to the
 promised freebie later. It does feel like a lot of what the partial evaluator is, would be called
