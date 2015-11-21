@@ -57,7 +57,7 @@ Quite a while before crystallizing into the idea of a new language, i already sa
 system. Off course, and this dates back to the first memory layouts. But i mean the need for a
 *strong typing* system, or maybe it's even clearer to call it compile time typing. The type that c
 and c++ have. It is essential (mentally, this is off course all for the programmer, not the computer)
-to be able to thing in a static type system, and then extend that and make it dynamic.
+to be able to think in a static type system, and then extend that and make it dynamic.
 Or possibly use it in a dynamic way.
 
 This is a good example of this too big gap, where one just steps on quicksand if everything is

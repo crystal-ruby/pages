@@ -28,8 +28,10 @@ with code to generate code for constants.
 
 And off course there is the overwhelming arm infocenter, [here with it's bizarre division](http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.dui0473c/CEGECDGD.html)
 
-The full 750 page specification for the pi , the [ARM1176JZF-S is here](/arm/big_spec.pdf)
+The full 750 page specification for the pi , the [ARM1176JZF-S pdf is here](/arm/big_spec.pdf) or
+[online](http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.dui0553a/BABFADHJ.html)
 
+A nice list of [Kernel calls](http://docs.cs.up.ac.za/programming/asm/derick_tut/syscalls.html) 
 ## Virtual pi
 
 And since not everyone has access to an arm, here is a description how to set up an [emulated pi](/arm/qemu.html)
