@@ -2,17 +2,16 @@
 layout: site
 ---
 
-
-
-
 <div class="row vspace10">
 	<div class="span10">
 		<h2 class="center">{{page.title}}</h2>
+		<p class="center"><span> {{page.sub-title}} </span></p>
 		<div>
-    <p class="center"><span> {{page.sub-title}} </span></p>
+      {{content}}
 		</div>
 	</div>
 	<div class="span2">
+		<h3 class="center">More Detail</h2>
 		<div>
   		<ul class="nav nav-list">
 				<li><a href="/soml/soml.html"> Soml </a> </li>
@@ -22,5 +21,3 @@ layout: site
 		</div>
 	</div>
 </div>
-
-{{content}}

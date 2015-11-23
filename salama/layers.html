@@ -4,8 +4,7 @@ title: Salama architectural layers
 ---
 
 
-<div class="row">
-  <div class="span10">
+<div class="row span10">
     <h4>Main Layers</h4>
     <p>
       To implement an object system to execute object oriented languages takes a large system.
@@ -32,11 +31,9 @@ title: Salama architectural layers
             bootstraping code</li>
       </ul>
     </p>
-  </div>
 </div>
 
-<div class="row">
-  <div class="span10">
+<div class="row span10">
     <h5>Binary , Arm and Elf</h5>
     <p>
       A physical machine will run binaries containing intructions that the cpu understands. With arm
@@ -49,11 +46,9 @@ title: Salama architectural layers
       register load instruction. It is possible to create very dense code using all the arm
       special features, but this is not implemented yet.
     </p>
-  </div>
 </div>
 
-<div class="row">
-  <div class="span10">
+<div class="row span10">
     <h5>Register Machine</h5>
     <p>
       The Register machine layer is a relatively close abstraction of risc hardware, but without the
@@ -84,11 +79,9 @@ title: Salama architectural layers
       tremendously in creating this layer. And the interpreter helps in testing, ie keeping it
       working in the face of developer change.
     </p>
-  </div>
 </div>
 
-<div class="row">
-  <div class="span10">
+<div class="row span10">
     <h5>Soml, Salama object machine language</h5>
     <p>
       Soml is probably the larest single part of the system and much more information can be found
@@ -121,11 +114,9 @@ title: Salama architectural layers
                   implementations for different types of the arguments (statically matched)</li>
     </ul>
   </p>
-  </div>
 </div>
 
-<div class="row">
-  <div class="span10">
+<div class="row span10">
     <h5>Salama</h5>
     <p>
       To compile and run ruby, we need to parse and compile ruby code. To compile ruby to soml a clear
@@ -156,7 +147,6 @@ title: Salama architectural layers
       compile a single ruby method into several soml methods. Each such method is typed, ie all
       arguments and variables are of known type. According to these types we can call methods according
       to their signatures. Also we can autognerate error methods for unhandled types, and predict
-      that only a fraction of the possible combinations will actually be needed. 
+      that only a fraction of the possible combinations will actually be needed.
     </p>
-  </div>
 </div>
