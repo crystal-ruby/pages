@@ -110,17 +110,6 @@ title: Salama architectural layers
                   in soml (remembering that parfait will be expressed in soml eventually)</li>
       </ul>
     </p>
-    <p>
-    Just to summarize a few of soml features that are maybe unusual:
-    <ul>
-      <li> <b> Mesage based calling:</b> Calling is completely object oriented (not stack based)
-              and uses Message and Frame objects.</li>
-      <li> <b> Return addresses:</b>  A soml method call may return to several addresses, according
-              to type, and in case of exception</li>
-      <li> <b> Overloaded arguments </b> A method is defined by name, but may have several
-                  implementations for different types of the arguments (statically matched)</li>
-    </ul>
-  </p>
   </div>
 </div>
 
@@ -128,35 +117,38 @@ title: Salama architectural layers
   <div class="span10">
     <h5>Salama</h5>
     <p>
-      To compile and run ruby, we need to parse and compile ruby code. To compile ruby to soml a clear
-      mapping has to be achieved. Particularly the dynamic aspects, and typing need to be addressed.
+    </p>
+  </p>
+  </div>
+</div>
+
+</div>
+
+<div class="row">
+  <div class="span12">
+    <h5>Parfait</h5>
+    <p>
+      Ruby is very dynamic, and so it has a relatively large run-time. Parfait is that Run-time.
       <br/>
-      While parsing ruby is quite a difficult task, it has already been implemented in pure ruby
-      <a href="https://github.com/whitequark/parser"> here </a>. The output of the parser is again
-      an ast, which needs to be compiled to soml. <br/>
-      The dynamic aspects of ruby are actually realtively easy to handle, once the whole system is
-      in place, because the whole system is written in ruby without external dependencies.
-      Since (when finished) it can compile ruby, it can do so to produce a binary. This binary can
-      then contain the whole of the system, and so the resulting binary will be able to produce
-      binary code when it runs. With small changes to the linking process (easy in ruby!) it can
-      then extend itself.
+      Parfait includes all the functionality a ruby program could not do without, Array, Hash, Object, Class, etc.
+      <br/>
+      Parfait does not include any stdlib or indeed core functionality if it doesn't have too.
+      <br/>
+      Parfait is coded in ruby, but not all functionality can be coded in ruby, so there is Builtin
     </p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="span12">
+    <h5>Builtin</h5>
     <p>
-      The type aspect is more tricky: Ruby is not typed and soml is after all. And if everything
-      were objects (as we like to pretend in ruby) we could just do a lot of dynamic checking,
-      possibly later introduce some caching. But everything is not an object, minimally integers
-      are not, but maybe also floats and other values. The destinction between what is an integer
-      and what an object has sprouted an elaborate type system, which is (by necessity) present in
-      soml (see there).
-    </p>
-    <p>
-      The idea (because it hasn't been implemented yet) is to have different functions for different
-      types. The soml layer defines object layout and types and also lets us return to different
-      places from a function (in effect a soml function call is like an if). By using this, we can
-      compile a single ruby method into several soml methods. Each such method is typed, ie all
-      arguments and variables are of known type. According to these types we can call methods according
-      to their signatures. Also we can autognerate error methods for unhandled types, and predict
-      that only a fraction of the possible combinations will actually be needed. 
+      Builtin is the part of the vm that can not be coded in ruby. It is not, as may be imagined, a set of instructions,
+      but rather a set of modules.
+      <br/>
+      Modules of Builtin have functions that implement functionality that can not be coded in ruby. Ie array access.
+      The functions take a VM::Method and provide the code as a set of instructions. This may be seen as the assembler
+      layer if the vm.
     </p>
   </div>
 </div>

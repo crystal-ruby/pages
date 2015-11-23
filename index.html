@@ -3,10 +3,11 @@ layout: site
 ---
 <div class="row vspace10">
 	<div class="span12">
-		<h2 class="center">A completely object oriented virtual machine</h2>
+		<h2 class="center">A completely object oriented machine</h2>
 		<div>
     <p class="center"><span>
-    Leaving the old (c) world behind to go where no machine has gone before (or something like that)
+    A fully self describing object system without external dependencies capable of executing dynamic
+		object oriented languages like ruby or python.
    </span></p>
 		</div>
 	</div>
@@ -14,51 +15,50 @@ layout: site
 
 <div class="row vspace20">
   <div class="span4">
-    <h2 class="center">Architecture</h2>
-    <p>
-      Salama is maybe the first successful attempt at writing a virtual machine without the use
-      of c or c tools.
-      It defines and implements an object virtual machine completely in object oriented terms,
-      using ruby to bootstrap itself.
+    <h2 class="center">Goal</h2>
+		<p>
+			The goal is to execute object oriented code without external dependencies, on modern hardware.
     </p>
-    <p>
-      Just some of the features, most of which would not be possible in c:
-      <ul>
-        <li> Linked-List, not stack, based </li>
-        <li> Multiple return addresses based on type  </li>
-        <li> Multiple implementations per function based on type  </li>
-        <li> Implicit type tracking using adaptive code</li>
-        <li> Explicit <a href="/2015/06/20/the-static-call-chain.html">message and frame objects</a></li>
-        <li> <a href="http://book.salama-vm.org/register/machine.html">Register machine abstraction</a></li>
-        <li> <a href="http://book.salama-vm.org/object/instructions.html">Extensible</a> instruction set</li>
-      </ul>
-			Salama defines is's own machine language (soml) to bridge the gap between the higher language
-			(ruby) and assembler. Both soml and assembler can be seens as layers towards the final
-			 binary executables</li>
+		<p>
+			No external dependencies means a system that defines an object oriented system language
+			that compiles to assembler. A sort of object version of c, but without using c.
+    </p>
+		<p>
+			It must be possible to compile higher level, dynamic, object oriented languages into this
+			language, in a similar way that c++ is compiled into c (at least used to be). So ruby compiles
+			to soml which compiles to assembler which compiles to binaries. <b>No interpretation.</b>
+    </p>
+		<p>
+			Most of the system is defined in a higher level language (ruby) and only a small runtime,
+			mostly for operating system acccess, needs to be written in the system language.
     </p>
   </div>
 
   <div class="span4">
     <h2 class="center">Status</h2>
+		<p>
+			A first version of the system language is now <a href="/soml/soml.html">done.</a>.
+			The staticaly typed language is called SOML (salama object machine language), has a roughly
+			ruby-ish syntax while c-ish semantics, and introduces several new concept:
+			<ul>
+				<li> Object based memory (no global memory) </li>
+				<li> Multiple return addresses based on type  </li>
+				<li> Multiple implementations per function based on type  </li>
+				<li> Implicit type tracking using adaptive code</li>
+				<li> Explicit <a href="/2015/06/20/the-static-call-chain.html">message and frame objects</a></li>
+				<li> <a href="http://book.salama-vm.org/register/machine.html">Register machine abstraction</a></li>
+				<li> <a href="http://book.salama-vm.org/object/instructions.html">Extensible</a> instruction set</li>
+			</ul>
+		</p>
     <p>
-      While the project is just getting on two years, it is starting to settle conceptually,
-      progress smoothly, and produce <b>working binaries</b>.
+			An abstract risc like register level defines some abstraction from the actual hardware. The
+			compiler compiles to this level, but a mapping to Arm is provided to produce  <b>working binaries</b>.
     </p>
-    <p>
-      In numbers, there are over <b>1000 commits</b>, 6 sub-projects, more than 10k lines of code
-      and well over 600 tests.
-    </p>
-    <p>
-      Maybe more importantly there is <a href"/book.html">good documentation</a> along with an
-      evolved idea of how most of the difficult issues are solved. So while the executables are
-      still of the "Hello world" quality, there are no coneptual problems anymore.
-    </p>
-    <p>
+		<p>
       There is also an interpreter (mostly for testing) and a basic
       <a href="https://github.com/salama/salama-debugger"> visual debugger</a> which not only helps
       debugging, but also understanding of the machine.
     </p>
-
   </div>
 
   <div class="span4">
@@ -66,9 +66,11 @@ layout: site
     <p>
       The short introduction is under the <a href="/salama/layers.html">architecture</a> menu.
     </p>
+		<p>
+      The section on SOML gives an overview of the <a href="/soml/soml.html">system language</a>.
+    </p>
     <p>
-      The full documentation is in form of a gitbook and can be <a href="/book.html">viewed</a> ,
-      and  <a href="https://github.com/salama/object-machine">edited</a>
+      The full documentation is in form of a gitbook and can be <a href="/book.html">viewed here.</a>
     </p>
     <p>
       The <a href="/project/motivation.html">about</a> section has some info of when and how this
