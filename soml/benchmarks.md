@@ -13,7 +13,7 @@ performance is not outstanding, but still there were some surprises.
 - add   - run integer adds by linear fibonacci of 40
 - call  - exercise calling by recursive fibonacci of 20
 
-Hello and puti and add run 100_000 iterations per program invocation to remove startup overhead.
+Hello and itos and add run 100_000 iterations per program invocation to remove startup overhead.
 Call only has 10000 iterations, as it is much slower, executing about 10000 calls per invocation
 
 Gcc used to compile c on the machine. soml executables produced by ruby (on another machine)
@@ -24,13 +24,9 @@ Results were measured by a ruby script. Mean and variance was measured until var
 always under one percent.
 
 The machine was a virtual arm run on a powerbook, performance roughly equivalent to a raspberry pi.
-But results should be seen as relative, not absolute.
+But results should be seen as relative, not absolute (some were scaled)
 
-
-|language  | loop    | hello   | itos    |  add    | call   | | loop    | hello   | itos    |  add    | call   |     
-|-------------------------------------------------------------------------------------------------------------
-|c         | 0,0500  | 2,1365  | 0,2902  | 0,1245  | 0,8535 | | + 33 %  | + 79 %  |         |         |        |
-|soml      | 0,0374  | 1,2071  | 0,7263  | 0,2247  | 1,3625 | |         |         | + 150%  | + 80 %  | + 60 % |
+![Graph](bench.png)
 
 
 ### Discussion
