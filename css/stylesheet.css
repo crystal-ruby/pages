@@ -1,5 +1,5 @@
 body {
-	font: 300 13px/1.4 "Roboto",Arial,sans-serif;
+	font: 300 15px "Roboto",Arial,sans-serif;
   text-rendering: optimizelegibility;
   margin-top: 50px;
 	/*background: #FCFCFC url(../img/pattern.png) top left repeat;*/
@@ -39,6 +39,11 @@ hr {
 /*******************************
     Twitter Bootstrap Override
 ********************************/
+.row  .span2 {
+	margin-left: 10px;
+	width: 195px;
+	margin-right: -10px;
+}
 .wrapper {
 	margin: 0 auto;
 	padding: 0 30px;
@@ -210,7 +215,7 @@ hr {
 
 .theme p {
   font-size:15px;
-  line-height:1.5;
+  line-height:1.4;
 }
 
 .theme img {

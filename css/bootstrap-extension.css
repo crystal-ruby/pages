@@ -183,7 +183,7 @@ ul.tagcloud a {
 }
 
 .tag2 {
-	font-size: 100%;	
+	font-size: 100%;
 }
 
 .tag3 {
@@ -242,7 +242,7 @@ ul.tagcloud a {
 	body {
 		padding: 0;
 	}
-	
+
 	.container {
 		padding-left: 20px;
 		padding-right: 20px;
@@ -254,7 +254,5 @@ ul.tagcloud a {
 		padding-right: 0;
 		background-color: #000000;
 	}
-	
+
 }
-
-

@@ -30,7 +30,7 @@ layout: site
     </p>
 		<p>
 			Most of the system is defined in a higher level language (ruby) and only a small runtime,
-			mostly for operating system acccess, needs to be written in the system language.
+			mostly the class sytsem and os acccess, needs to be written in the system language.
     </p>
   </div>
 
@@ -45,9 +45,9 @@ layout: site
 				<li> Multiple return addresses based on type  </li>
 				<li> Multiple implementations per function based on type  </li>
 				<li> Implicit type tracking using adaptive code</li>
-				<li> Explicit <a href="/2015/06/20/the-static-call-chain.html">message and frame objects</a></li>
+				<li> Explicit <a href="/2015/06/20/the-static-call-chain.html">message and frame objects</a>(no stack)</li>
 				<li> <a href="http://book.salama-vm.org/register/machine.html">Register machine abstraction</a></li>
-				<li> <a href="http://book.salama-vm.org/object/instructions.html">Extensible</a> instruction set</li>
+				<li> <a href="http://book.salama-vm.org/register/instructions.html">Extensible</a> instruction set</li>
 			</ul>
 		</p>
     <p>
@@ -77,14 +77,22 @@ layout: site
       started. If you feel like contributing <a href="/contribute.html">read this</a> or write a
 			<a href="https://groups.google.com/forum/#!forum/salama-dev"> mail </a>.
     </p>
-    <p>
-      Last but not least, i try to get recent developments down on paper when they are still
-      fresh, which you can read in the <a href="{{ site.posts.first.url }}">news</a> section.
-    </p>
-    <p>
-      {{ site.posts.first.date | date: "%d.%m.%y"  }}:
-			<a href="{{ site.posts.first.url }}">{{ site.posts.first.title }}   </a>
-    </p>
+		<h4 class="center">News</h2>
+			<p>
+	      Last but not least, i try to get recent developments down on paper when they are still fresh.
+	    </p>
+			<p>
+	      {{ site.posts[0].date | date: "%d.%m.%y"  }}:
+				<a href="{{ site.posts.first.url }}">{{ site.posts[0].title }}   </a>
+	    </p>
+			<p>
+	      {{ site.posts[1].date | date: "%d.%m.%y"  }}:
+				<a href="{{ site.posts.first.url }}">{{ site.posts[1].title }}   </a>
+	    </p>
+			<p>
+	      {{ site.posts[2].date | date: "%d.%m.%y"  }}:
+				<a href="{{ site.posts.first.url }}">{{ site.posts[2].title }}   </a>
+	    </p>
   </div>
 
 </div>
