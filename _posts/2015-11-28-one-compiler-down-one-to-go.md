@@ -15,7 +15,7 @@ a factor of 20.
 
 So, the good news: it **it works**
 
-Working means calling works, if, while, assignment, class and method definition. The benchmarks
+Working means: calling works, if, while, assignment, class and method definition. The benchmarks
 were hello world and fibonacci, both recursive and by looping.  
 
 I even updated the [**whole book**](/book.html) to be up to date. Added a Soml section, updated
@@ -23,7 +23,7 @@ parfait, rewrote the register level . . .
 
 ### It all clicked into place
 
-To be fair, i don't think anyone write a language that isn't a toy in 2 months, and it was only
+To be fair, i don't think anyone writes a language that isn't a toy in 2 months, and it was only
 possible because  a lot of the stuff was there already.
 
 - [Parfait](/soml/parfait.html) was pretty much there. Just consolidated it as it is all just adapter.
