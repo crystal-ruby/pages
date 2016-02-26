@@ -48,7 +48,7 @@ field definitions, and are basically instance variables, but not hidden (see bel
 The example below shows how to define local variables at the same time. Notice chaining, both for
 field access and call, is not allowed.
 
-      Layout l = self.layout
+      Type l = self.type
       Class  c = l.object_class
       Word   n = c.name
 
@@ -109,7 +109,7 @@ field, must be in class (not method) scope and may not be assigned to.
 
     class Class < Object
       field List instance_methods
-      field Layout object_layout
+      field Type object_type
       field Word name
       ...
     end

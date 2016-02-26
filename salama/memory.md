@@ -1,9 +1,9 @@
 ---
 layout: salama
-title: Memory layout and management
+title: Types, memory layout and management
 ---
 
-Memory management must be one of the main horrors of computing. That's why garbage collected languages like ruby are so great. Even simple malloc implementations tend to be quite complicated. Unneccessay so, if one used object oriented principles of data hiding.
+Memory management must be one of the main horrors of computing. That's why garbage collected languages like ruby are so great. Even simple malloc implementations tend to be quite complicated. Unnecessary so, if one used object oriented principles of data hiding.
 
 ### Object and values
 
@@ -19,29 +19,30 @@ If integers were normal objects, the first would mean they would be singletons. 
 
 Instead of trying to make this difference go away (like MRI) I think it should be explicit and indeed be expanded to all Objects that have these properties. Words for examples (ruby calls them Symbols), are the same. A Table is a Table, and Toble is not. Floats (all numbers) and Times are the same.
 
-### Object Layout
+### Object Type
 
-So if we're not tagging we must pass and keep the type information around seperately. For passing it has been mentioned that a seperate register is used.
+So if we're not tagging we must pass and keep the type information around separately. For passing it has been mentioned that a separate register is used.
 
-For keeping track of the type data we need to make a descision of how many we support. The register for passing gives the upper limit of 4 bits, and this fits well with the idea of cache lines. So if we use cahce lines, for every 8 words, we take one for the type.
+For keeping track of the type data we need to make a decision of how many we support. The register for passing gives the upper limit of 4 bits, and this fits well with the idea of cache lines. So if we use cache lines, for every 8 words, we take one for the type.
 
-Traditionally the class of the object is stored in the object. But this forces the dynamic lookup that is a good part of the performance problem. Instead we store the Object's Layout. The Layout then stores the Class, but it is the layout that describes the memory layout of the object (and all objects with the same layout).
+Traditionally the class of the object is stored in the object. But this forces the dynamic lookup that is a good part of the performance problem. Instead we store the Object's Type. The Type then stores the Class, but it is the type that describes the memory layout of the object (and all objects with the same type).
 
-This is is in essence a level of indirection that gives us the space to have several Layouts for one class, and so we can eveolve the class without having to hange the Layout (we just create new ones for every change)
+This is is in essence a level of indirection that gives us the space to have several Types for one class, and so we can evolve the class without having to change the Type (we just create new ones for every change)
 
-The memory layout of **every** object is type word, layout reference and "data".
+The memory layout of **every** object is type word followed by "data".
 
 That leaves the length open and we can use the 8th 4bits to store it. That gives a maximum of 16 Lines.
 
 #### Continuations
 
-But (i hear), ruby is dynamic, we must be able to add variables and methods to an object at any time. So the layout can't
-be fixed. Ok, we can change the Layout every time, but when any empty slots have been used up, what then.
+But (i hear), ruby is dynamic, we must be able to add variables and methods to an object at any time.
+So the type can't be fixed. Ok, we can change the Type every time, but when any empty slots have
+been used up, what then.
 
-Then we use Continuations, so instead of adding a new variable to the end of the object, we use a new object and store it
-in the original object. Thus extending the object.
+Then we use Continuations, so instead of adding a new variable to the end of the object, we use a
+new object and store it in the original object. Thus extending the object.
 
-Continuations are pretty normal objects and it is just up to the layout to manage the redirection.
+Continuations are pretty normal objects and it is just up to the object to manage the redirection.
 Off course this may splatter objects a little, but in running application this does not really happen much. Most instance variables are added quite soon after startup, just as functions are usually parsed in the beginning.
 
 The good side of continuation is also that we can be quite tight on initial allocation, and even minimal with continuations. Continuations can be completely changed out after all.

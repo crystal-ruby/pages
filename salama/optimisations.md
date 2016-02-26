@@ -17,10 +17,10 @@ But this can easily lead to a dictionary/hash type of implementation. As variabl
 common thing an OO system does, that leads to bad performance (unneccessarily). 
 
 So instead we keep variables layed out c++ style, continous, array style, at the address of the object. Then we have 
-to manage that in a dynamic manner. This (as i mentioned [here](memory.html)) is done by the indirection of the Layout. A Layout is 
+to manage that in a dynamic manner. This (as i mentioned [here](memory.html)) is done by the indirection of the Type. A Type is 
 a dynamic structure mapping names to indexes (actually implemented as an array too, but the api is hash-like).
 
-When a new variable is added, we create a *new* Layout and change the Layout of the object. We can do this as the Layout will
+When a new variable is added, we create a *new* Type and change the Type of the object. We can do this as the Type will
 determine the Class of the object, which stays the same. The memory page mentions how this works with constant sized objects.
 
 So, Problem one fixed: instance variable access at O(1)
@@ -44,11 +44,11 @@ The Plock can store those cache hits inside the code. So then we "just" need to 
 
 Initializing the cached values is by normal lazy initialization. Ie we check for nil and if so we do the dynamic lookup, and store the result. 
 
-Remember, we cache Layout against function address. Since Layouts never change, we're done. We could (as hinted above) 
+Remember, we cache Type against function address. Since Types never change, we're done. We could (as hinted above) 
 do things with counters or robins, but that is for later.
 
-Alas: While Layouts are constant, darn the ruby, method implementations can actually change! And while it is tempting to 
-just create a new Layout for that too, that would mean going through existing objects and changing the Layout, nischt gut.
+Alas: While Types are constant, darn the ruby, method implementations can actually change! And while it is tempting to 
+just create a new Type for that too, that would mean going through existing objects and changing the Type, nischt gut.
 So we need change notifications, so when we cache, we must register a change listener and update the generated function,
 or at least nullify it.
 
