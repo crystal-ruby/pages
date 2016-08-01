@@ -142,10 +142,10 @@ title: Salama architectural layers
     </p>
     <p>
       The idea (because it hasn't been implemented yet) is to have different functions for different
-      types. The soml layer defines object layout and types and also lets us return to different
+      types. The soml layer defines the Type class and BasicTypes and also lets us return to different
       places from a function (in effect a soml function call is like an if). By using this, we can
-      compile a single ruby method into several soml methods. Each such method is typed, ie all
-      arguments and variables are of known type. According to these types we can call methods according
+      compile a single ruby method into several soml functtions. Each such function is typed, ie all
+      arguments and variables are of known type. According to these types we can call functions according
       to their signatures. Also we can autognerate error methods for unhandled types, and predict
       that only a fraction of the possible combinations will actually be needed.
     </p>

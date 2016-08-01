@@ -3,12 +3,19 @@ layout: soml
 title: Salama object machine language
 ---
 
+### Disclaimer
+
+The som Language was a stepping stone: it will go. The basic idea is good and will stay, but the
+parser, and thus it's existence as a standalone language, will go.
+
+What will remain is traditionally called an intermediate representation. Basically the layer into
+which the soml compiler compiles to. As such these documents will be rewritten soon.
 
 #### Top down designed language
 
 Soml is a language that is designed to be compiled into, rather than written, like
 other languages. It is the base for a higher system,
-designed for the needs to compile ruby. It is not an endeavour to abstract from a
+designed for the needs to compile ruby. It is not an endeavor to abstract from a
 lower level, like other system languages, namely off course c.
 
 Still it is a system language, or an object machine language, so almost as low level a

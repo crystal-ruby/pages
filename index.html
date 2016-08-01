@@ -20,26 +20,24 @@ layout: site
 			The goal is to execute object oriented code without external dependencies, on modern hardware.
     </p>
 		<p>
-			No external dependencies means a system that defines an object oriented system language
-			that compiles to assembler. A sort of object version of c, but without using c.
+			It must be possible to compile higher level, dynamic, object oriented languages into a typed
+			intermediate representation, in a similar way that c++ is compiled into c (at least used to be).
+			So ruby compiles to soml which compiles to assembler which compiles to binaries.
+			<b>No interpretation.</b>
     </p>
 		<p>
-			It must be possible to compile higher level, dynamic, object oriented languages into this
-			language, in a similar way that c++ is compiled into c (at least used to be). So ruby compiles
-			to soml which compiles to assembler which compiles to binaries. <b>No interpretation.</b>
-    </p>
-		<p>
-			Most of the system is defined in a higher level language (ruby) and only a small runtime,
-			mostly the class sytsem and os acccess, needs to be written in the system language.
+			Using the compilation method on it's own runtime (and bootstraping with an exising vm),
+			it is possible to write the whole system in a dynamic oo language (ruby), thus
+			<b>removing the two language problem</b> (having to choose between nice and fast)
     </p>
   </div>
 
   <div class="span4">
     <h2 class="center">Status</h2>
 		<p>
-			A first version of the system language is now <a href="/soml/soml.html">done.</a>.
-			The staticaly typed language is called SOML (salama object machine language), has a roughly
-			ruby-ish syntax while c-ish semantics, and introduces several new concept:
+			A first version of the lower level intermediate representation is now <a href="/soml/soml.html">done</a>.
+			Currently there is staticaly typed layer is called SOML (salama object machine layers), which
+			has roughly c-ish semantics, and introduces several new concept:
 			<ul>
 				<li> Object based memory (no global memory) </li>
 				<li> Multiple return addresses based on type  </li>
@@ -52,7 +50,7 @@ layout: site
 		</p>
     <p>
 			An abstract risc like register level defines some abstraction from the actual hardware. The
-			compiler compiles to this level, but a mapping to Arm is provided to produce  <b>working binaries</b>.
+			soml compiler compiles to this level, but a mapping to Arm is provided to produce <b>working binaries</b>.
     </p>
 		<p>
       There is also an interpreter (mostly for testing) and a basic
@@ -67,7 +65,7 @@ layout: site
       The short introduction is under the <a href="/salama/layers.html">architecture</a> menu.
     </p>
 		<p>
-      The section on SOML gives an overview of the <a href="/soml/soml.html">system language</a>.
+      The section on SOML gives an overview of the <a href="/soml/soml.html">system layer</a>.
     </p>
     <p>
       The full documentation is in form of a gitbook and can be <a href="/book.html">viewed here.</a>
