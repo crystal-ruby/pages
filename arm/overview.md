@@ -10,7 +10,7 @@ a collection of helpful resources (links and specs) with sometimes very very bri
 
 So why learn assembler, after all, it's likely you spent your programmers life  avoiding it:
 
-  - Some things can not be expressed in Soml
+  - Some things can not be expressed in ruby
   - To speed things up.
   - To add cpu specific capabilities
 
@@ -31,7 +31,7 @@ And off course there is the overwhelming arm infocenter, [here with it's bizarre
 The full 750 page specification for the pi , the [ARM1176JZF-S pdf is here](/arm/big_spec.pdf) or
 [online](http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.dui0553a/BABFADHJ.html)
 
-A nice list of [Kernel calls](http://docs.cs.up.ac.za/programming/asm/derick_tut/syscalls.html) 
+A nice list of [Kernel calls](http://docs.cs.up.ac.za/programming/asm/derick_tut/syscalls.html)
 ## Virtual pi
 
 And since not everyone has access to an arm, here is a description how to set up an [emulated pi](/arm/qemu.html)
