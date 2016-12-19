@@ -3,12 +3,13 @@ layout: site
 ---
 <div class="row vspace10">
 	<div class="span12">
-		<h2 class="center">A completely object oriented machine</h2>
+		<h2 class="center">Compiling Ruby to Binary.</h2>
 		<div>
-    <p class="center"><span>
-    A fully self describing object system without external dependencies capable of executing dynamic
-		object oriented languages like ruby or python.
-   </span></p>
+	    <p class="center">
+				<span>
+					Interpreting code is like checking a map at every step: It can really slow you down.
+	   		</span>
+			</p>
 		</div>
 	</div>
 </div>
@@ -17,16 +18,20 @@ layout: site
   <div class="span4">
     <h2 class="center">Goal</h2>
 		<p>
-			The goal is to execute object oriented code without external dependencies, on modern hardware.
+			The goal is to execute (not interpret) object oriented code without external dependencies, on modern hardware.
     </p>
 		<p>
-			It must be possible to compile higher level, dynamic, object oriented languages into a typed
-			intermediate representation, in a similar way that c++ is compiled into c (at least used to be).
-			So ruby compiles to soml which compiles to assembler which compiles to binaries.
+			This means compiling dynamic code into binary. Using several intermediate representations it
+			is possible to keep track of type changes and switch between differently typed, but
+			logically equivalent, versions of methods.
+
+			As the system is 100% in ruby, the ultimate goal is to carry on the compilation at run-time,
+			ie after the program has started.
+
 			<b>No interpretation.</b>
     </p>
 		<p>
-			Using the compilation method on it's own runtime (and bootstraping with an exising vm),
+			Using the compilation method on it's own runtime (and bootstraping with an exising ruby),
 			it is possible to write the whole system in a dynamic oo language (ruby), thus
 			<b>removing the two language problem</b> (having to choose between nice and fast)
     </p>
@@ -35,22 +40,28 @@ layout: site
   <div class="span4">
     <h2 class="center">Status</h2>
 		<p>
-			A first version of the lower level intermediate representation is now <a href="/soml/soml.html">done</a>.
-			Currently there is staticaly typed layer is called SOML (salama object machine layers), which
-			has roughly c-ish semantics, and introduces several new concept:
+			Work is progressing on the ruby compiler. This uses a pure
+			<a href="https://github.com/whitequark/parser"> ruby parser</a> to create:
+			<ul>
+				<li> An Object model of  <a href="/soml/parfait.html">classes, types</a>, methods and basic types </li>
+				<li> Several strongly typed method versions for every ruby instance method </li>
+			</ul>
+		</p>
+		<p>
+			The lower level, strongly typed layer is  <a href="/soml/soml.html">finished.</a>.
+			While it has well known typed language data semantics, it introduces several new concept:
 			<ul>
 				<li> Object based memory (no global memory) </li>
 				<li> Multiple return addresses based on type  </li>
 				<li> Multiple implementations per function based on type  </li>
-				<li> Implicit type tracking using adaptive code</li>
 				<li> Explicit <a href="/2015/06/20/the-static-call-chain.html">message and frame objects</a>(no stack)</li>
-				<li> <a href="http://book.salama-vm.org/register/machine.html">Register machine abstraction</a></li>
-				<li> <a href="http://book.salama-vm.org/register/instructions.html">Extensible</a> instruction set</li>
+				<li> <a href="https://github.com/salama/salama/tree/master/lib/register" target="_blank">Register machine abstraction</a></li>
+				<li> Extensible instruction set, with arm implementations
 			</ul>
 		</p>
     <p>
 			An abstract risc like register level defines some abstraction from the actual hardware. The
-			soml compiler compiles to this level, but a mapping to Arm is provided to produce <b>working binaries</b>.
+			type compiler compiles to this level, but a mapping to Arm is provided to produce <b>working binaries</b>.
     </p>
 		<p>
       There is also an interpreter (mostly for testing) and a basic
@@ -65,17 +76,14 @@ layout: site
       The short introduction is under the <a href="/salama/layers.html">architecture</a> menu.
     </p>
 		<p>
-      The section on SOML gives an overview of the <a href="/soml/soml.html">system layer</a>.
-    </p>
-    <p>
-      The full documentation is in form of a gitbook and can be <a href="/book.html">viewed here.</a>
+      The section on the intermediate rerepresentation is <a href="/soml/soml.html">here</a>.
     </p>
     <p>
       The <a href="/project/motivation.html">about</a> section has some info of when and how this
       started. If you feel like contributing <a href="/contribute.html">read this</a> or write a
 			<a href="https://groups.google.com/forum/#!forum/salama-dev"> mail </a>.
     </p>
-		<h4 class="center">News</h2>
+		<h2 class="center">News</h2>
 			<p>
 	      Last but not least, i try to get recent developments down on paper when they are still fresh.
 	    </p>
