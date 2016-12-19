@@ -6,8 +6,8 @@ author: Torsten
 Ok, that was surprising: I just wrote a language in two months. Parser, compiler, working binaries
 and all.
 
-Then i [documented it](/soml/soml.html) , detailed the [syntax](/soml/syntax.html) and even did
-some [benchmarking](/soml/benchmarks.html). Speed is luckily roughly where i wanted it. Mostly
+Then i [documented it](/typed/typed.html) , detailed the [syntax](/typed/syntax.html) and even did
+some [benchmarking](/typed/benchmarks.html). Speed is luckily roughly where i wanted it. Mostly
 (only mostly?) slower than c, but only by about 50, very understandable percent. It is doing
 things in a more roundabout, and easier to understand way, and lacking any optimisation. It means
 you can do about a million fibonacci(20) in a second on a pi, and beat ruby at it by a about
@@ -26,8 +26,8 @@ parfait, rewrote the register level . . .
 To be fair, i don't think anyone writes a language that isn't a toy in 2 months, and it was only
 possible because  a lot of the stuff was there already.
 
-- [Parfait](/soml/parfait.html) was pretty much there. Just consolidated it as it is all just adapter.
-- The [Register abstraction](/soml/debugger.html) (bottom) was there.
+- [Parfait](/typed/parfait.html) was pretty much there. Just consolidated it as it is all just adapter.
+- The [Register abstraction](/typed/debugger.html) (bottom) was there.
 - Using the ast library made things easier.
 - A lot of the [parser](https://github.com/salama/salama-reader) could be reused.
 

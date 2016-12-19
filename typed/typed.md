@@ -1,6 +1,6 @@
 ---
-layout: soml
-title: Salama object machine language
+layout: typed
+title: Typed intermediate representation
 ---
 
 ### Disclaimer
@@ -69,4 +69,4 @@ to a minimum, currently around 15 classes, described in detail [here](parfait.ht
 Historically Parfait has been coded in ruby, as it was first needed in the compiler.
 This had the additional benefit of providing solid test cases for the functionality.
 Currently the process is to convert the code into soml, using the same compiler used to compile
-ruby.  
+ruby.

@@ -1,5 +1,5 @@
 ---
-layout: soml
+layout: typed
 title: Register Level Debugger / simulator
 ---
 

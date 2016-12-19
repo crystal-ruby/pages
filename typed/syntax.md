@@ -1,5 +1,5 @@
 ---
-layout: soml
+layout: typed
 title: Soml Syntax
 ---
 

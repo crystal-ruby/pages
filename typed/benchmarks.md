@@ -1,5 +1,5 @@
 ---
-layout: soml
+layout: typed
 title: Simple soml performance numbers
 ---
 
