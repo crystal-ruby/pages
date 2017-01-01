@@ -1,6 +1,6 @@
 ---
-layout: salama
-title: Salama architectural layers
+layout: rubyx
+title: RubyX architectural layers
 ---
 
 ## Main Layers
@@ -17,7 +17,7 @@ to compile ruby.
 
 In a similar way to the c++ example, we need level between ruby and assembler, as it is too
 big a mental step from ruby to assembler. Off course course one could try to compile to c, but
-since c is not object oriented that would mean dealing with all off c's non oo heritance, like
+since c is not object oriented that would mean dealing with all off c's non oo heritage, like
 linking model, memory model, calling convention etc.
 
 Top down the layers are:
@@ -107,11 +107,11 @@ In other words the instruction set is extensible (unlike cpu instruction sets).
 
 Basic object oriented concepts are needed already at this level, to be able to generate a whole
 self contained system. Ie what an object is, a class, a method etc. This minimal runtime is called
-parfait, and the same objects willbe used at runtime and compile time.
+parfait, and the same objects will be used at runtime and compile time.
 
 Since working with at this low machine level (essentially assembler) is not easy to follow for
 everyone, an interpreter was created. Later a graphical interface, a kind of
-[visual debugger](https://github.com/salama/salama-debugger) was added.
+[visual debugger](https://github.com/ruby-x/rubyx-debugger) was added.
 Visualizing the control flow and being able to see values updated immediately helped
 tremendously in creating this layer. And the interpreter helps in testing, ie keeping it
 working in the face of developer change.

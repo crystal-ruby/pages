@@ -1,5 +1,5 @@
 ---
-layout: salama
+layout: rubyx
 title: Types, memory layout and management
 ---
 
@@ -7,7 +7,7 @@ Memory management must be one of the main horrors of computing. That's why garba
 
 ### Object and values
 
-As has been mentioned, in a true OO system, object tagging is not really an option. Tagging being the technique of adding the lowest bit as marker to pointers and thus having to shift ints and loosing a bit. Mri does this for Integers but not other value types. We accept this and work with it and just say "off course" , but it's not modelled well.
+As has been mentioned, in a true OO system, object tagging is not really an option. Tagging being the technique of adding the lowest bit as marker to pointers and thus having to shift ints and loosing a bit. Mri does this for Integers but not other value types. We accept this and work with it and just say "off course" , but it's not modeled well.
 
 Integers are not Objects like "normal" objects. They are Values, on par with ObjectReferences, and have the following distinctive differences:
 

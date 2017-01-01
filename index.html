@@ -48,14 +48,13 @@ layout: site
 			</ul>
 		</p>
 		<p>
-			The lower level, strongly typed layer is  <a href="/typed/typed.html">finished.</a>.
+			The lower level, strongly typed layer is  <a href="/typed/typed.html">finished</a>.
 			While it has well known typed language data semantics, it introduces several new concept:
 			<ul>
 				<li> Object based memory (no global memory) </li>
-				<li> Multiple return addresses based on type  </li>
 				<li> Multiple implementations per function based on type  </li>
-				<li> Explicit <a href="/2015/06/20/the-static-call-chain.html">message and frame objects</a>(no stack)</li>
-				<li> <a href="https://github.com/salama/salama/tree/master/lib/register" target="_blank">Register machine abstraction</a></li>
+				<li> Object oriented calling semantics (not stack based) </li>
+				<li> <a href="https://github.com/ruby-x/ruby/tree/master/lib/register" target="_blank">Register machine abstraction</a></li>
 				<li> Extensible instruction set, with arm implementations
 			</ul>
 		</p>
@@ -65,7 +64,7 @@ layout: site
     </p>
 		<p>
       There is also an interpreter (mostly for testing) and a basic
-      <a href="https://github.com/salama/salama-debugger"> visual debugger</a> which not only helps
+      <a href="https://github.com/ruby-x/salama-debugger"> visual debugger</a> which not only helps
       debugging, but also understanding of the machine.
     </p>
   </div>
@@ -73,7 +72,7 @@ layout: site
   <div class="span4">
     <h2 class="center">Docs</h2>
     <p>
-      The short introduction is under the <a href="/salama/layers.html">architecture</a> menu.
+      The short introduction is under the <a href="/rubyx/layers.html">architecture</a> menu.
     </p>
 		<p>
       The section on the intermediate rerepresentation is <a href="/typed/typed.html">here</a>.

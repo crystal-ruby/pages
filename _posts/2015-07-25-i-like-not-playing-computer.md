@@ -22,7 +22,7 @@ little big. It took a little, but then i started.
 I fiddled a little with fancy 2 or even 3d representations but couldn't get things to work.
 Also getting used to running ruby in the browser, with opal, took a while.
 
-But now there is a [basic frame](https://github.com/salama/salama-debugger) up,
+But now there is a [basic frame](https://github.com/ruby-x/salama-debugger) up,
 and i can see registers swishing around and ideas of what needs
 to be visualized and partly even how, are gushing. Off course it's happening in html,
 but that ok for now.

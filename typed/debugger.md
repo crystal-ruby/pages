@@ -3,7 +3,7 @@ layout: typed
 title: Register Level Debugger / simulator
 ---
 
-![Debugger](https://raw.githubusercontent.com/salama/salama-debugger/master/static/debugger.png)
+![Debugger](https://raw.githubusercontent.com/rubyx/salama-debugger/master/static/debugger.png)
 
 ## Views
 
@@ -30,8 +30,8 @@ over a name to look at the class and it's instance variables (recursively)
 ### Source View
 
 Next is a view of the Soml source. The Source is reconstructed from the ast as html.
-Soml (Salama object machine language) is is a statically typed language,
-maybe in spirit close to c++ (without the c). In the future Salama will compile ruby to soml.
+Soml (RubyX object machine language) is is a statically typed language,
+maybe in spirit close to c++ (without the c). In the future RubyX will compile ruby to soml.
 
 While stepping through the code, those parts of the code that are active get highlighted in blue.
 
@@ -43,7 +43,7 @@ Each step will show progress on the register level though (next view)
 
 ### Register Instruction view
 
-Salama defines a register machine level which is quite close to the arm machine, but with more
+RubyX defines a register machine level which is quite close to the arm machine, but with more
 sensible names. It has 16 registers (below) and an instruction set that is useful for Soml.
 
 Data movement related instruction implement an indexed get and set. There is also Constant load and

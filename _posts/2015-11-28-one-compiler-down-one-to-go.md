@@ -29,7 +29,7 @@ possible because  a lot of the stuff was there already.
 - [Parfait](/typed/parfait.html) was pretty much there. Just consolidated it as it is all just adapter.
 - The [Register abstraction](/typed/debugger.html) (bottom) was there.
 - Using the ast library made things easier.
-- A lot of the [parser](https://github.com/salama/salama-reader) could be reused.
+- A lot of the [parser](https://github.com/ruby-x/salama-reader) could be reused.
 
 And off course the second time around everything is easier (aka hindsight is perfect).
 

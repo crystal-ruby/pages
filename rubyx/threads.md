@@ -1,5 +1,5 @@
 ---
-layout: salama
+layout: rubyx
 title: Threads are broken
 author: Torsten
 ---
@@ -9,24 +9,24 @@ i am not sure yet. But good to get it out on paper as a basis for communication.
 
 ### Processes
 
-I find it helps to consider why we have threads. Before threads, unix had only processes and ipc, 
+I find it helps to consider why we have threads. Before threads, unix had only processes and ipc,
 so inter-process-communication.
 
 Processes were a good idea, keeping each programm save from the mistakes of others by restricting access to the processes
 own memory. Each process had the view of "owning" the machine, being alone on the machine as it were. Each a small turing/
 von neumann machine.
 
-But one had to wait for io, the network and so it was difficult, or even impossible to get one process to use the machine 
+But one had to wait for io, the network and so it was difficult, or even impossible to get one process to use the machine
 to the hilt.
 
-IPC mechnisms were and are sockets, shared memory regions, files, each with their own sets of strengths, weaknesses and 
+IPC mechnisms were and are sockets, shared memory regions, files, each with their own sets of strengths, weaknesses and
 api's, all deemed complicated and slow. Each switch encurs a process switch and processes are not lightweight structures.
 
 ### Thread
- 
+
 And so threads were born as a lightweight mechanisms of getting more things done. Concurrently, because when the one
 thread is in a kernel call, it is suspended.
- 
+
 #### Green or fibre
 
 The first threads that people did without kernel support, were quickly found not to solve the problem so well. Because as any
@@ -37,17 +37,17 @@ we find that the different viewpoint can help to express some solutions more nat
 
 #### Kernel threads
 
-The real solution, where the kernel knows about threads and does the scheduling, took some while to become standard and 
+The real solution, where the kernel knows about threads and does the scheduling, took some while to become standard and
 makes processes more complicated a fair degree. Luckily we don't code kernels and don't have to worry.
 
-But we do have to deal with the issues that come up. The isse is off course data corruption. I don't even want to go into 
+But we do have to deal with the issues that come up. The isse is off course data corruption. I don't even want to go into
 how to fix this, or the different ways that have been introduced, because the main thrust becomes clear in the next chapter:
 
 ### Broken model
 
 My main point about threads is that they are one of the worse hacks, especially in a c environemnt. Processes had a good
 model of a programm with a global memory. The equivalent of threads would have been shared memory with **many** programs
-connected. A nightmare. It even breaks that old turing idea and so it is very difficult to reason about what goes on in a 
+connected. A nightmare. It even breaks that old turing idea and so it is very difficult to reason about what goes on in a
 multi threaded program, and the only ways this is achieved is by developing a more restrictive model.
 
 In essence the thread memory model is broken. Ideally i would not like to implement it, or if implemented, at least fix it
@@ -57,23 +57,22 @@ But what is the fix? It is in essence what the process model was, ie each thread
 
 ### Thread memory
 
-In OO it is possible to fix the thread model, just because we have no global memory access. In effect the memory model 
-must be inverted: instead of almost all memory being shared by all threads and each thread having a small thread local 
+In OO it is possible to fix the thread model, just because we have no global memory access. In effect the memory model
+must be inverted: instead of almost all memory being shared by all threads and each thread having a small thread local
 storage, threads must have mostly thread specific data and a small amount of shared resources.
 
-A thread would thus work as a process used. In essence it can update any data it sees without restrictions. It must 
+A thread would thus work as a process used. In essence it can update any data it sees without restrictions. It must
 exchange data with other threads through specified global objects, that take the role of what ipc used to be.
 
-In an oo system this can be enforced by strict pass-by-value over thread borders. 
+In an oo system this can be enforced by strict pass-by-value over thread borders.
 
 The itc (inter thread communication) objects are the only ones that need current thread synchronization techniques.
 The one mechanism that could cover all needs could be a simple lists.
 
-### Salama
+### RubyX
 
 The original problem of what a program does during a kernel call could be solved by a very small number of kernel threads.
 Any kernel call would be listed and "c" threads would pick them up to execute them and return the result.
 
 All other threads could be managed as green threads. Threads may not share objects, other than a small number of system
 provided.
-

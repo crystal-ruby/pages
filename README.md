@@ -1,7 +1,7 @@
-# [Salama webpages](http://salama-vm.org)
+# [RubyX webpages](http://ruby-x.org)
 
 
-Salamas webpage is done with github pages: https://help.github.com/categories/20/articles
+RubyX's webpage is done with github pages: https://help.github.com/categories/20/articles
 
 ###Contribute
 
