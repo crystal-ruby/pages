@@ -7,7 +7,7 @@ layout: site
 		<div>
 	    <p class="center">
 				<span>
-					Interpreting code is like checking a map at every step: It can really slow you down.
+					Putting wings on ruby to let you fly (may take X years).
 	   		</span>
 			</p>
 		</div>
@@ -18,12 +18,12 @@ layout: site
   <div class="span4">
     <h2 class="center">Goal</h2>
 		<p>
-			The goal is to execute (not interpret) object oriented code without external dependencies, on modern hardware.
+			The goal is to execute (not interpret) object oriented code without external dependencies,
+			on modern hardware.
     </p>
 		<p>
-			This means compiling dynamic code into binary. Using several intermediate representations it
-			is possible to keep track of type changes and switch between differently typed, but
-			logically equivalent, versions of methods.
+			This means compiling dynamic code into binary. Using type knowledge at run-time we
+			optimise and cache method dispatch for know types.
 
 			As the system is 100% in ruby, the ultimate goal is to carry on the compilation at run-time,
 			ie after the program has started.
@@ -44,7 +44,7 @@ layout: site
 			<a href="https://github.com/whitequark/parser"> ruby parser</a> to create:
 			<ul>
 				<li> An Object model of  <a href="/typed/parfait.html">classes, types</a>, methods and basic types </li>
-				<li> Several strongly typed method versions for every ruby instance method </li>
+				<li> Methods for every type (may be several per class) </li>
 			</ul>
 		</p>
 		<p>
@@ -52,8 +52,8 @@ layout: site
 			While it has well known typed language data semantics, it introduces several new concept:
 			<ul>
 				<li> Object based memory (no global memory) </li>
-				<li> Multiple implementations per function based on type  </li>
 				<li> Object oriented calling semantics (not stack based) </li>
+				<li> Inline method caching.  </li>
 				<li> <a href="https://github.com/ruby-x/ruby/tree/master/lib/register" target="_blank">Register machine abstraction</a></li>
 				<li> Extensible instruction set, with arm implementations
 			</ul>

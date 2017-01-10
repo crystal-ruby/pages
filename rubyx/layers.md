@@ -25,7 +25,7 @@ Top down the layers are:
 - **Melon** , compiling ruby code into typed layer and includes bootstrapping code
 
 - **Typed intermediate layer:** Statically typed object oriented with object oriented
-call semantics.
+  call semantics.
 
 - **Risc register machine abstraction** provides a level of machine abstraction, but
               as the name says, quite a simple one.
@@ -40,21 +40,17 @@ a difficult task, it has already been implemented in pure ruby
 [here](https://github.com/whitequark/parser). The output of the parser is again
 an ast, which needs to be compiled to the typed layer.
 
-The dynamic aspects of ruby are actually reltively easy to handle, once the whole system is
+The dynamic aspects of ruby are actually relatively easy to handle, once the whole system is
 in place, because the whole system is written in ruby without external dependencies.
 Since (when finished) it can compile ruby, it can do so to produce a binary. This binary can
 then contain the whole of the system, and so the resulting binary will be able to produce
 binary code when it runs. With small changes to the linking process (easy in ruby!) it can
 then extend itself.
 
-The type aspect is more tricky: Ruby is not typed and but the typed layer is after all. And
-if everything were objects (as we like to pretend in ruby) we could just do a lot of
-dynamic checking, possibly later introduce some caching. But everything is not an object,
-minimally integers are not, but maybe also floats and other values.
-The distinction between what is an integer and what an object has sprouted an elaborate
-type system, which is (by necessity) present in the typed layer.
-
-
+The type aspect is more tricky: Ruby is not typed but the typed layer is after all.
+But since everything is object (yes, also integers and floats are first class citizens)
+we know the type on any object at any time and can check it easily.
+Easy checks also make inline method jump tables relatively easy.
 
 ### Typed intermediate layer
 
@@ -68,26 +64,8 @@ In broad strokes it consists off:
                   create a binary with the required information to be dynamic
 - **Builtin:**  A very small set of primitives that are impossible to express in ruby
 
-The idea is to have different methods for different types, but implementing the same ruby
-logic. In contrast to the usual 1-1 relationship between a ruby method and it's binary
-definition, there is a 1-n.
-
-The typed layer defines the Type class and BasicTypes and also lets us return to different
-places from a function. By using this, we can
-compile a single ruby method into several typed functions. Each such function is typed, ie all
-arguments and variables are of known type. According to these types we can call functions according
-to their signatures. Also we can autognerate error methods for unhandled types, and predict
-that only a fraction of the possible combinations will actually be needed.
-
-
-Just to summarize a few of typed layer features that are maybe unusual:
-
 - **Message based calling:** Calling is completely object oriented (not stack based)
                               and uses Message and Frame objects.
-- **Return addresses:**  A method call may return to several addresses, according
-                          to type, and in case of exception
-- **Cross method jumps** When a type switch is detected, a method may jump into the middle
-                            of another method.
 
 
 ### Register Machine
