@@ -27,12 +27,10 @@ Also the object memory model is kept quite simple in that object sizes are alway
 of the cache size of the hardware machine.
 We use object encapsulation to build up larger looking objects from these basic blocks.
 
-The calling convention is also object oriented, not stack based*. Message objects used to
-define the data needed for invocation. They carry arguments, a frame and return addresses.
-Return addresses are pre-calculated and determined by the caller, and yes, there
-are several. In fact there is one return address per basic type, plus one for exception.
-A method invocation may thus be made to return to an entirely different location than the
-caller.
+The calling convention is also object oriented, not stack based*. Message objects are used to
+define the data needed for invocation. They carry arguments, a frame and return address.
+The return address is pre-calculated and determined by the caller, so
+a method invocation may thus be made to return to an entirely different location.
 \*(A stack, as used in c, is not typed, not object oriented, and as such a source of problems)
 
 There is no non- object based memory at all. The only global constants are instances of
@@ -47,8 +45,6 @@ The typed layer is mainly concerned in defining TypedMethods, for which argument
 have specified type (like in c). Basic Type names are the class names they represent,
 but the "int" may be used for brevity
 instead of Integer.
-As mentioned a function may return to different addresses according to type, though this is not
-fully implemented.
 
 The runtime, Parfait, is kept
 to a minimum, currently around 15 classes, described in detail [here](parfait.html).

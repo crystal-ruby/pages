@@ -74,7 +74,7 @@ The Register machine layer is a relatively close abstraction of risc hardware, b
 quirks.
 
 The register machine has registers, indexed addressing, operators, branches and everything
-needed for the next layer. It doesn't not try to abstract every possible machine feature
+needed for the next layer. It does not try to abstract every possible machine feature
 (like llvm), but rather "objectifies" the risc view to provide what is needed for the typed
 layer, the next layer up.
 
