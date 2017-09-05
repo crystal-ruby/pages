@@ -75,7 +75,7 @@ thus experience a cache miss and have their correct method found.
 
 ## Up next
 
-More grunt-work. Now that Vool replaces the ast the ode from rubyx/passes has to be "ported" to use it. That means:
+More grunt-work. Now that Vool replaces the ast the code from rubyx/passes has to be "ported" to use it. That means:
 - class extraction and class object creation
 - method extraction and creation
 - type creation by ivar analysis
