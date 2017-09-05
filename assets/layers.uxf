@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.2">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>60</x>
+      <y>130</y>
+      <w>120</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>&lt;Vool&gt;
+--
+Concrete Tree</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>60</x>
+      <y>70</y>
+      <w>120</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>&lt;Ruby&gt;
+--
+Abstract Tree</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>60</x>
+      <y>190</y>
+      <w>120</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>&lt;Mom&gt;
+--
+Concrete Tree
++ Linked List</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>60</x>
+      <y>250</y>
+      <w>120</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>&lt;Risc&gt;
+--
+Linked List</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>60</x>
+      <y>300</y>
+      <w>120</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>&lt;Arm&gt;
+--
+Linked List</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>60</x>
+      <y>350</y>
+      <w>120</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>&lt;Elf&gt;
+--
+Binary / Array</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>220</x>
+      <y>70</y>
+      <w>670</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>Ruby is parsed into and abstract syntax tree. "Abstract" means all nodes are 
+represented by one class. Compiling to Vool happens by visitor pattern.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>220</x>
+      <y>130</y>
+      <w>670</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>Vool (Virtual object oriented Language) is ruby without the fluff. Just simple oo.
+Vool uses a concrete syntax tree, meaning one class per kind of statement.
+Code to compile to Mom is in the statement classes.
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>220</x>
+      <y>190</y>
+      <w>670</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>Mom (Minimal object machine) is a very simple object oriented machine. It only deals in objects, 
+incuding the calling convention. A first pass still uses a tree structure to represent control. 
+The final representation is a list of instructions.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>220</x>
+      <y>250</y>
+      <w>670</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>The Risc (reduced intruction set computer) layer is an (sane) subset of ARM. It models only those
+instructions needed to implement Mom, about 20. It deals in memory, logic and jumps.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>220</x>
+      <y>300</y>
+      <w>670</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>The arm chip is the most sold/used in the world, so it is our first "target". Arm has a simple
+instruction set and we only use the part to implement what is used in Risc.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>220</x>
+      <y>350</y>
+      <w>670</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>The lowest level, achieved by assembling arm instructions, is binary code that a cpu can execute.
+Elf is used to wrap it into a file so Linux can start it. Elf includes debug info too.</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

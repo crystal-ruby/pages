@@ -9,74 +9,73 @@ To implement an object system to execute object oriented languages takes a large
 The parts or abstraction layers are detailed below.
 
 It is important to understand the approach first though, as it differs from the normal
-interpretation. The idea is to **compile** ruby. It may be easiest to compare to a static
-object oriented language like c++. When c++ was created c++ code was translated into c, which
-then gets translated into assembler, which gets translated to binary code, which is linked
-and executed. Compiling to binaries is what gives these languages speed, and is the reason
+interpretation. The idea is to **compile** ruby. The argument is often made that
+typed languages are faster, but i don't believe in that. I think dynamic languages
+just push more functionality into the "virtual machine" and it is in fact only the
+compiling to binaries that gives static languages their speed. This is the reason
 to compile ruby.
 
-In a similar way to the c++ example, we need level between ruby and assembler, as it is too
-big a mental step from ruby to assembler. Off course course one could try to compile to c, but
-since c is not object oriented that would mean dealing with all off c's non oo heritage, like
-linking model, memory model, calling convention etc.
+![Architectural layers](/assets/layers.jpg)
 
-Top down the layers are:
 
-- **Melon** , compiling ruby code into typed layer and includes bootstrapping code
+### Ruby
 
-- **Typed intermediate layer:** Statically typed object oriented with object oriented
-  call semantics.
-
-- **Risc register machine abstraction** provides a level of machine abstraction, but
-              as the name says, quite a simple one.
-
-- **Binary and cpu specific assembler**  This includes arm assembly and elf support
-          to produce a binary that can then read in ruby programs
-
-### Melon
-
-To compile and run ruby, we need to parse and compile ruby code. While parsing ruby is quite
+To compile and run ruby, we first need to parse ruby. While parsing ruby is quite
 a difficult task, it has already been implemented in pure ruby
-[here](https://github.com/whitequark/parser). The output of the parser is again
-an ast, which needs to be compiled to the typed layer.
+[here](https://github.com/whitequark/parser). The output of the parser is
+an ast, which holds information about the code in instances of a single *Node* class.
+Nodes have a type (which you sometimes see in s-expressions) and a list of children.
 
-The dynamic aspects of ruby are actually relatively easy to handle, once the whole system is
-in place, because the whole system is written in ruby without external dependencies.
-Since (when finished) it can compile ruby, it can do so to produce a binary. This binary can
-then contain the whole of the system, and so the resulting binary will be able to produce
-binary code when it runs. With small changes to the linking process (easy in ruby!) it can
-then extend itself.
+There are two basic problems when working with ruby ast: one is the a in ast, the other is ruby.
 
-The type aspect is more tricky: Ruby is not typed but the typed layer is after all.
-But since everything is object (yes, also integers and floats are first class citizens)
-we know the type on any object at any time and can check it easily.
-Easy checks also make inline method jump tables relatively easy.
+Since an abstract syntax tree only has one base class, one needs to employ the visitor
+pattern to write a compiler. This ends up being one great class with lots of unrelated
+functions, removing much of the benefit of OO.
 
-### Typed intermediate layer
+The second, possibly bigger problem, is ruby itself: Ruby is full of programmer happiness,
+three ways to do this, five to do that. To simplify that, remove the duplication and
+make analyis easier, Vool was created.
 
-The Typed intermediate layer is more fully described [here](/typed/typed.html)
+### Virtual Object Oriented Language
 
-In broad strokes it consists off:
+Virtual, in this context, means that there is no syntax for this language; it is an
+intermediate representation which *could* be targeted by several languages.
 
-- **MethodCompiler:**  compiles the ast into a sequence of Register instructions.
-                        and runtime objects (classes, methods etc)
-- **Parfait:** Is the runtime, ie the minimal set of objects needed to
-                  create a binary with the required information to be dynamic
-- **Builtin:**  A very small set of primitives that are impossible to express in ruby
+The main purpose is to simplify existing oo languages down to it's core components: mostly
+calling, assignment, continuations and exceptions. Typed classes for each language construct
+exist and make it easier to transform a statement into a lower level representations.
 
-- **Message based calling:** Calling is completely object oriented (not stack based)
-                              and uses Message and Frame objects.
+Examples for things that exist in ruby but are broken down in Vool are *unless* , ternary operator,
+do while or for loops and other similar syntactic sugar.
 
+### Minimal Object machine
 
-### Register Machine
+We compile Vool statements into Mom instructions. Mom is a machine, which means it has
+instructions. But unlike a cpu (or the risc layer below) it does not have memory, only objects.
+It also has no registers, and together these two things mean that all information is stored in
+objects. Also the calling convention is object based and uses Frame and Message instances to
+save state.
+
+Objects are typed, and are in fact the same objects the language operates on. Just the
+functionality is expressed through instructions. Methods are in fact defined (as vool) on classes
+and then compiled to Mom/Risc/Arm and the results stored in the method object.
+
+Compilation to Mom happens in two stages:
+1. The linear statements/code is translated to Mom instructions.
+2. Control statements are translated to jumps and labels.
+
+The second step leaves a linked list of machine instructions as the input for the next stage.
+In the future a more elaborate system of optimisations is envisioned between these stages.
+
+### Risc
 
 The Register machine layer is a relatively close abstraction of risc hardware, but without the
 quirks.
 
-The register machine has registers, indexed addressing, operators, branches and everything
+The Risc machine has registers, indexed addressing, operators, branches and everything
 needed for the next layer. It does not try to abstract every possible machine feature
-(like llvm), but rather "objectifies" the risc view to provide what is needed for the typed
-layer, the next layer up.
+(like llvm), but rather "objectifies" the general risc view to provide what is needed for
+the Mom layer, the next layer up.
 
 The machine has it's own (abstract) instruction set, and the mapping to arm is quite
 straightforward. Since the instruction set is implemented as derived classes, additional
@@ -88,7 +87,7 @@ self contained system. Ie what an object is, a class, a method etc. This minimal
 parfait, and the same objects will be used at runtime and compile time.
 
 Since working with at this low machine level (essentially assembler) is not easy to follow for
-everyone, an interpreter was created. Later a graphical interface, a kind of
+everyone (me :-), an interpreter was created (by me:-). Later a graphical interface, a kind of
 [visual debugger](https://github.com/ruby-x/rubyx-debugger) was added.
 Visualizing the control flow and being able to see values updated immediately helped
 tremendously in creating this layer. And the interpreter helps in testing, ie keeping it
