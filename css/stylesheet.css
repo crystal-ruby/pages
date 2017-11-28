@@ -1,5 +1,5 @@
 body {
-	font: 300 15px "Roboto",Arial,sans-serif;
+	font: 300 1rem "Roboto",Arial,sans-serif;
   text-rendering: optimizelegibility;
   margin-top: 50px;
 	/*background: #FCFCFC url(../img/pattern.png) top left repeat;*/
@@ -69,7 +69,6 @@ hr {
     padding: 15px 40px;
     text-shadow: none;
     text-transform: uppercase;
-    font-size: 12px;
 }
 
 .navbar .nav > li > a:hover {
@@ -214,7 +213,7 @@ hr {
 }
 
 .theme p {
-  font-size:15px;
+  font-size: 1.1rem;
   line-height:1.4;
 }
 
