@@ -3,7 +3,7 @@ layout: arm
 title: How to configure Qemu
 ---
 
-##Target Pi on Mac
+## Target Pi on Mac
 
 
 So even the idea is to run software on the Pi, not everyone has a Pi (yet :-)
@@ -14,7 +14,7 @@ For all those, this here explains how to emulate the Pi on a Mac.
 
 Even if you have a Pi, [this explains](/remote_pi.html) a nice way to develop with it.
 
-###Replace the buggy llvm
+### Replace the buggy llvm
 
 
 Written April 2014: as of writing the latest and greatest llvm based gcc (5.1) on Maverick (10.9) has a bug that makes qemu hang.
@@ -25,7 +25,7 @@ So type gcc -v and if the output contains "LLVM version 5.1", you must install g
 
 This will not interfere with the systems compiler as the gcc4.2 has postfixed executables (ie gcc-4.2)
 
-###Qemu
+### Qemu
 
 Then its time to get the Qemu. There may be other emulators out there, and i have read of armulator, but this is what i found discribed and it works and is "easy enough".
 
@@ -33,7 +33,7 @@ Then its time to get the Qemu. There may be other emulators out there, and i hav
 
 For people not on Maverick it may work without the -cc option.
 
-###Pi images
+### Pi images
 
 Create a directory for the stuff on your mac, ie pi.
 
@@ -41,7 +41,7 @@ Get the latest Raspian image.
 
 There seems to be some chicken and egg problem, so quemu needs the kernel seperately. There is one in the links.
 
-###Configure
+### Configure
 
 In the blog post there is some fun configuration, I did it and it works. Not sure what happens if you don't.
 The booting is described below (you may or may not need an extra init=/bin/bash in the root... quotes), so boot your Pi and then configure:
@@ -61,7 +61,7 @@ Press ctrl-x then y then enter to save and exit.
 The kernel sees the disk as /dev/sda, while a real pi sees /dev/mmcblk0.
 This will create symlinks to be more consistent with the real pi.
 
-###Boot
+### Boot
 
 There is quite a bit to the command line to boot the pi (i have an alias), here it is:
 
@@ -81,7 +81,7 @@ will get you "in". Ie username pi (password raspberry is the default) and port 2
 
 Qemu bridges the network (that it emulates), and so your pi is now as connected as your mac.
 
-###More Disk
+### More Disk
 
 The image that you download has only 200Mb free. Since the gcc is included and we're developing (tiny little files of) ruby, this may be ok. If not there is a 3 step procedure to up the space.
 

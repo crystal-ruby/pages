@@ -3,14 +3,15 @@ layout: typed
 title: Register Level Debugger / simulator
 ---
 
-![Debugger](https://raw.githubusercontent.com/rubyx/salama-debugger/master/static/debugger.png)
-
 ## Views
 
 From left to right there are several views showing different data and controls.
 All of the green boxes are in fact pop-up menus and can show more information.  
 Most of these are implemented as a single class with the name reflecting what part.
 I wrote 2 base classes that handle element generation (ie there is hardly any html involved, just elements)
+
+![Debugger](https://raw.githubusercontent.com/ruby-x/rubyx-debugger/master/static/debugger.png){: width="100%"}
+
 
 ### Switch view
 

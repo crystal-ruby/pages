@@ -2,22 +2,18 @@
 layout: site
 ---
 
-<div class="row vspace10">
-	<div class="span10">
-		<h2 class="center">{{page.title}}</h2>
-		<div>
-      {{content}}
-		</div>
+<div class="row">
+	<div>
+		<h1 class="center">{{page.title}}</h2>
+		<p class="center"><span> {{page.sub-title}} </span></p>
+		<ul class="nav">
+			<li><a href="/rubyx/layers.html">Layers of RubyX</a> </li>
+			<li><a href="/rubyx/memory.html">Memory</a> </li>
+			<li><a href="/rubyx/threads.html">Threads</a> </li>
+			<li><a href="/rubyx/optimisations.html">Optimisation ideas</a> </li>
+		</ul>
 	</div>
-	<div class="span2">
-		<h3 class="center">More Detail</h2>
-		<div>
-  		<ul class="nav nav-list">
-        <li><a href="/rubyx/layers.html"> Layers of RubyX </a> </li>
-        <li><a href="/rubyx/memory.html"> Memory </a> </li>
-        <li><a href="/rubyx/threads.html"> Threads </a> </li>
-        <li><a href="/rubyx/optimisations.html"> Optimisation ideas </a> </li>
-  		</ul>
-		</div>
+	<div>
+    {{content}}
 	</div>
 </div>

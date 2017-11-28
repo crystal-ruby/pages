@@ -3,7 +3,7 @@ layout: arm
 title: How to use a remote pi
 ---
 
-###Headless
+### Headless
 
 The pi is a strange mix, development board and full pc in one. Some people use it as a pc, but not me.
 
@@ -13,9 +13,9 @@ As such i don't use the keyboard or display and that is called headless mode, lo
 
     ssh -p 2222 -l pi localhost
 
-    the -p 2222 is only needed for the qemu version, not the real pi.
+the -p 2222 is only needed for the qemu version, not the real pi.
 
-###Authorized
+### Authorized
 
 Over ssh one can use many other tools, but the password soon gets to be a pain.
 So the first thing i do is copy my public key over to the pi. This will allow login without password.
@@ -25,7 +25,7 @@ So the first thing i do is copy my public key over to the pi. This will allow lo
 This assumes a fresh pi, otherwise you have to append your key to the authorized ones. Also if it complains about no
 id_rsa.pub then you have to generate a key pair (public/private) using ssh-keygen (no password, otherwise you'll be typing that)
 
-###Syncing
+### Syncing
 
 Off course I do all that to be able to actually work on my machine. On the Pi my keyboard doesn't even work and
 i'd have to use emacs or nano instead of TextMate. So i need to get the files accross.
@@ -37,7 +37,7 @@ I set up a directory (home) in my pi directory (on the mac), that i copy to the 
 
 The pi/home is on my laptop and the command transfers all files to /home/pi , the default directory of the pi user.
 
-###Automatic sync
+### Automatic sync
 
 Transferring files is off course nice, but having to do it by hand after saving quickly becomes tedious.
 

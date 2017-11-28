@@ -3,7 +3,7 @@ layout: project
 title: Join the fun
 ---
 
-I am very open for people to join. Say hello at the [list](https://groups.google.com/forum/#!forum/salama-dev).
+I am very open for people to join. Say hello at the [list](https://groups.google.com/forum/#!forum/ruby-x).
 
 I just want to mention that this is my hobby, something i do in my spare time, for fun.
 I don't get any money and in fact, running 2 companies, have to carve the time to do this.

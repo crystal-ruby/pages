@@ -1,21 +1,19 @@
 ---
 layout: site
 ---
-<div class="row vspace10">
-	<div class="span12">
-		<h2 class="center">Compiling Ruby to Binary.</h2>
-		<div>
-	    <p class="center">
-				<span>
-					Putting wings on ruby to let you fly (may take X years).
-	   		</span>
-			</p>
-		</div>
+<div class="row">
+	<h2 class="center">Compiling Ruby to Binary.</h2>
+	<div>
+    <p class="center">
+			<span>
+				Putting wings on ruby to let you fly (may take X years).
+   		</span>
+		</p>
 	</div>
 </div>
 
-<div class="row vspace20">
-  <div class="span4">
+<div class="row">
+  <div class="tripple">
     <h2 class="center">Goal</h2>
 		<p>
 			The goal is to execute (not interpret) object oriented code without external dependencies,
@@ -37,7 +35,7 @@ layout: site
     </p>
   </div>
 
-  <div class="span4">
+  <div class="tripple">
     <h2 class="center">Status</h2>
 		<p>
 			Work is progressing on the ruby compiler. This uses a pure
@@ -64,23 +62,24 @@ layout: site
     </p>
 		<p>
       There is also an interpreter (mostly for testing) and a basic
-      <a href="https://github.com/ruby-x/salama-debugger"> visual debugger</a> which not only helps
+      <a href="https://github.com/ruby-x/rubyx-debugger"> visual debugger</a> which not only helps
       debugging, but also understanding of the machine.
     </p>
   </div>
 
-  <div class="span4">
+  <div class="tripple">
     <h2 class="center">Docs</h2>
     <p>
       The short introduction is under the <a href="/rubyx/layers.html">architecture</a> menu.
     </p>
 		<p>
-      The section on the intermediate rerepresentation is <a href="/typed/typed.html">here</a>.
+      The section on the intermediate representation is
+			<a href="/typed/typed.html">here</a>.
     </p>
     <p>
       The <a href="/project/motivation.html">about</a> section has some info of when and how this
       started. If you feel like contributing <a href="/contribute.html">read this</a> or write a
-			<a href="https://groups.google.com/forum/#!forum/salama-dev"> mail </a>.
+			<a href="https://groups.google.com/forum/#!forum/ruby-x"> mail</a>.
     </p>
 		<h2 class="center">News</h2>
 			<p>
@@ -88,15 +87,15 @@ layout: site
 	    </p>
 			<p>
 	      {{ site.posts[0].date | date: "%d.%m.%y"  }}:
-				<a href="{{ site.posts[0].url }}">{{ site.posts[0].title }}   </a>
+				<a href="{{ site.posts[0].url }}">{{ site.posts[0].title }}</a>
 	    </p>
 			<p>
 	      {{ site.posts[1].date | date: "%d.%m.%y"  }}:
-				<a href="{{ site.posts[1].url }}">{{ site.posts[1].title }}   </a>
+				<a href="{{ site.posts[1].url }}">{{ site.posts[1].title }}</a>
 	    </p>
 			<p>
 	      {{ site.posts[2].date | date: "%d.%m.%y"  }}:
-				<a href="{{ site.posts[2].url }}">{{ site.posts[2].title }}   </a>
+				<a href="{{ site.posts[2].url }}">{{ site.posts[2].title }}</a>
 	    </p>
   </div>
 

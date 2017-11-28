@@ -2,24 +2,20 @@
 layout: site
 ---
 
-<div class="row vspace10">
-	<div class="span10">
-		<h2 class="center">{{page.title}}</h2>
-		<div>
-      {{content}}
-		</div>
+<div class="row">
+	<div>
+		<h1 class="center">{{page.title}}</h2>
+		<p class="center"><span> {{page.sub-title}} </span></p>
+		<ul class="nav">
+			<li><a href="/arm/overview.html">Overview</a> </li>
+			<li><a href="/arm/qemu.html">Virtual Pi</a> </li>
+			<li><a href="/arm/remote_pi.html">Remote pi</a> </li>
+			<li><a href="/arm/target.html" target="sspec">Small Spec(html)</a> </li>
+			<li><a href="/arm/arm_inst.pdf" target="pspec">Small Spec(pdf)</a> </li>
+			<li><a href="/arm/big_spec.pdf" target="bspec">Huge spec</a> </li>
+		</ul>
 	</div>
-	<div class="span2">
-		<h3 class="center">More Detail</h2>
-		<div>
-  		<ul class="nav nav-list">
-				<li><a href="/arm/overview.html"> Overview </a> </li>
-				<li><a href="/arm/target.html" target="sspec"> Small Spec(html) </a> </li>
-				<li><a href="/arm/arm_inst.pdf" target="pspec"> Small Spec(pdf) </a> </li>
-	      <li><a href="/arm/big_spec.pdf" target="bspec"> Huge spec </a> </li>
-				<li><a href="/arm/qemu.html"> Virtual Pi </a> </li>
-				<li><a href="/arm/remote_pi.html"> Remote pi </a> </li>
-  		</ul>
-		</div>
+	<div>
+    {{content}}
 	</div>
 </div>

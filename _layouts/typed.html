@@ -2,24 +2,19 @@
 layout: site
 ---
 
-<div class="row vspace10">
-	<div class="span10">
-		<h2 class="center">{{page.title}}</h2>
+<div class="row">
+	<div>
+		<h1 class="center">{{page.title}}</h2>
 		<p class="center"><span> {{page.sub-title}} </span></p>
-		<div>
-      {{content}}
-		</div>
+		<ul class="nav">
+			<li><a href="/typed/typed.html">Typed</a> </li>
+			<li><a href="/typed/parfait.html">Parfait</a> </li>
+			<li><a href="/typed/benchmarks.html">Performance</a> </li>
+			<li><a href="/typed/debugger.html">Debugger</a> </li>
+			<li><a href="/typed/syntax.html">Syntax (obsolete)</a> </li>
+		</ul>
 	</div>
-	<div class="span2">
-		<h3 class="center">More Detail</h2>
-		<div>
-  		<ul class="nav nav-list">
-				<li><a href="/typed/typed.html"> Typed </a> </li>
-				<li><a href="/typed/parfait.html"> Parfait </a> </li>
-				<li><a href="/typed/benchmarks.html"> Performance </a> </li>
-				<li><a href="/typed/debugger.html"> Debugger </a> </li>
-				<li><a href="/typed/syntax.html"> Syntax (obsolete)</a> </li>
-  		</ul>
-		</div>
+	<div>
+    {{content}}
 	</div>
 </div>

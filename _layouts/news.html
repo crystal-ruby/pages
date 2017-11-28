@@ -2,23 +2,23 @@
 layout: site
 ---
 
-<div class="row vspace10">
-	<div class="span10">
-		<h2 class="center">{{page.title}}</h2>
-		<div>
-  	  <h5 class="center">Written by {{page.author}} on {{page.date | date_to_string}}.</h5>
-      {{content}}
-		</div>
+<div class="row">
+	<div>
+		<h1 class="center">{{page.title}}</h2>
+		<p class="center"><span> Written by {{page.author}} on {{page.date | date_to_string}}. </span></p>
 	</div>
-	<div class="span2">
-		<h2 class="center">Older</h2>
-		<div>
-  		<ul class="nav nav-list">
-        {% for post in site.posts %}
-        <li><a href="{{ post.url }}">{{ post.title }} <small><small>{{ post.date | date: "%d.%m.%y"  }} </small></small></a>
+	<div>
+    {{content}}
+	</div>
+</div>
+<div class="row">
+	<h2 class="center">Older</h2>
+	<div>
+		<ul class="nav">
+      {% for post in site.posts %}
+      <li><a href="{{ post.url }}">{{ post.title }} <small>{{ post.date | date: "%d.%m.%y"  }} </small></a>
 </li>
-      {% endfor %}
-  		</ul>
-		</div>
+    {% endfor %}
+		</ul>
 	</div>
 </div>
