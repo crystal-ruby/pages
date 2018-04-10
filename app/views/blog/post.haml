@@ -13,4 +13,4 @@
   .center_col
     %h1= @post.title
   .center_col
-    = render( @post.template_name )
+    = render( "posts/#{@post.template_name}" )

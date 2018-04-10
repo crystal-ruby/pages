@@ -40,12 +40,16 @@ class Post
   end
   def self.posts
     return @@posts if @@posts
-    @@posts ={}
+    posts ={}
     Dir["#{self.blog_path}/_2*.haml"].reverse.each do |file|
       post = Post.new(file)
-      @@posts[post.slug] = post
+      posts[post.slug] = post
     end
-    @@posts
+    @@posts = posts.sort_by { |slug, post| post.sort_key }.reverse.to_h
+  end
+
+  def sort_key
+    year*10000 + month*1000 + day
   end
 
   def self.blog_path
