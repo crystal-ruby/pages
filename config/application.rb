@@ -15,5 +15,8 @@ module RubyxWebpage
     # Application configuration can go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded after loading
     # the framework and any gems in your application.
+    config.assets.paths << Gem.loaded_specs['susy'].full_gem_path+'/sass'
+
+    config.blog_path = Rails.root.to_s + "/app/views/posts"
   end
 end
