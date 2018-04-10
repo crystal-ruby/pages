@@ -6,14 +6,14 @@ class Post
   def initialize(path)
     @dir = File.dirname(path)
     base , @ext = File.basename(path).split(".")
-    raise "must be partial, statr with _ not:#{base}" unless base[0] == "_"
+    raise "must be partial, start with _ not:#{base}" unless base[0] == "_"
     @words = base.split("-")
     @year = parse_int(@words.shift[1 .. -1] , 2100)
-    @day = parse_int(@words.shift , 32)
     @month = parse_int(@words.shift , 12)
+    @day = parse_int(@words.shift , 32)
     raise "Invalid path #{path}" unless @words
   end
-  
+
   def slug
     @words.join("-").downcase
   end
@@ -24,7 +24,7 @@ class Post
     "#{date}-#{@words.join("-")}"
   end
   def date
-    "#{year}-#{day}-#{month}"
+    "#{year}-#{month}-#{day}"
   end
   def parse_int( value , max)
     ret = value.to_i

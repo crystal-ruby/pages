@@ -27,8 +27,8 @@ RSpec.describe Post, type: :model do
     end
     it "returns dates" do
       expect(@post.year).to eq 1993
-      expect(@post.month).to eq 4
-      expect(@post.day).to eq 2
+      expect(@post.day).to eq 4
+      expect(@post.month).to eq 2
     end
     it "returns date" do
       expect(@post.date).to eq "1993-2-4"
