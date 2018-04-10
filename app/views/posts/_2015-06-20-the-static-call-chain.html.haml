@@ -1,0 +1,57 @@
+%p
+  Quite long ago i
+  %a{:href => "/2014/06/27/an-exceptional-thought.html"} had already determined
+  that return
+  addresses and exceptional return addresses should be explicitly stored in the message.
+%p
+  It was also clear that Message would have to be a linked list. Just managing that list at run-time
+  in Register Instructions (ie almost assembly) proved hard. Not that i was creating Message objects
+  but i did shuffle their links about. I linked and unlinked messages by setting their next/prev fields
+  at runtime.
+%h2#the-list-is-static The List is static
+%p
+  Now i realized that touching the list structure in any way at runtime is not necessary.
+  The list is completely static, ie created at compile time and never changed.
+%p
+  To be more precise: I created the Messages at compile time and set them up as a forward linked list.
+  Each Item had
+  %em caller
+  field (a backlink) which i then filled at run-time. I was keeping the next
+  message to be used as a variable in the Space, and because that is basically global it was
+  relatively easy to update when making a call.
+  But i noticed when debugging that when i updated the message’s next field, it was already set to
+  the value i was setting it to. And that made me stumble and think. Off course!
+%p
+  It is the data
+  %strong in
+  the Messages that changes. But not the Message, nor the call chain.
+%p
+  As programmer one has the call graph in mind and as that is a graph, i was thinking that the
+  Message list changes. But no. When working on one message, it is always the same message one sends
+  next. Just as one always returns to the same one that called.
+%p It is the addresses and Method arguments that change, not the message.
+%p
+  The best analogy i can think of is when calling a friend. Whatever you say, it is alwas the same
+  number you call.
+%p
+  Or in C terms, when using the stack (push/pop), it is not the stack memory that changes, only the
+  pointer to the top. A stack is an array, right, so the array stays the same,
+  even it’s size stays the same. Only the used part of it changes.
+%h2#simplifies-call-model Simplifies call model
+%p
+  Obviously this simplifies the way one thinks about calls. Just stick the data into the pre-existing
+  Message objects and go.
+%p
+  When i first had the
+  %a{:href => "/2014/06/27/an-exceptional-thought.html"} return address as argument
+  idea,
+  i was thinking that in case of exception one would have to garbage collect Messages.
+  In the same way that i was thinking that they need to be dynamically managed.
+%p
+  Wrong again. The message chain (double linked list to be precise) stays. One just needs to clear
+  the data out from them, so that garbage does get collected. Anyway, it’s all quite simple and that’s
+  nice.
+%p
+  As an upshot from this new simplicity we get
+  = succeed "." do
+    %strong speed

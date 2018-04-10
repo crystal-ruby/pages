@@ -1,0 +1,60 @@
+%hr/
+%p
+  After almost a year of rewrite:
+  %strong Hello World
+  is back.
+%p
+  %strong Working executables again
+%p
+  So much has changed in the last year it is almost impossible to recap.
+  Still a little summary:
+%h3#register-machine Register Machine
+%p
+  The whole layer of the
+  %a{:href => "/2014/09/30/a-better-register-machine.html"} Register Machine
+  as an
+  abstraction was not there. Impossible is was to see what was happening.
+%h3#passes Passes
+%p
+  In the beginning i was trying to
+  = succeed "." do
+    %em just do it
+  %a{:href => "/2014/07/05/layers-vs-passes.html"} implemented Passes
+  to go between them.
+%h3#the-virtual-machine-design The virtual machine design
+%p
+  Thinking about what objects makes up a virtual machine has brought me to a clear understanding
+  of the
+  = succeed "." do
+    %a{:href => "/2014/09/12/register-allocation-reviewed.html"} objects needed
+  %a{:href => "/2014/06/27/an-exceptional-thought.html"} stopped using the machine stack
+  altogether and am using a linked list instead.
+  Recently is has occurred to me that that linked list
+  %a{:href => "/06/20/the-static-call-chain.html"}> doesn’t even change
+  , so it is very simple indeed.
+%h3#smaller-though-not-small-changes Smaller, though not small, changes
+%ul
+  %li
+    The
+    %a{:href => "/2014/08/19/object-storage.html"} Salma Object File
+    format was created.
+  %li
+    The
+    %a{:href => "http://dancinglightning.gitbooks.io/the-object-machine/content/"} Book
+    was started
+  %li I gave lightning talks at Frozen Rails 2014, Helsinki and Bath Ruby 2015
+  %li I presented at Munich and Zurich user groups, lots to take home from all that
+%h3#future Future
+%p
+  The mountain is still oh so high, but at last there is hope again. The second dip into arm
+  (gdb) debugging has made it very clear that a debugger is needed. Preferably visual, possibly 3d,
+  definitely browser based. So either Opal or even Volt.
+%p Already more clarity in upcoming fields has arrived:
+%ul
+  %li inlining is high on the list, to code in higher language
+  %li
+    the difference between
+    %a{:href => "/2015/05/20/expression-is-slot.html"} statement and expression
+    helped
+    to structure code.
+  %li hopefully the debugger / interpreter will help to write better tests too.

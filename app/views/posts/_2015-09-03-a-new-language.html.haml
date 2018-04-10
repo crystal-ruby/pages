@@ -1,0 +1,143 @@
+%p
+  It is the
+  %strong one
+  thing i said i wasn’t going to do: Write a language.
+  There are too many languages out there already, and just because i want to write a vm,
+  doesn’t mean i want to add to the language jungle.
+  %strong But
+  …
+%h2#the-gap The gap
+%p
+  As it happens in life, which is why they say never to say never, it happens just like it
+  i didn’t want. It turns out the semantic gap of what i have is too large.
+%p
+  There is the
+  %strong register level
+  , which is approximately assembler, and there is the
+  %strong vm level
+  which is more or less the ruby level. So my head hurts from trying to implement ruby in assembler,
+  no wonder.
+%p
+  Having run into this wall, which btw is the same wall that crystal ran into, one can see the sense
+  in what others have done more clearly: Why rubinus uses c++ underneath. Why crystal does not
+  implement ruby, but a statically typed language. And ultimately why there is no ruby compiler.
+  The gap is just too large to bridge.
+%h2#the-need-for-a-language The need for a language
+%p
+  As I have the architecture of passes, i was hoping to get by with just another layer in the
+  architecture. A tried an tested approach after all. And while i won’t say that that isn’t a
+  possibility, i just don’t see it. I think it may be one of those where hindsight will be perfect.
+%p
+  I can see as far as this: If i implement a language, that will mean a parser, ast and compiler.
+  The target will be my register layer. So a reasonable step up is a sort of object c, that has
+  basic integer maths and object access. I’ll detail that more below, but the point is, if i have
+  that, i can start writing a vm implementation in that language.
+%p
+  Off course the vm implementation involves a parser, an ast and a compiler, unless we go to the free
+  compilers (see below). And so implementing the vm in a new language is in essence swapping nodes of
+  the higher level tree with nodes of the lower level (c-ish) one. Ie parsing should not strictly
+  speaking be necessary. This node swapping is after all what the pass architecture was designed
+  to do. But, as i said, i just can’t see that happening (yet?).
+%h3#trees-vs-blocks Trees vs. Blocks
+%p
+  Speaking of the Pass architecture: I flopped. Well, maybe not so much with the actual Passes, but
+  with the Method representation. Blocks holding Instructions, and being in essence a list.
+  Misinformed copying from llvm, misinformed by the final outcome. Off course the final binary
+  has a linear address space, but that is where the linearity ends. The natural structure of code
+  is a tree, not a list, as demonstrated by the parse
+  = succeed "." do
+    %em tree
+%h2#soml---salama-object-machine-language Soml - Salama Object Machine Language
+%h3#typed Typed
+%p
+  Quite a while before crystallizing into the idea of a new language, i already saw the need for a type
+  system. Off course, and this dates back to the first memory layouts. But i mean the need for a
+  %em strong typing
+  system, or maybe it’s even clearer to call it compile time typing. The type that c
+  and c++ have. It is essential (mentally, this is off course all for the programmer, not the computer)
+  to be able to think in a static type system, and then extend that and make it dynamic.
+  Or possibly use it in a dynamic way.
+%p
+  This is a good example of this too big gap, where one just steps on quicksand if everything is
+  all the time dynamic.
+%p
+  The way i had the implementation figured was to have different versions of the same function. In
+  each function we would have compile time types, everything known. I’ll probably still do that,
+  just written in Soml.
+%h3#machine-language Machine language
+%p
+  Soml is a machine language for the Salama machine. As i tried to implement without this layer, i was
+  essentially implementing in assembler. Too much.
+%p
+  There are two main feature we need from the machine language, one is typed a typed oo memory model,
+  the other an oo call model.
+%h3#object-c Object c
+%p
+  The language needs to be object based, off course. Just because it’s typed and not dynamic
+  and closer to assembler, doesn’t mean we need to give up objects. In fact we mustn’t. Soml
+  should be a little bit like c++, ie compile time known variable arrangement and types,
+  objects. But no classes (or inheritance), more like structs, with full access to everything.
+  So a struct.variable syntax would mean grab that variable at that address, no functions, no possible
+  override, just get it. This is actually already implemented as i needed it for the slot access.
+%p So objects without encapsulation or classes. A lower level object orientation.
+%h3#whitequark Whitequark
+%p
+  This new approach (and more experience) shed a new light on ruby parsing. The previous idea was to
+  start small, write the necessary stuff in the parsable subset and with time expand that set.
+%p
+  Alas . . ruby is a beast to parse, and because of the
+  %strong semantic gap
+  writing the system,
+  even in a subset, is not viable. And it turns out the brave warriors of the ruby community have
+  already produced a pure, production ready,
+  = succeed "." do
+    %a{:href => "https://github.com/whitequark/parser"} ruby parser
+%h3#interoperability Interoperability
+%p
+  The system code needs to be callable from the higher level, and possibly the other way around.
+  This probably means the same or compatible calling mechanism and data model. The data model is
+  quite simple as the at the system level all is just machine words, but in object sized
+  packets. As for the calling it will probably mean that the same message object needs to be used
+  and what is now called calling at the machine level is supported. Sending off course won’t be.
+%h3#still-missing-a-piece Still missing a piece
+%p
+  How the level below calling can be represented is still open. It is clear though that it does need
+  to be present, as otherwise any kind of concurrency is impossible to achieve. The question ties
+  in with the still open question of
+  = succeed "." do
+    %a{:href => "http://valerieaurora.org/synthesis/SynthesisOS/ch4.html"} Quajects
+%h3#start-small Start small
+%p The first next step is to wrap the functionality i have in the Passes as a language.
+%p Then to expand that language, by writing increasingly more complex programs in it.
+%p
+  And then to re-attack ruby using the whitequark parser, that probably means jumping on the
+  mspec train.
+%p All in all, no biggie :-)
+%h2#compilers-are-not-free Compilers are not free
+%p
+  Oh and i re-read and re-watched Toms
+  %a{:href => "http://codon.com/compilers-for-free"} compilers for free
+  talk,
+  which did make quite an impression on me the first time. But when i really thought about actually
+  going down that road (who does’t enjoy a free beer), i got into the small print.
+%p
+  The second biggest of which is that writing a partial evaluator is just about as complicated
+  as writing a compiler.
+%p
+  But the biggest problem is that the (free) compiler you could get, has the implementation language
+  of the evaluator, as it’s
+  = succeed "." do
+    %strong output
+  %em for
+  c, not for ruby.
+%p
+  Ok, maybe it is not quite as bad as that makes it sound. As i do have the register layer ready
+  and will be writing a c-ish language, it may even be possible to write an interpreter
+  = succeed "," do
+    %strong in soml
+  %strong for soml
+  too.
+%p
+  I will nevertheless go the straighter route for now, ie write a compiler, and maybe return to the
+  promised freebie later. It does feel like a lot of what the partial evaluator is, would be called
+  compiler optimization in another lingo. So may be road will lead there naturally.

@@ -1,0 +1,72 @@
+%p
+  Ok, that was surprising: I just wrote a language in two months. Parser, compiler, working binaries
+  and all.
+%p
+  Then i
+  %a{:href => "/typed/typed.html"} documented it
+  , detailed the
+  %a{:href => "/typed/syntax.html"} syntax
+  and even did
+  some
+  = succeed "." do
+    %a{:href => "/typed/benchmarks.html"} benchmarking
+%p
+  So, the good news: it
+  %strong it works
+%p
+  Working means: calling works, if, while, assignment, class and method definition. The benchmarks
+  were hello world and fibonacci, both recursive and by looping.
+%p
+  I even updated the
+  %a{:href => "/book.html"}
+    %strong whole book
+  to be up to date. Added a Soml section, updated
+  parfait, rewrote the register level . . .
+%h3#it-all-clicked-into-place It all clicked into place
+%p
+  To be fair, i don’t think anyone writes a language that isn’t a toy in 2 months, and it was only
+  possible because  a lot of the stuff was there already.
+%ul
+  %li
+    %a{:href => "/typed/parfait.html"} Parfait
+    was pretty much there. Just consolidated it as it is all just adapter.
+  %li
+    The
+    %a{:href => "/typed/debugger.html"} Register abstraction
+    (bottom) was there.
+  %li Using the ast library made things easier.
+  %li
+    A lot of the
+    %a{:href => "https://github.com/ruby-x/salama-reader"} parser
+    could be reused.
+%p And off course the second time around everything is easier (aka hindsight is perfect).
+%p
+  One of the better movie lines comes to mind,
+  (
+  %a{:href => "http://www.imdb.com/title/tt1341188/quotes"}> paraphrased
+  ) “We are all just one small
+  adjustment away from making our code work”. It was a step sideways in the head which brought a leap
+  forward in terms of direction. Not where i was going but where i wanted to go.
+%h3#open-issues Open issues
+%p
+  Clearly i had wobbled on the parfait front. Now it’s clear it will have to be recoded in soml,
+  and then re-translated into ruby. But it was good to have it there in ruby all the time for the
+  concepts to solidify.
+%p
+  Typing is not completely done, and negative tests for types are non existant. Also exceptions and
+  the machinery for the returns.
+%p
+  I did a nice framework for testing the binaries on a remote machine, would be nice to have it
+  on travis. But my image is over 2Gb.
+%h3#and-onto-the-next-compiler And onto the next compiler
+%p
+  The ideas about how to compile ruby into soml have been percolating and are waiting to be put to
+  action.
+  %a{:href => "http://book.salama-vm.org/object/dynamic_types.html"} The theory
+  looks good,but one has
+  to see it to believe it.
+%p
+  The first steps are quite clear though. Get the
+  %a{:href => "https://github.com/whitequark/parser"} ruby parser
+  integrated, get the compiler up, start with small tests. Work the types at the same time.
+%p And let the adventure continue.

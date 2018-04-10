@@ -1,0 +1,12 @@
+%p Part of the reason why i even thought this was possible was because i had bumped into Metasm.
+%p
+  Metasm creates native code in 100% ruby. Either from Assembler or even C (partially). And for many cpu’s too.
+  It also creates many binary formats, elf among them.
+%p
+  Still, i wanted something small that i could understand easily as it was clear it would have to be changed to fit.
+  As there was no external assembler file format planned, the whole approach from parsing was inappropriate.
+%p
+  I luckily found a small library, as, that did arm only and was just a few files. After removing not needed parts
+  like parsing and some reformatting i added an assembler like dsl.
+%p This layer (arm subdirectory) said hello after about 2 weeks of work.
+%p I also got qemu to work and can thus develop without the actual pi.

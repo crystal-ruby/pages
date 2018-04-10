@@ -1,0 +1,29 @@
+%p Parsing is a difficult, the theory incomprehensible and older tools cryptic. At least for me.
+%p
+  And then i heard recursive is easy and used by even llvm. Formalised as peg parsing libraries exists, and in ruby
+  they have dsl’s and are suddenly quite understandable.
+%p
+  Off the candidates i had first very positive experiences with treetop. Upon continuing i found the code
+  generation aspect not just clumsy (after all you can define methods in ruby), but also to interfere unneccessarily
+  with code control. On top of that conversion into an AST was not easy.
+%p After looking around i found Parslet, which pretty much removes all those issues. Namely
+%ul
+  %li It does not generate code, it generates methods. And has a nice dsl.
+  %li
+    It transforms to ruby basic types and has the notion on a transformation.
+    So an easy and clean way to create an AST
+  %li One can use ruby modules to partition a larger parser
+  %li Minimal dependencies (one file).
+  %li Active use and development.
+%p
+  So i was sold, and i got up to speed quite quickly. But i also found out how fiddly such a parser is in regards
+  to ordering and whitespace.
+%p
+  I spent some time to make quite a solid test framework, testing the different rules separately and also the
+  stages separately, so things would not break accidentally when growing.
+%p
+  After about another 2 weeks i was able to parse functions, both calls and definitions, ifs and whiles and off course basic
+  types of integers and strings.
+%p
+  With the great operator support it was a breeze to create all 15 ish binary operators. Even Array and Hash constant
+  definition was very quick. All in all surprisingly painless, thanks to Kasper!

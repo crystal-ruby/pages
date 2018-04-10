@@ -1,0 +1,50 @@
+%hr/
+%p
+  layout: arm
+  title: Arm resources
+  —
+%h2#arm-is-the-target Arm is the target
+%p
+  So, since the first target is arm, some of us may need to learn a bit (yep, that’s me). So this is
+  a collection of helpful resources (links and specs) with sometimes very very brief summaries.
+%p So why learn assembler, after all, it’s likely you spent your programmers life  avoiding it:
+%ul
+  %li Some things can not be expressed in ruby
+  %li To speed things up.
+  %li To add cpu specific capabilities
+%h2#links Links
+%p
+  A very good
+  %a{:href => "/arm/arm_inst.pdf"} summary pdf
+  was created by the arm university, which i converted
+  to
+  %a{:href => "/arm/target.html"} html for online reading
+%p
+  %a{:href => "http://www.davespace.co.uk/arm/introduction-to-arm/why-learn.html"} Dave’s
+  site explains just about
+  everything about the arm in nice and easy to understand terms.
+%p
+  A nice series on thinkgeek, here is the integer
+  %a{:href => "http://thinkingeek.com/2013/08/11/arm-assembler-raspberry-pi-chapter-15/"} division section
+  that has a
+  %a{:href => "https://github.com/rofirrim/raspberry-pi-assembler/blob/master/chapter15/magic.py"} code respository
+  with code to generate code for constants.
+%p
+  And off course there is the overwhelming arm infocenter,
+  %a{:href => "http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.dui0473c/CEGECDGD.html"} here with it’s bizarre division
+%p
+  The full 750 page specification for the pi , the
+  %a{:href => "/arm/big_spec.pdf"} ARM1176JZF-S pdf is here
+  or
+  %a{:href => "http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.dui0553a/BABFADHJ.html"} online
+%p
+  A nice list of
+  %a{:href => "http://docs.cs.up.ac.za/programming/asm/derick_tut/syscalls.html"} Kernel calls
+  \## Virtual pi
+%p
+  And since not everyone has access to an arm, here is a description how to set up an
+  %a{:href => "/arm/qemu.html"} emulated pi
+%p
+  And how to
+  %a{:href => "/arm/remote_pi.html"} access that
+  or any remote machine with ssl
