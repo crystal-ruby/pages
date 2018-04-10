@@ -1,8 +1,3 @@
----
-layout: news
-author: Torsten
----
-
 Since i currently have no time to do actual work, i've been doing some research.
 
 Reading about other implementations, especially transpiling ones. Opal, ruby to

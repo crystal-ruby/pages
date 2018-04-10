@@ -1,9 +1,3 @@
----
-layout: news
-author: Torsten
-title: More clarity
----
-
 It's such a nice name, crystal. My first association is clarity, and that is exactly what i am trying to achieve.
 
 But i've been struggling a bit to achieve any clarity on the topic of system boundary: where does OO stop. I mean i can't very well define method lookup in ruby syntax, as that involves method lookups. But tail recursion is so booring, it just never stops!

@@ -1,8 +1,3 @@
----
-layout: news
-author: Torsten
----
-
 It is the **one** thing i said i wasn't going to do: Write a language.
 There are too many languages out there already, and just because i want to write a vm,
 doesn't mean i want to add to the language jungle.

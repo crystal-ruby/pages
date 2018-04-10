@@ -1,8 +1,3 @@
----
-layout: news
-author: Torsten
----
-
 Parsing is a difficult, the theory incomprehensible and older tools cryptic. At least for me.
 
 And then i heard recursive is easy and used by even llvm. Formalised as peg parsing libraries exists, and in ruby

@@ -1,8 +1,3 @@
----
-layout: news
-author: Torsten
----
-
 The register machine abstraction has been somewhat thin, and it is time to change that
 
 ### Current affairs
@@ -14,7 +9,7 @@ Not having **any** experience at this level i felt that arm was pretty sensible.
 so i abtracted the basic instruction classes a little and had the arm instructions implement them pretty much one
 to one.
 
-Then i tried to implement any ruby logic in that abstraction and failed. Thus was born the virtual machine 
+Then i tried to implement any ruby logic in that abstraction and failed. Thus was born the virtual machine
 abstraction of having Message, Frame and Self objects. This in turn mapped nicely to registers with indexed
 addressing.
 
@@ -24,17 +19,17 @@ I just have to sidestep here a little about addressing: the basic problem is off
 compile-time at what address the executable will end up.
 
 The problem first emerged with calling functions. Mostly because that was the only objects i had, and so i was
-very happy to find out about pc relative addressing, in which you jump or call relative to your current position 
+very happy to find out about pc relative addressing, in which you jump or call relative to your current position
 (**p**rogram **c**ounter). Since the relation is not changed by relocation all is well.
 
 Then came the first strings and the aproach can be extended: instead of grabbing some memory location, ie loading
-and address and dereferencing, we calculate the address in relation to pc and then dereference. This is great and 
+and address and dereferencing, we calculate the address in relation to pc and then dereference. This is great and
 works fine.
 
 But the smug smile is wiped off the face when one tries to store references. This came with the whole object
 aproach, the bootspace holding references to **all** objects in the system. I even devised a plan to always store
 relative addresses. Not relative to pc, but relative to the self that is storing. This i'm sure would have
-worked fine too, but it does mean that the running program also has to store those relative addresses (or have 
+worked fine too, but it does mean that the running program also has to store those relative addresses (or have
 different address types, shudder). That was a runtime burden i was not willing to accept.
 
 So there are two choices as far as i see: use elf relocation, or relocate in init code. And yet again i find myself
@@ -65,10 +60,10 @@ conclusion that a load is meant. And since this is a fresh effort i would rather
 it easier for others to learn sensible stuff than me get used to cryptics only to have everyone after me do the same.
 
 So i will have instructions like RegisterMove, ConstantLoad, Branch, which will translate to mov, ldr and b in arm. I still like to keep the arm level with the traditional names, so people who actually know arm feel right at home.
-But the extra register layer will make it easier for everyone who has not programmed assembler (and me!), 
+But the extra register layer will make it easier for everyone who has not programmed assembler (and me!),
 which i am guessing is quite a lot in the *ruby* community.
 
-In implementation terms it is a relatively small step from the vm layer to the register layer. And an even smaller 
+In implementation terms it is a relatively small step from the vm layer to the register layer. And an even smaller
 one to the arm layer. But small steps are good, easy to take, easy to understand, no stumbling.
 
 ### Extra Benefits
@@ -79,10 +74,10 @@ benefits clearly exist.
 ##### Clean interface for cpu specific implementation
 
 That really says it all. That interface was a bit messy, as the RegisterMachine was used in Vm code, but was actually
-an Arm implementation. So no seperation. Also as mentioned the instruction set was arm heavy, with the quirks 
+an Arm implementation. So no seperation. Also as mentioned the instruction set was arm heavy, with the quirks
 even arm has.
 
-So in the future any specific cpu implementation can be quite self sufficient. The classes it uses don't need to 
+So in the future any specific cpu implementation can be quite self sufficient. The classes it uses don't need to
 derive from anything specific and need only implement the very small code interface (position/length/assemble).
 And to hook in, all that is needed is to provide a translation from RegisterMachine instructions, which can be
 done very nicely by providing a Pass for every instruction. So that layer of code is quite seperate from the actual

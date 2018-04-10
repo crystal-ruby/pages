@@ -1,8 +1,3 @@
----
-layout: news
-author: Torsten
----
-
 I was just reading my ruby book, wondering about functions and blocks and the like, as one does when implementing
 a vm. Actually the topic i was struggling with was receivers, the pesty self, when i got the exception.
 

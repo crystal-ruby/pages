@@ -1,8 +1,3 @@
----
-layout: news
-author: Torsten
----
-
 It really is like [Bret Victor](http://worrydream.com/#!/InventingOnPrinciple) says in his video:
  good programmers are the ones who play computer in their head well.
 

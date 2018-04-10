@@ -1,8 +1,3 @@
----
-layout: news
-author: Torsten
----
-
 Ok, that was surprising: I just wrote a language in two months. Parser, compiler, working binaries
 and all.
 

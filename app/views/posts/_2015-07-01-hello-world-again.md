@@ -1,8 +1,4 @@
 ---
-layout: news
-author: Torsten
----
-
 After almost a year of rewrite: **Hello World** is back.
 
 **Working executables again**

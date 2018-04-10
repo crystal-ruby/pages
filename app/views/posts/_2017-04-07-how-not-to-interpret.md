@@ -1,8 +1,3 @@
----
-layout: news
-author: Torsten
----
-
 Method caching can be done at language level. Wow. But first some boring news:
 
 ## Vool is ready, Mom is coming

@@ -1,8 +1,3 @@
----
-layout: news
-author: Torsten
----
-
 Well, it has been a good holiday, two months in Indonesia, Bali and diving Komodo. It brought
 clarity, and so  i have to start a daunting task.
 

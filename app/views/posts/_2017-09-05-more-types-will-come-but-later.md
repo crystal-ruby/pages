@@ -1,8 +1,3 @@
----
-layout: news
-author: Torsten
----
-
 While work on Mom (Minimal object machine) continues, i can see the futures a little clearer.
 Alas, for now the shortest route is best, so the future will have to wait. But here is what i'm
 thinking.

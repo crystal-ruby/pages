@@ -1,10 +1,6 @@
----
-layout: news
-author: Torsten
----
 Both "ends", parsing and machine code, were relatively clear cut. Now it is into unknown territory.
 
-I had ported the Kaleidescope llvm tutorial language to ruby-llvm last year, so thee were some ideas floating.
+I had ported the Kaleidoscope llvm tutorial language to ruby-llvm last year, so thee were some ideas floating.
 
 The idea of basic blocks, as the smallest unit of code without branches was pretty clear. Using those as jump
 targets was also straight forward. But how to get from the AST to arm Intructions was not, and took some trying out.

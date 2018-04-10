@@ -1,8 +1,3 @@
----
-layout: news
-author: Torsten
----
-
 Since i got the ideas of Slots and the associated instruction Set, i have been wondering how that
 fits in with the code generation.
 

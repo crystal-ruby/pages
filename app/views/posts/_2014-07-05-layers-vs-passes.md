@@ -1,8 +1,3 @@
----
-layout: news
-author: Torsten
----
-
 I am not stuck. I know i'm not. Just because there is little visible progress doesn't mean i'm stuck. It may just feel like it though.
 
 But like little cogwheels in the clock, i can hear the background process ticking away and sometimes there is a gong.

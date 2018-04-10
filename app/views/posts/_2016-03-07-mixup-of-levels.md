@@ -1,8 +1,3 @@
----
-layout: news
-author: Torsten
----
-
 Writing Soml helped a lot to separate the levels, or phases of the ruby compilation process. Helped
 me that is, to plan the ruby compiler.
 

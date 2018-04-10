@@ -1,8 +1,3 @@
----
-layout: news
-author: Torsten
----
-
 So, the plan, in short:
 
 1. I need to work a little more on docs. Reading them i notice they are still not up to date

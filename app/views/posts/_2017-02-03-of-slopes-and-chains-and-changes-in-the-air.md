@@ -1,8 +1,3 @@
----
-layout: news
-author: Torsten
----
-
 As i said in the last post, a step back and forward, possibly two, was taken and understanding
 grows again. Especially when i think that some way is the way, it always changes and i turn out
 to be at least partially wrong. The way of life, of imperfect intelligence, to strive for that

@@ -1,8 +1,3 @@
----
-layout: news
-author: Torsten
----
-
 Now that i *have* had time to write some more code (250 commits last month), here is
 the good news:
 

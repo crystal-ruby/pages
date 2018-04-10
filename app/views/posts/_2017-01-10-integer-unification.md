@@ -1,8 +1,3 @@
----
-layout: news
-author: Torsten
----
-
 I just read mri 2.4 "unifies" Fixnum and Integer. This, it turns out, is something quite
 different from what i though, mostly about which class names are returned.
 And that it is ok to have two implementations for the same class, Integer.

@@ -1,8 +1,3 @@
----
-layout: news
-author: Torsten
----
-
 ## RubyX compiles ruby to binary
 
 The previous name was from a time in ancient history, three years ago, in internet time over

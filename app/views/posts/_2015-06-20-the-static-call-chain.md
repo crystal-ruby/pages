@@ -1,8 +1,3 @@
----
-layout: news
-author: Torsten
----
-
 Quite long ago i [had already determined](/2014/06/27/an-exceptional-thought.html) that return
 addresses and exceptional return addresses should be explicitly stored in the message.
 

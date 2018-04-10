@@ -1,8 +1,3 @@
----
-layout: news
-author: Torsten
----
-
 Going on holiday without a computer was great. Forcing me to recap and write things down on paper.
 
 ## Layers
