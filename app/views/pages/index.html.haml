@@ -77,13 +77,8 @@
         %a{:href => "https://groups.google.com/forum/#!forum/ruby-x"} mail
     %h2.center News
     %p
-      Last but not least, i try to get recent developments down on paper when they are still fresh.
-    %p
-      {{ site.posts[0].date | date: "%d.%m.%y"  }}:
-      %a{:href => "{{ site.posts[0].url }}"} {{ site.posts[0].title }}
-    %p
-      {{ site.posts[1].date | date: "%d.%m.%y"  }}:
-      %a{:href => "{{ site.posts[1].url }}"} {{ site.posts[1].title }}
-    %p
-      {{ site.posts[2].date | date: "%d.%m.%y"  }}:
-      %a{:href => "{{ site.posts[2].url }}"} {{ site.posts[2].title }}
+      Last but not least, i try to get recent developments down on paper when they are
+      still fresh.
+    %p=post_link(0)
+    %p=post_link(1)
+    %p=post_link(2)
