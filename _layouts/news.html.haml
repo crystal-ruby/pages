@@ -1,0 +1,21 @@
+\---
+layout: site
+\---
+.row
+  %div
+    %h1.center
+      {{page.title}}
+    %p.center
+      %span Written by {{page.author}} on {{page.date | date_to_string}}.
+  %div
+    {{content}}
+.row
+  %h2.center Older
+  %div
+    %ul.nav
+      {% for post in site.posts %}
+      %li
+        %a{:href => "{{ post.url }}"}
+          {{ post.title }}
+          %small {{ post.date | date: "%d.%m.%y"  }}
+      {% endfor %}

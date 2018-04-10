@@ -1,0 +1,70 @@
+!!! Strict
+%html
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %title Synthesis: An Efficient Implementation of Fundamental Operating System Services - Abstract
+    %link{:href => "../css/style.css", :rel => "stylesheet", :type => "text/css"}/
+    %link{:href => "style.css", :rel => "stylesheet", :type => "text/css"}/
+  %body
+    #nav
+      %a.home{:href => "../index.html"} Alexia's Home
+      %a{:href => "index.html"} Dissertation
+      %a{:href => "abs.html"} Abstract
+      %a{:href => "ack.html"} Acknowledgements
+      %a{:href => "toc.html"} Contents
+      %a{:href => "ch1.html"} Chapter 1
+      %a{:href => "ch2.html"} Chapter 2
+      %a{:href => "ch3.html"} Chapter 3
+      %a{:href => "ch4.html"} Chapter 4
+      %a{:href => "ch5.html"} Chapter 5
+      %a{:href => "ch6.html"} Chapter 6
+      %a{:href => "ch7.html"} Chapter 7
+      %a{:href => "ch8.html"} Chapter 8
+      %a{:href => "bib.html"} Bibliography
+      %a.here{:href => "app-A.html"} Appendix A
+    #running-title
+      Synthesis: An Efficient Implementation of Fundamental Operating System Services - Abstract
+    #content
+      Appendix A
+      %span.smallcaps Unix
+      Emulator Test Programs
+      
+      \#define N 500000int x[N]; main() -int i;
+      
+      for(i=5; i--; )g(); printf("%d"n%d"n", x[N-2], x[N-1]); ""
+      
+      g() - int i;
+      
+      x[0] = x[1] = 1;for(i=2; i!N; i++)
+      
+      x[i] = x[i-x[i-1]] + x[i-x[i-2]];""
+      
+      Figure A.1: Test 1: Compute
+      
+      137 #define N 1024 /* or 1 or 4096 */char x[N]; main()-
+      
+      int fd[2],i;pipe(fd); for(i=10000; i--; ) -write(fd[1], x, N);
+      
+      read(fd[0], x, N);"" ""
+      
+      Figure A.2: Test 2, 3, and 4: Read/Write to a Pipe
+      
+      \#include !sys/file.h? #define Test.dev "/dev/null" /* or /dev/tty */ main()-
+      
+      int f,i;for(i=10000; i--; ) -
+      
+      f = open(Test.dev, O.RDONLY); close(f);""
+      
+      ""
+      
+      Figure A.3: Test 5 and 6: Opening and Closing
+      
+      \#include !sys/file.h?#define N 1024 char x[N];main() - int f,i,j;
+      
+      f = open("file", O.RDWR -- O.CREAT -- O.TRUNC, 0666); for(j=1000; j--; ) -
+      
+      lseek(f, 0L, L.SET);for(i=10; i--; )
+      
+      write(f, x, N);lseek(f, 0L, L.SET); for(i=10; i--; )read(f, x, N); ""close(f); ""
+      
+      Figure A.4: Test 7: Read/Write to a File

@@ -1,0 +1,265 @@
+!!! Strict
+%html
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %title Synthesis: An Efficient Implementation of Fundamental Operating System Services - Abstract
+    %link{:href => "../css/style.css", :rel => "stylesheet", :type => "text/css"}/
+    %link{:href => "style.css", :rel => "stylesheet", :type => "text/css"}/
+    / CUSTOM STYLE GOES HERE
+  %body
+    #nav
+      %a{:href => "index.html"} Title
+      %a{:href => "abs.html"} Abstract
+      %a{:href => "ack.html"} Acknowledgements
+      %a.here{:href => "toc.html"} Contents
+      %a{:href => "ch1.html"} Chapter 1
+      %a{:href => "ch2.html"} Chapter 2
+      %a{:href => "ch3.html"} Chapter 3
+      %a{:href => "ch4.html"} Chapter 4
+      %a{:href => "ch5.html"} Chapter 5
+      %a{:href => "ch6.html"} Chapter 6
+      %a{:href => "ch7.html"} Chapter 7
+      %a{:href => "ch8.html"} Chapter 8
+      %a{:href => "bib.html"} Bibliography
+      %a{:href => "app-A.html"} Appendix A
+    #running-title
+      Synthesis: An Efficient Implementation of Fundamental Operating System Services - Abstract
+    #content
+      .toc
+        %h1 Contents
+        %ul
+          %li
+            %a{:href => "ch1.html"} 1. Introduction
+            %ul
+              %li
+                %a{:href => "ch1.html"} 1.1 Purpose
+              %li
+                %a{:href => "ch1.html"} 1.2 History and Motivation
+              %li
+                %a{:href => "ch1.html"} 1.3 Synthesis Overview
+                %ul
+                  %li
+                    %a{:href => "ch1.html"} 1.3.1 Kernel Structure
+                  %li
+                    %a{:href => "ch1.html"} 1.3.2 Implementation Ideas
+                  %li
+                    %a{:href => "ch1.html"} 1.3.3 Implementation Language
+                  %li
+                    %a{:href => "ch1.html"} 1.3.4 Target Hardware
+                  %li
+                    %a{:href => "ch1.html"}
+                      1.3.5
+                      %span.smallcaps Unix
+                      Emulator
+          %li
+            %a{:href => "ch2.html"} 2. Previous Work
+            %ul
+              %li
+                %a{:href => "ch2.html"} 2.1 Overview
+              %li
+                %a{:href => "ch2.html"} 2.2 The Tradeoff Between Throughput and Latency
+              %li
+                %a{:href => "ch2.html"} 2.3 Kernel Structure
+                %ul
+                  %li
+                    %a{:href => "ch2.html"} 2.3.1 The Trend from Monolithic to Diffuse
+                  %li
+                    %a{:href => "ch2.html"} 2.3.2 Services and Interfaces
+                  %li
+                    %a{:href => "ch2.html"} 2.3.3 Managing Diverse Types of I/O
+                  %li
+                    %a{:href => "ch2.html"} 2.3.4 Managing Processes
+          %li
+            %a{:href => "ch3.html"} 3. Kernel Code Generator
+            %ul
+              %li
+                %a{:href => "ch3.html"} 3.1 Fundamentals
+              %li
+                %a{:href => "ch3.html"} 3.2 Methods of Runtime Code Generation
+                %ul
+                  %li
+                    %a{:href => "ch3.html"} 3.2.1 Factoring Invariants
+                  %li
+                    %a{:href => "ch3.html"} 3.2.2 Collapsing Layers
+                  %li
+                    %a{:href => "ch3.html"} 3.2.3 Executable Data Structures
+                  %li
+                    %a{:href => "ch3.html"} 3.2.4 Performance Gains
+              %li
+                %a{:href => "ch3.html"} 3.3 Uses of Code Synthesis in the Kernel
+                %ul
+                  %li
+                    %a{:href => "ch3.html"} 3.3.1 Buffers and Queues
+                  %li
+                    %a{:href => "ch3.html"} 3.3.2 Context Switches
+                  %li
+                    %a{:href => "ch3.html"} 3.3.3 Interrupt Handling
+                  %li
+                    %a{:href => "ch3.html"} 3.3.4 System Calls
+              %li
+                %a{:href => "ch3.html"} 3.4 Other Issues 3.4.1 Kernel Size
+                %ul
+                  %li
+                    %a{:href => "ch3.html"} 3.4.2 Protecting Synthesized Code
+                  %li
+                    %a{:href => "ch3.html"} 3.4.3 Non-coherent Instruction Cache
+              %li
+                %a{:href => "ch3.html"} 3.5 Summary
+          %li
+            %a{:href => "ch4.html"} 4. Kernel Structure
+            %ul
+              %li
+                %a{:href => "ch4.html"} 4.1 Quajects
+                %ul
+                  %li
+                    %a{:href => "ch4.html"} 4.1.1 Quaject Interfaces
+                  %li
+                    %a{:href => "ch4.html"} 4.1.2 Creating and Destroying Quajects
+                  %li
+                    %a{:href => "ch4.html"} 4.1.3 Resolving References
+                  %li
+                    %a{:href => "ch4.html"} 4.1.4 Building Services
+                  %li
+                    %a{:href => "ch4.html"} 4.1.5 Summary
+              %li
+                %a{:href => "ch4.html"} 4.2 Procedure-Based Kernel
+                %ul
+                  %li
+                    %a{:href => "ch4.html"} 4.2.1 Calling Kernel Procedures
+                  %li
+                    %a{:href => "ch4.html"} 4.2.2 Protection
+                  %li
+                    %a{:href => "ch4.html"} 4.2.3 Dynamic Linking
+              %li
+                %a{:href => "ch4.html"} 4.3 Threads of Execution
+                %ul
+                  %li
+                    %a{:href => "ch4.html"} 4.3.1 Execution Modes
+                  %li
+                    %a{:href => "ch4.html"} 4.3.2 Thread Operations
+                  %li
+                    %a{:href => "ch4.html"} 4.3.3 Scheduling
+              %li
+                %a{:href => "ch4.html"} 4.4 Input and Output
+                %ul
+                  %li
+                    %a{:href => "ch4.html"} 4.4.1 Producer/Consumer
+                  %li
+                    %a{:href => "ch4.html"} 4.4.2 Hardware Devices
+              %li
+                %a{:href => "ch4.html"} 4.5 Virtual Memory
+              %li
+                %a{:href => "ch4.html"} 4.6 Summary
+          %li
+            %a{:href => "ch5.html"} 5. Concurrency and Synchronization
+            %ul
+              %li
+                %a{:href => "ch5.html"} 5.1 Synchronization in OS Kernels
+                %ul
+                  %li
+                    %a{:href => "ch5.html"} 5.1.1 Disabling Interrupts
+                  %li
+                    %a{:href => "ch5.html"} 5.1.2 Locking Synchronization Methods
+                  %li
+                    %a{:href => "ch5.html"} 5.1.3 Lock-Free Synchronization Methods
+                  %li
+                    %a{:href => "ch5.html"} 5.1.4 Synthesis Approach
+              %li
+                %a{:href => "ch5.html"} 5.2 Lock-Free Quajects
+                %ul
+                  %li
+                    %a{:href => "ch5.html"} 5.2.1 Simple Linked Lists
+                  %li
+                    %a{:href => "ch5.html"} 5.2.2 Stacks and Queues
+                  %li
+                    %a{:href => "ch5.html"} 5.2.3 General Linked Lists
+                  %li
+                    %a{:href => "ch5.html"} 5.2.4 Lock-Free Synchronization Overhead
+              %li
+                %a{:href => "ch5.html"} 5.3 Threads
+                %ul
+                  %li
+                    %a{:href => "ch5.html"} 5.3.1 Scheduling and Dispatching
+                  %li
+                    %a{:href => "ch5.html"} 5.3.2 Thread Operations
+                  %li
+                    %a{:href => "ch5.html"} 5.3.3 Cost of Thread Operations
+              %li
+                %a{:href => "ch5.html"} 5.4 Summary
+          %li
+            %a{:href => "ch6.html"} 6. Fine-Grain Scheduling
+            %ul
+              %li
+                %a{:href => "ch6.html"} 6.1 Scheduling Policies and Mechanisms
+                %ul
+                  %li
+                    %a{:href => "ch6.html"} 6.2.1 Hardware Phase Locked Loop
+                  %li
+                    %a{:href => "ch6.html"} 6.2.2 Software Feedback
+                  %li
+                    %a{:href => "ch6.html"} 6.2.3 FLL Example
+                  %li
+                    %a{:href => "ch6.html"} 6.2.4 Application Domains
+              %li
+                %a{:href => "ch6.html"} 6.3 Uses of Feedback in Synthesis
+                %ul
+                  %li
+                    %a{:href => "ch6.html"} 6.3.1 Real-Time Signal Processing
+                  %li
+                    %a{:href => "ch6.html"} 6.3.2 Rhythm Tracking and The Automatic Drummer
+                  %li
+                    %a{:href => "ch6.html"} 6.3.3 Digital Oversampling Filter
+                  %li
+                    %a{:href => "ch6.html"} 6.3.4 Discussion
+              %li
+                %a{:href => "ch6.html"} 6.4 Other Applications
+                %ul
+                  %li
+                    %a{:href => "ch6.html"} 6.4.1 Clocks
+                  %li
+                    %a{:href => "ch6.html"} 6.4.2 Real-Time Scheduling
+                  %li
+                    %a{:href => "ch6.html"} 6.4.3 Multiprocessor and Distributed Scheduling
+              %li
+                %a{:href => "ch6.html"} 6.5 Summary
+          %li
+            %a{:href => "ch7.html"} 7. Measurements and Evaluation
+            %ul
+              %li
+                %a{:href => "ch7.html"} 7.1 Measurement Environment
+                %ul
+                  %li
+                    %a{:href => "ch7.html"} 7.1.1 Hardware
+                  %li
+                    %a{:href => "ch7.html"} 7.1.2 Software
+              %li
+                %a{:href => "ch7.html"} 7.2 User-Level Measurements
+                %ul
+                  %li
+                    %a{:href => "ch7.html"} 7.2.1 Comparing Synthesis with SUNOS 3.5
+                  %li
+                    %a{:href => "ch7.html"} 7.2.2 Comparing Window Systems
+              %li
+                %a{:href => "ch7.html"} 7.3 Detailed Measurements
+                %ul
+                  %li
+                    %a{:href => "ch7.html"} 7.3.1 File and Device I/O
+                  %li
+                    %a{:href => "ch7.html"} 7.3.2 Virtual Memory
+                  %li
+                    %a{:href => "ch7.html"} 7.3.3 Window System
+                  %li
+                    %a{:href => "ch7.html"} 7.3.4 Other Figures
+              %li
+                %a{:href => "ch7.html"} 7.4 Experience
+                %ul
+                  %li
+                    %a{:href => "ch7.html"} 7.4.1 Assembly Language
+                  %li
+                    %a{:href => "ch7.html"} 7.4.2 Porting Synthesis to the Sony NEWS Workstation
+                  %li
+                    %a{:href => "ch7.html"} 7.4.3 Architecture Support
+              %li
+                %a{:href => "ch7.html"} 7.5 Other Opinions
+          %li
+            %a{:href => "ch8.html"} 8. Conclusion

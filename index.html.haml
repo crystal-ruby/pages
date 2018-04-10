@@ -1,0 +1,92 @@
+\---
+layout: site
+\---
+.row
+  %h2.center Compiling Ruby to Binary.
+  %div
+    %p.center
+      %span
+        Putting wings on ruby to let you fly (may take X years).
+.row
+  .tripple
+    %h2.center Goal
+    %p
+      The goal is to execute (not interpret) object oriented code without external dependencies,
+      on modern hardware.
+    %p
+      This means compiling dynamic code into binary. Using type knowledge at run-time we
+      optimise and cache method dispatch for know types.
+      
+      As the system is 100% in ruby, the ultimate goal is to carry on the compilation at run-time,
+      ie after the program has started.
+      %b No interpretation.
+    %p
+      Using the compilation method on it's own runtime (and bootstraping with an exising ruby),
+      it is possible to write the whole system in a dynamic oo language (ruby), thus
+      %b removing the two language problem
+      (having to choose between nice and fast)
+  .tripple
+    %h2.center Status
+    %p
+      Work is progressing on the ruby compiler. This uses a pure
+      %a{:href => "https://github.com/whitequark/parser"} ruby parser
+      to create:
+    %ul
+      %li
+        An Object model of
+        = succeed "," do
+          %a{:href => "/typed/parfait.html"} classes, types
+      %li Methods for every type (may be several per class)
+    %p
+      The lower level, strongly typed layer is
+      = succeed "." do
+        %a{:href => "/typed/typed.html"} finished
+    %ul
+      %li Object based memory (no global memory)
+      %li Object oriented calling semantics (not stack based)
+      %li Inline method caching.
+      %li
+        %a{:href => "https://github.com/ruby-x/ruby/tree/master/lib/register", :target => "_blank"} Register machine abstraction
+      %li
+        Extensible instruction set, with arm implementations
+    %p
+      An abstract risc like register level defines some abstraction from the actual hardware. The
+      type compiler compiles to this level, but a mapping to Arm is provided to produce
+      = succeed "." do
+        %b working binaries
+    %p
+      There is also an interpreter (mostly for testing) and a basic
+      %a{:href => "https://github.com/ruby-x/rubyx-debugger"} visual debugger
+      which not only helps
+      debugging, but also understanding of the machine.
+  .tripple
+    %h2.center Docs
+    %p
+      The short introduction is under the
+      %a{:href => "/rubyx/layers.html"} architecture
+      menu.
+    %p
+      The section on the intermediate representation is
+      = succeed "." do
+        %a{:href => "/typed/typed.html"} here
+    %p
+      The
+      %a{:href => "/project/motivation.html"} about
+      section has some info of when and how this
+      started. If you feel like contributing
+      %a{:href => "/contribute.html"} read this
+      or write a
+      = succeed "." do
+        %a{:href => "https://groups.google.com/forum/#!forum/ruby-x"} mail
+    %h2.center News
+    %p
+      Last but not least, i try to get recent developments down on paper when they are still fresh.
+    %p
+      {{ site.posts[0].date | date: "%d.%m.%y"  }}:
+      %a{:href => "{{ site.posts[0].url }}"} {{ site.posts[0].title }}
+    %p
+      {{ site.posts[1].date | date: "%d.%m.%y"  }}:
+      %a{:href => "{{ site.posts[1].url }}"} {{ site.posts[1].title }}
+    %p
+      {{ site.posts[2].date | date: "%d.%m.%y"  }}:
+      %a{:href => "{{ site.posts[2].url }}"} {{ site.posts[2].title }}

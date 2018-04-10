@@ -1,0 +1,117 @@
+\---
+layout: project
+title: RubyX, where it started
+\---
+.row.vspace10
+  .span12.center
+    %h1
+      %span
+    %p
+.row
+  .span1  
+  .span10
+    %p
+      Torsten Ruger started this on 10.04.2014 after having read the Blue Book 20 years earlier.
+      The main ideas were:
+    %p
+      %b> Mikrokernel
+      \: The microkernel idea: anything that can be left out, should, puts a nice upper limit
+      on things and at the same time provides a great cooking pot for everyone else to try out their ideas.
+      %br/
+      Given gems and bundler this also seems an obvious choice. I really hope to see things i hadn't even thought of.
+      %br/
+      = succeed ":" do
+        %b Layers represent an interface, not an implementation
+      %br/
+      = succeed ":" do
+        %b Empowerment
+      %br/
+      But ruby itself has not benefited from this in the same way (ie by ruby developers), because it is not in ruby.
+      %br/
+      = succeed ":" do
+        %b To get it done
+      %br/
+.row
+  .span12.center
+    %h1
+      %span Thanks
+    %p This would not have happened without:
+/ About Us
+.row
+  .tripple
+    %h2.center Smalltalk
+    %p
+      Smalltalk is the mother of OO for me.  Adele Goldberg has written down the details of early implementations in the
+      Blue Book, which made a great impression on me. Having read it, mri code is quite easy to understand.
+      %br/
+      Unfortunately Smalltalk was too far ahead of it's time and used the image, the implications of which are still
+      not understood imho.
+      %br/
+      Additional bad luck struck when, in Steven Jobs great heist of the PARC UI, he did not recognise the value of it's
+      implementation language and so pure OO did not get the same boost as the gui. Instead we got difficult c dialects.
+  .tripple
+    %h2.center Ruby and Rails
+    %p
+      After years of coding Java, Ruby was a very fresh wind. Smalltalk reborn without the funny syntax or image.
+      Instead of the image we now have gems, git and bundler, so code exchange has never been easier.
+    %p
+      Rails has sort of given Ruby it's purpose and made it grow from a perl like scripting language to a server programming
+      environment with all the whistles and bells. Rails maturity and code quality make it not only a joy to use,
+      but an excellent source for good ruby practises.
+    %p
+  .tripple
+    %h2.center Synthesis
+    %p
+      Synthesis is a microkernel OS written
+      in the 80's by Alexia Massalin which not only proves the validity of the microkernel idea, but also
+      introduces self modifying code into, of all places, the OS.
+    %p
+      Alexia has raised questions about the nature of code and ways of programming which are still unresolved.
+      I regularly reread the thesis and especially the chapter on
+      %a{:href => "http://valerieaurora.org/synthesis/SynthesisOS/ch4.html"} Quajects
+      in the endeavour to understand what
+      they are in any higher language terms.
+.row
+  .span12.center
+    %p Many other steps on the way that have left their mark:
+.row
+  .span1  
+  .span10
+    %p
+      %b
+        %a{:href => "http://judy.sourceforge.net/"} Judy
+      has been a major source of inspiration and opened new
+      ways of thinking about data structures and indeed coding. It has been the basis of two databases i wrote and together
+      with Synthesis redefined the meaning of speed for me.
+    %p
+      %b
+        %a{:href => "http://metasm.cr0.org/"} Metasm
+      finally confirmed what i had suspected for a while.
+      Namely that you don't need C to generate machine code. Metasm has be been assembling, deassembling and
+      compiling for several cpu's since 2007, in 100% ruby.
+      A great feat, and the only reason i don't use it is because it is too big (for me to understand).
+    %p
+      %b
+        %a{:href => "https://github.com/cyndis/as"} As
+      ended up being the starting point for the assembly layer.
+      It was nice and small and produced working ARM code, which is what i wanted, as raspberry is arm.
+      = succeed "got" do
+        %b
+          %a{:href => "https://github.com/seattlerb/wilson"} Wilson
+    %p
+      %b
+        %a{:href => "http://kschiess.github.io/parslet/"} Parslet
+      is great, thanks Kasper!
+      Parslet makes parsing possible for everyone.
+    %p
+      %b
+        %a{:href => "http://bundler.io/"} Bundler
+      just makes you wonder how we managed before.
+      Thanks to Yahuda, for starting it and Andre for making it fantastic.
+.row
+  .span12.center
+    %p
+      Lastly, but most importantly there is a siritual side to this too. Actually to anything i have done for at
+      least 15 years, and i just mention it
+      = succeed "," do
+        %a{:href => "spiritual.html"} here

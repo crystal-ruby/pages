@@ -1,0 +1,24 @@
+\---
+layout: site
+\---
+.row
+  %div
+    %h1.center
+      {{page.title}}
+    %p.center
+      %span {{page.sub-title}}
+    %ul.nav
+      %li
+        %a{:href => "/arm/overview.html"} Overview
+      %li
+        %a{:href => "/arm/qemu.html"} Virtual Pi
+      %li
+        %a{:href => "/arm/remote_pi.html"} Remote pi
+      %li
+        %a{:href => "/arm/target.html", :target => "sspec"} Small Spec(html)
+      %li
+        %a{:href => "/arm/arm_inst.pdf", :target => "pspec"} Small Spec(pdf)
+      %li
+        %a{:href => "/arm/big_spec.pdf", :target => "bspec"} Huge spec
+  %div
+    {{content}}

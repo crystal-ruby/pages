@@ -1,0 +1,115 @@
+!!! Strict
+%html
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %title Synthesis: An Efficient Implementation of Fundamental Operating System Services - Abstract
+    %link{:href => "../css/style.css", :rel => "stylesheet", :type => "text/css"}/
+    %link{:href => "style.css", :rel => "stylesheet", :type => "text/css"}/
+  %body
+    #nav
+      %a.home{:href => "../index.html"} Alexia's Home
+      %a{:href => "index.html"} Dissertation
+      %a{:href => "abs.html"} Abstract
+      %a{:href => "ack.html"} Acknowledgements
+      %a{:href => "toc.html"} Contents
+      %a{:href => "ch1.html"} Chapter 1
+      %a{:href => "ch2.html"} Chapter 2
+      %a{:href => "ch3.html"} Chapter 3
+      %a{:href => "ch4.html"} Chapter 4
+      %a{:href => "ch5.html"} Chapter 5
+      %a{:href => "ch6.html"} Chapter 6
+      %a{:href => "ch7.html"} Chapter 7
+      %a.here{:href => "ch8.html"} Chapter 8
+      %a{:href => "bib.html"} Bibliography
+      %a{:href => "app-A.html"} Appendix A
+    #running-title
+      Synthesis: An Efficient Implementation of Fundamental Operating System Services - Abstract
+    #content
+      %h1 8. Conclusion
+      #chapter-quote
+        A dissertation is never finished.
+        %br/
+        You just stop writing.
+        %br/
+        \-- Everyone with a Ph.D.
+      %p
+        This dissertation has described Synthesis, a new operating system kernel that provides fundamental services an order of magnitude more efficiently than traditional operating systems.
+      %p
+        Two options define the direction in which research of this nature may proceed. Firstly, an existing system may be adopted as a platform upon which incremental development may take place. Studying a piece of an existing system limits the scope of the work, ensures that one is never far from a functioning system that can be measured to guide development, and secures a preexisting base of users, upon completion. On the down side, such an approach may necessarily limit the amount of innovation and creativity brought to the process and possibly carry along any preexisting biases built in by the originators of the environment, reducing the impact the research might have on improving overall performance.
+      %p
+        Alternatively one can start anew. Such an effort removes the burden of preexisting decisions and tradeoffs, and allows use of knowledge and hindsight acquired from past systems to avoid making the same mistakes. The danger, however, is of making new, possibly fatal mistakes. In addition, so much valuable time can be spent building up the base and re-inventing wheels, that little innovation takes place.
+      %p
+        I have chosen the second direction. I felt that the potential benefits of an important breakthrough far outweighed the dangers of failure. Happily, I believe that a positive outcome may be reported. I would like to summarize both the major contributions and shortcomings of this effort.
+      %p
+        A basic assumption of this research effort has been that low overhead and low latency are important properties of an operating system. Supporting this notion is the prediction that as distributed computing becomes ubiquitous, responsiveness and overall performance will suffer at the hands of the high overhead and latency of current systems. Advances in networking technology, impressive as they are, will bear little fruit unless operating systems software is efficient enough to to make full use of the higher bandwidths. Emerging application areas such as interactive sound, video, and the future panoply of interface technologies subsumed under the umbrella of "multi-media" place strict timing requirements on operating system services -- requirements that existing systems have difficulty meeting, in part, because of their high overhead and lack of real-time support.
+      %p
+        The current leading suggestion to address the performance problems is to move function out of the kernel, thus avoiding crossing the kernel boundary and allowing customization of traditional kernel services to individual applications. Synthesis shows that it is not necessary to accept that kernel services will be slow, and to find work-arounds to them, but rather that it is possible to provide very efficient kernel services. This is important, because ultimately communications with the outside world still must go through the kernel.
+      %p
+        With real-time support and an overhead factor ten times less than that of other systems, Synthesis may be considered a resounding success. Four key performance-improving dynamics differentiate Synthesis:
+      %ul
+        %li
+          Large scale use of run-time code generation.
+        %li
+          Quaject-oriented kernel structure.
+        %li
+          Lock-free synchronization.
+        %li
+          Feedback-based process scheduling.
+      %p
+        Synthesis constitutes the first large-scale use of run time code generation to specifically improve operating system performance. Chapter 3 demonstrates that common operating system functions run five times faster when implemented using runtime generated code than a typical C language implementation, and nearly ten times faster when compared with the standard
+        %span.smallcaps Unix
+        implementation. The use of run time code generation not only improves the performance of existing services, but allows for the addition of new services without incremental systems overhead.
+      %p
+        Further differentiating Synthesis is its novel kernel structure, based around "quajects," forming the building blocks of all kernel services. In many respects, quajects resemble the objects of traditional Object-Oriented programming, including data encapsulation and abstraction. Quajects differ, however, in four important ways:
+      %ul
+        %li
+          A procedural rather than message-based interface.
+        %li
+          Explicit declaration of exceptions and external calls.
+        %li
+          Runtime binding of the external calls, and
+        %li
+          Implementation using runtime code generation.
+      %p
+        By making explicit the quaject's exceptions and external calls, the kernel may dynamically link quajects. Rather than providing services monolithically, Synthesis builds them through the use of one or more quajects eventually comprising the user's thread. This binding takes place dynamically, at runtime, allowing for both the expansion of existing services and for an enhanced capability for creating new ones. The traditional distinction between kernel and user services becomes blurred, allowing for applications' direct participation in the delivery of services. This is possible because a quaject's interface is extensible across the protection boundaries which divide applications from the kernel and from each other. Such an approach enjoys a further advantage: preserving the partitioning and modularity found in traditional systems centered around user-level servers, while bettering the higher performance levels of the monolithic kernels which, while fast, are often difficult to understand and modify.
+      %p
+        The code generation implementation and procedural interface of quajects enhances performance by reducing argument passing and enabling in-line expansion of called quajects into their caller to happen at runtime. Quaject callentries, for example, require no "self" parameter, since it is implicit in their runtime-generated code. This shows, through quajects, that a highly efficient object-based system is possible.
+      %p
+        A further research contribution of Synthesis is to demonstrate that lock-free synchronization is a viable, efficient alternative to mutual exclusion for the implementation of multiprocessor kernels. Mutual exclusion and locking, the traditional forms of synchronization, suffer from deadlock and priority inversion. Lock-free synchronization avoids these problems. But until now, there has been no evidence that a sufficiently rich set of concurrent data structures could be implemented efficiently enough using lock-free synchronization to support a full operating system. Synthesis successfully implements a sufficient number of concurrent, lock-free data structures using one and two-word Compare-&amp;-Swap instructions. The kernel is then carefully structured using only those data structures in the places where synchronization is needed. The lock-free concurrent data structures are then demonstrated to deliver better performance than locking-based techniques, further supporting my thesis for hardware that supports Compare-&amp;-Swap.
+      %p
+        New scheduling algorithms have been presented which generalize scheduling from job assignments as a function of time, to functions of data flow and interrupt rates. The algorithms are based upon feedback, drawing from control systems theory. The applications for these algorithms include support for real-time data streams and improved support for dealing with the flow of time. These applications have been illustrated by numerous descriptions of real-time sound and signal processing programs, a disk-sector finder program, and a discussing on clock synchronization.
+      %p
+        It is often said that good research raises more questions than it answers. I now explore some open questions, point out some of Synthesis' shortcomings, and suggest directions for future work.
+      %p
+        Clearly, we need better understanding of how to write programs that create code at run time. A more formal model of what it is and how it is used would be helpful in extending its applicability and in finding ways to provide a convenient interface to it.
+      %p
+        Subsidiary to this, a good cost/benefit analysis of runtime code generation is lacking. Because Synthesis is the first system to apply run time code generation on a large-scale basis, a strategic goal has simply been to get it to work and show that performance benefits do exist. Accordingly, the emphasis has been in areas where the benefits have been deemed to be greatest and where code generation was easiest to do, both in terms of programming difficulty and in CPU cycles. Intuition has been an important guide in the implementation process, resulting in an end product which performs well. It is not known is how much more improvement is possible. Perhaps applying runtime code generation more vigorously or structuring things in a different way will yield even greater benefits.
+      %p
+        Unfortunately, there is no high-level language available making programs that use run time code generation easy to write and at the same time, portable. Aside from the obvious benefit of making the technique more accessible to all members of the profession, a better understanding of the benefits of runtime code generation will sure accrue from developing such a language.
+      %p
+        An interesting direction to explore is to extend the ideas of runtime code generation to runtime reconfigurable hardware. Chips now exist whose function is "programmed" by downloading strings of bits that configure the internal logic function blocks and the routing of signals between blocks. Although the chips are generally programmed once, upon initialization, they could be reprogrammed at other times, optimizing the hardware as the environment changes. Some PGAs could be set aside for computations purposes: functions such as permuting bit vectors can be implemented much more efficiently with PGA hardware than in software. Memory operations, such as a fast memory-zero or fast page copy could be implemented operating asynchronously with the main processor. As yet unanticipated functions could be configured as research identifies the need. A machine architecture is envisaged having no I/O device controllers at all -- just a large array of programmable gate array (PGA) chips wired to the processor and to various forms of I/O connectors. Clearly, the types of I/O devices which the machine supports is a function of the bit patterns loaded into its PGAs, rather than the boards which alternatively would be plugged into its backplane. This is highly advantageous, for as new devices need to be supported, there is no need for new boards and the attendant expense and delay of acquiring them.
+      %p
+        Currently, under Synthesis, users cannot define their own services. Quaject composition is a powerful mechanism to define and implement kernel services, but this power has not yet been made accessible to the end user. At present, all services that exist do so because located somewhere in the kernel is a piece of code which knows which quajects to create and how to link them in order to provide each service. It would be better if this were not hard coded into the kernel, but made user-accessible via some sort of service description language. To support such a language, the quaject type system would need to be extended to provide runtime type checking, which is currently lacking.
+      %p
+        Another open question concerns the generality of lock-free synchronization. Lock-free synchronization has many desirable properties as discussed in this dissertation. Synthesis has demonstrated that lock-free synchronization is sufficient for the implementation of an operating system kernel. "Is this accomplished at the expense of required generality" is a question in need of an answer. Synthesis isolates all synchronization to a handful of concurrent data structures which have been shown to have an efficient lock-free implementation. Nonetheless, when lock-free data structures are used to implement systems policy, a loss of generality or efficiency may result. Currently, Synthesis efficiently supports a scheduling policy only if it has an efficient lock free implementation. One approach to this issue is to add to the list of efficient lock-free data structure implementations, thereby expanding the set of supportable policies. Another research direction is to determine when other synchronization methods are necessary so that a policy may be followed literally, but also when the policy can be modified to fit an efficient lock-free implementation. In addition, determining how best to support processors without a Compare-&amp;-Swap instruction would be valuable.
+      %p
+        The behavior of feedback-based, fine grained scheduling has not been fully explored. When the measurements and adjustments happen at regular intervals, the schedule can be modeled as a linear discrete time system and Z-transforms used to prove stability and convergence. In the general case, measurements and adjustments can occur at irregular intervals because they are scheduled as a function of previous measurements. It is not known whether this type of scheduler is stable for all work load conditions. While empirical observations of real-time signal processing applications indicate that the scheduler is stable under many interesting, real-life workloads, it would be nice if this could be formally proven.
+      %p
+        The current 68030 assembly language implementation limits Synthesis' portability. The amount of code is not inordinately large (20,000 lines) and much of it is macro invocations, rather than machine instructions, so an assembler-level port might not be nearly as difficult as it might first appear. A high level language implementation would be better. An open question is the issue of runtime code generation. While one could create code which inserts machine-op codes into memory, the result would be no more portable than the current assembly language version. A possible approach to this problem would be to abstract as many runtime code generation techniques as possible in simple, machine-independent extensions to an existing programming language such as C. Using the prototypic language and making performance comparisons along the way would go far toward identifying which direction the final language should take.
+      %p
+        While Synthesis holds out enormous promise, its readiness for public release is retarded by the following factors:
+      %ul
+        %li
+          Known bugs need to be removed.
+        %li
+          The window system is incomplete, and lacks many 2-D graphics primitives and mouse tracking.
+        %li
+          The virtual memory model is not fully developed, and the pager interface should be exported to the user in order to enhance its utility.
+        %li
+          The network driver works, but no protocols have as yet been implemented.
+      %p
+        All of these enhancements can be made without risk to either the measurements presented in this dissertation, or to the speed and efficiency of the primitive kernel. My confidence rests partly because the significant execution paths have been anticipated and measured, and partly from past experience, when the much more significant functionality of multiprocessor support, virtual memory, ethernet driver, and the window system were added to the then primitive kernel without slowing it down.
+      %p
+        I want to conclude by emphasizing that although this work has been done in the context of operating systems, the ideas presented in this dissertation - runtime code generation, quaject structuring, lock-free methods of synchronization, and scheduling based on feedback - can all be applied equally well to improving the performance, structuring, and robustness of user-level programs. The open questions, particularly those regarding runtime code generation, may make this difficult at times; nevertheless the potential is there.
+      %p
+        While countless philosophers throughout Western Civilization have all proffered advice against the practice of predicting the future, most have failed to resist the temptation. While computer scientists shall most likely fare no better at this art, I believe that Synthesis brings to the surface an operating system of elegance and efficiency as to accelerate serious consideration and development of multiple microprocessor machine environments, particularly those allied with multi-media and communications. In short, Synthesis and the concepts upon which it rests are not likely to be eclipsed by any major occurrence on the event horizon of technology any time soon.

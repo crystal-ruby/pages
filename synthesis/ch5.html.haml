@@ -1,0 +1,627 @@
+!!! Strict
+%html
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %title Synthesis: An Efficient Implementation of Fundamental Operating System Services - Abstract
+    %link{:href => "../css/style.css", :rel => "stylesheet", :type => "text/css"}/
+    %link{:href => "style.css", :rel => "stylesheet", :type => "text/css"}/
+  %body
+    #nav
+      %a.home{:href => "../index.html"} Alexia's Home
+      %a{:href => "index.html"} Dissertation
+      %a{:href => "abs.html"} Abstract
+      %a{:href => "ack.html"} Acknowledgements
+      %a{:href => "toc.html"} Contents
+      %a{:href => "ch1.html"} Chapter 1
+      %a{:href => "ch2.html"} Chapter 2
+      %a{:href => "ch3.html"} Chapter 3
+      %a{:href => "ch4.html"} Chapter 4
+      %a.here{:href => "ch5.html"} Chapter 5
+      %a{:href => "ch6.html"} Chapter 6
+      %a{:href => "ch7.html"} Chapter 7
+      %a{:href => "ch8.html"} Chapter 8
+      %a{:href => "bib.html"} Bibliography
+      %a{:href => "app-A.html"} Appendix A
+    #running-title
+      Synthesis: An Efficient Implementation of Fundamental Operating System Services - Abstract
+    #content
+      %h1 5. Concurrency and Synchronization
+      #chapter-quote
+      %h2 5.1 Synchronization in OS Kernels
+      %p
+        In single-processor machines, the need for synchronization within an operating system arises because of hardware interrupts. They may happen in the middle of sensitive kernel data structure modifications, compromising their integrity if not properly handled. Even if the operating system supports multiprogramming, as most do, it is always an interrupt that causes the task switch, leading to inter-task synchronization problems.
+      %p
+        In shared-memory multiprocessors, there is interference between processors accessing the shared memory, in addition to hardware interrupts. When different threads of control in the kernel need to execute in specific order (e.g., to protect the integrity of kernel data structures), they use synchronization mechanisms to ensure proper execution ordering. In this chapter, we discuss different ways to ensure synchronization in the kernel with emphasis on the Synthesis approach based on lock-free Synchronization.
+      %h3 5.1.1 Disabling Interrupts
+      %p
+        In a single-processor kernel (including most flavors of
+        = succeed ")," do
+          %span.smallcaps Unix
+      %p
+        But synchronization by disabling interrupts has its limitations. Interrupts cannot remain disabled for too long, otherwise frequent hardware interrupts such as a fast clock may be lost. This places a limit on the length of the execution path within critical regions protected by disabled interrupts. Furthermore, disabling interrupts is not always sufficient. In a shared-memory multiprocessor, data structures may be modified by different CPUs. Therefore, some explicit synchronization mechanism is needed.
+      %h3 5.1.2 Locking Synchronization Methods
+      %p
+        Mutual exclusion protects a critical section by allowing only one process at a time to execute in it. The many styles of algorithms and solutions for mutual exclusion may be divided into two kinds: busy-waiting (usually implemented as spin-locks) and blocking (usually implemented as semaphores). Spin-locks sit in tight loops while waiting for the critical region to clear. Blocking semaphores (or monitors) explicitly send a waiting process to a queue. When the currently executing process exits the critical section, the next process is dequeued and allowed into the critical section.
+      %p
+        The main problem with spin-locks is they waste CPU time while waiting. The justification in multiprocessors is that the process holding the lock is running and will soon clear the lock. This assumption may be false when multiple threads are mapped to the same physical processor, and results either in poor performance, or complicated scheduling to ensure the bad case does not happen. The main difficulty with blocking semaphores is the considerable overhead to maintain a waiting queue and to set and reset the semaphore. Furthermore, the waiting queue itself requires some kind of lock, resulting in a catch-22 situation that is resolved by disabling interrupts and spin-locks, Finally, having to choose between the two implementations leads to non-trivial decisions and algorithms for making it.
+      %p
+        Besides the overhead in acquiring and releasing locks, locking methods suffer from three major disadvantages: contention, deadlock, and priority inversion. Contention occurs when many competing processes all want to access the same lock. Important global data structures are often points of contention. In Mach, for example, a single lock serializes access to the global run-queue [7]. This becomes a point of contention if several processors want to access the queue at the same time, as would occur when the scheduler clocks are synchronized. One way to reduce the lock contention in Mach relies on scheduling "hints" from the programmer. For example, hand-off hints may give control directly to the destination thread, bypassing the run queue. Although hints may decrease lock contention for specific cases, their use is difficult and their benefits uncertain.
+      %p
+        Deadlock results when two or more processes both need locks held by the other. Typically, deadlocks are avoided by imposing a strict request order for the resources. This is a difficult solution because it requires system-wide knowledge to perform a local function; this goes against the modern programming philosophy of information-hiding.
+      %p
+        Priority inversion occurs when when a low priority process in a critical section is preempted and causes other, higher priority processes to wait for that critical section. This can be particularly problematic for real-time systems where rapid response to urgent events is essential. There are sophisticated solutions for the priority inversion problem [8], but they contribute to make locks more costly and less appealing.
+      %p
+        A final problem with locks is that they are state. In an environment that allows partial failure - such as parallel and distributed systems - a process can set a lock and then crash. All other processes needing that lock then hang indefinitely.
+      %h3 5.1.3 Lock-Free Synchronization Methods
+      %p
+        It is possible to perform safe updates of shared data without using locks. Herlihy [14] introduced a general methodology to transform a sequential implementation of any data structure into a wait-free, concurrent one using the
+        %em Compare-&amp;-Swap
+        primitive, which he shows is more powerful than test-and-set, the primitive usually used for locks. Compare-&amp;- Swap takes three parameters: a memory location, a compare value, and an update value. If contents of the memory location is identical to the compare value, the update value is stored there and the operation succeeds; otherwise the memory location is left unchanged and the operation fails.
+      %p
+        Figure 5.1 shows how
+        %em Compare-&amp;-Swap
+        is used to perform an arbitrary atomic update of single-word data in a lock-free manner. Initially, the current value of the word is read into a private variable, old val. This value is passed to the update function which places its result in a private variable, new val.
+        %em Compare-&amp;-Swap
+        then checks if interference happened by testing whether the word still has value old val. If it does, then the word is atomically updated with new val. Otherwise, there was interference, so the operation is retried. For reference, Figures 5.2 and 5.3 shows the definition of CAS, the
+        %em Compare-&amp;-Swap
+        function, and of CAS2, the two-word
+        %em Compare-&amp;-Swap
+        function, which is used later.
+      .code
+        %pre
+          :preserve
+            
+            int data_val;
+            
+            AtomicUpdate(update_function)
+            {
+            retry:
+                old_val = data_val;
+                new_val = update_function(old_val);
+                if(CAS(&data_val, old_val, new_val) == FAIL)
+            	goto retry;
+                return new_val;
+            }
+        %p.caption Figure 5.1: Atomic Update of Single-Word Data
+      .code
+        %pre
+          :preserve
+            
+            CAS(mem_addr, compare_value, update_value)
+            {
+                if(*mem_addr == compare_value) {
+            	*mem_addr = update_value;
+            	return SUCCEED;
+                } else
+            	return FAIL;
+            }
+        %p.caption Figure 5.2: Definition of Compare-and-Swap
+      %p
+        Updating data of arbitrary-length using
+        %em Compare-&amp;-Swap
+        is harder. Herlihy's general method works like this: each data structure has a "root" pointer, which points to the current version of the data structure. An update is performed by allocating new memory and copying the old data structure into the new memory, making the changes, using
+        %em Compare-&amp;-Swap
+        to swing the root pointer to the new structure, and deallocating the old.
+      .code
+        %pre
+          :preserve
+            
+            CAS2(mem_addr1, mem_addr2, compare1, compare2, update1, update2)
+            {
+                if(*mem_addr1 == compare1 && *mem_addr2 == compare2) {
+            	*mem_addr1 = update1;
+            	*mem_addr2 = update2;
+            	return SUCCEED;
+                } else
+            	return FAIL;
+            }
+        %p.caption Figure 5.3: Definition of Double-Word Compare-and-Swap
+      %p
+        He provides methods of partitioning large data structures so that not all of it needs to be copied, but in general, his methods are expensive.
+      %p
+        Herlihy defines an implementation of a concurrent data structure to be wait-free if it guarantees that each process modifying the data structure will complete the operation in a finite number of steps. He defines an implementation to be non-blocking if it guarantees that some process will complete an operation in a finite number of steps. Both prevent deadlock. Wait-free also prevents starvation. In this paper, we use the term lock-free as synonymous with non-blocking. We have chosen to use lock-free synchronization instead of wait-free because the cost of wait-free is much higher and the chances of starvation in an OS kernel is low -- I was unable to construct a test case where that would happen.
+      %p
+        Even with the weaker goal of non-blocking, Herlihy's data structures are expensive, even when there is no interference. For example, updating a limited-depth stack is implemented by copying the entire stack to a newly allocated block of memory, making the changes on the new version, and switching the pointer to the stack with a
+        = succeed "." do
+          %em Compare-&amp;-Swap
+      %h3 5.1.4 Synthesis Approach
+      %p
+        The Synthesis approach to synchronization is motivated by a desire to do each job using the minimum resources. The previous sections outlined the merits and problems of various synchronization methods. Here are the ideas that guided our search for a synchronization primitive for Synthesis:
+      %ul
+        %li
+          We wanted a synchronization method that avoids the problem of priority inversion so as to simplify support of real-time signal processing.
+        %li
+          We did not want to disable interrupts because we wanted to support I/O devices that interrupt at a very high rate, such as the Sound-IO devices. Also, disabling interrupts by itself does not work for multiprocessors.
+        %li
+          We wanted a synchronization method that does not have the problem of deadlock. The reason is that we wanted as much flexibility as possible to examine and modify running kernel threads. We wanted to be able to suspend threads to examine their state without affecting the rest of the system.
+      %p
+        Given these desires, lock-free synchronization is the method of choice. Lock-free synchronization does not have the problems of priority inversion and deadlock. I also feel it leads to more robust code because there can never be the problem of a process getting stuck and hanging while holding a lock.
+      %p
+        Unfortunately, Herlihy's general wait-free methods are too expensive. So instead of trying to implement arbitrary data structures lock-free, we take a different tack: We ask "what data structures can be implemented lock-free, efficiently?" We then build the kernel out of these structures. This differs from the usual way: typically, implementors select a synchronization method that works generally, such as semaphores, then use that everywhere. We want to use the cheapest method for each job. We rely on the quaject structuring of the kernel and on code synthesis to create special synchronization for each need.
+      %p
+        The job is made easier because the Motorola 68030 processor supports a two-word
+        %em Compare-&amp;-Swap
+        operation. It is similar in operation to the one-word
+        = succeed "," do
+          %em Compare-&amp;-Swap
+        %em Compare-&amp;-Swap
+        lets us efficiently implement many basic data structures such as stacks, queues, and linked lists because we can atomically update both a pointer and the location being pointed to in one step. In contrast, Herlihy's algorithms, using single-word
+        = succeed "," do
+          %em Compare-&amp;-Swap
+      %p
+        The first step is to see if synchronization is necessary at all. Many times the need for synchronization can be avoided through code isolation, where only specialized code that is known to be single-threaded handles the manipulation of data. An example of code isolation is in the run-queue. Typically a run-queue is protected by semaphores or spin-locks, such as in the
+        %span.smallcaps Unix
+        and Mach implementations [7]. In Synthesis, only code residing in each element can change it, so we separate the run-queue traversal, which is done lock-free, safely and concurrently, from the queue element update, which is done locally by its associated thread. Another example occurs in a single-producer, single-consumer queue. As long as the queue is neither full nor empty, the producer and consumer work on different parts of it and need not synchronize.
+      %p
+        Once it has been determined that synchronization is unavoidable, the next step is to try to encode the shared information into one or two machine words. If that succeeds, then we can use
+        %em Compare-&amp;-Swap
+        on the one or two words directly. Counters, accumulators, and state-flags all fall in this category. If the shared data is larger than two words, then we try to encapsulate it in one of the lock-free quajects we have designed, explained in the next section: LIFO stacks, FIFO queues, and general linked lists. If that does not work, we try to partition the work into two pieces, one part that can be done lock-free, such as enqueueing the work and setting a "work-to-be-done" flag, and another part that can be postponed and done at a time when it is known interference will not happen (e.g., code isolation). Suspending of threads, which is discussed in Section 5.3.2, follows this idea - a thread is marked suspended; the actual removal of the thread from the run-queue occurs when the thread is next scheduled.
+      %p
+        When all else fails, it is possible to create a separate thread that acts as a server to serialize the operations. Communication with the server happens using lock-free queues to assure consistency. This method is used to update complex data structures, such as those in the VT-100 terminal emulator. Empirically, I have found that after all the other causes of synchronization have been eliminated or simplified as discussed above, the complex data structures that remain are rarely updated concurrently. In these cases, we can optimize, dispensing with the server thread except when interference occurs. Invoking an operation sets a "busy" flag and then proceeds with the operation, using the caller's thread to do the work. If a second thread now attempts to invoke an operation on the same data, it sees the busy-flag set, and instead enqueues the work. When the first thread finishes the operation, it sees a non-empty work queue, and spawns a server thread to process the remaining work. This server thread persists as long as there is work in the queue. When the last request has been processed, the server dies.
+      %p
+        In addition to using only lock-free objects and optimistic critical sections, we also try to minimize the length of each critical section to decrease the probability of retries. The longer a process spends in the critical section, the greater the chance of outside interference forcing a retry. Even a small decrease in length can have a profound effect on retries. Sometimes a critical section can be divided into two shorter ones by finding a consistent intermediate state. Shifting some code between readers and writers will sometimes produce a consistent intermediate state.
+      %h2 5.2 Lock-Free Quajects
+      %p
+        The Synthesis kernel is composed of quajects, chunks of code with data structures. Some quajects represent OS abstractions, such as threads, memory segments, and I/O devices described earlier in chapter 4. Other quajects are instances of abstract data types such as stacks, queues, and linked lists, implemented in a concurrent, lock-free manner, This section describes them.
+      .code
+        %pre
+          :preserve
+            
+            Insert(elem)
+            {
+            retry:
+                old_first = list_head;
+                *elem = old_first;
+                if(CAS(&list_head, old_head, elem) == FAIL)
+            	goto retry;
+            }
+            
+            Delete()
+            {
+            retry:
+                old_first = list_head;
+                if(old_first == NULL)
+            	return NULL;
+                second = *old_first;
+                if(CAS2(&list_head, old_first, old_head, second, second, 0) == FAIL)
+            	goto retry;
+                return old_first;
+            }
+        %p.caption Figure 5.4: Insert and Delete at Head of Singly-Linked List
+      %h3 5.2.1 Simple Linked Lists
+      %p
+        Figure 5.4 shows a lock-free implementation of insert and delete at the head of a singly-linked list. Insert reads the address of the list's first element into a private variable (old.first), copies it into the link field of the new element to be inserted, and then uses
+        %em Compare-&amp;-Swap
+        to atomically update the list's head pointer if it had not been changed since the initial read. Insert and delete to the end of the list can be carried out in a similar manner, by maintaining a list-tail pointer. This method is similar to that suggested in the 68030 processor handbook [21].
+      %h3 5.2.2 Stacks and Queues
+      %p
+        One can implement a stack using insert and delete to the head of a linked list, using the method of the previous section. But this requires node allocation and deallocation, which adds overhead. So I found a way of doing an array-based implementation of a stack using two-word
+        = succeed "." do
+          %em Compare-&amp;-Swap
+      .code
+        %pre
+          :preserve
+            
+            Push(elem)
+            {
+            retry:
+                old_SP = SP;
+                new_SP = old_SP - 1;
+                old_val = *new_SP;
+                if(CAS2(&SP, new_SP, old_SP, old_val, new_SP, elem) == FAIL)
+            	goto retry;
+            }
+            
+            Pop()
+            {
+            retry:
+                old_SP = SP;
+                new_SP = old_SP + 1;
+                elem = *old_SP;
+                if(CAS2(&SP, old_SP, old_SP, elem, new_SP, elem) == FAIL)
+            	goto retry;
+                return elem;
+            }
+        %p.caption Figure 5.5: Stack Push and Pop
+      %p
+        Figure 5.5 shows a lock-free implementation of a stack. Pop is implemented in almost the same way as a counter increment. The current value of the stack pointer is read into a private variable, which is de-referenced to get the top item on the stack and incremented past that item. The stack pointer is then updated using
+        %em Compare-&amp;-Swap
+        to test for interfering accesses and retry when they happen.
+      %p
+        Push is more complicated because it must atomically update two things: the stack pointer and the top item on the stack. This needs a two-word
+        = succeed "." do
+          %em Compare-&amp;-Swap
+        = succeed "." do
+          %em Compare-&amp;-Swap
+        %em Compare-&amp;-Swap-2
+        two comparison values.
+        %em Compare-&amp;-Swap-2
+        always performs two tests; sometimes one of them is undesirable.)
+      %p
+        Figure 5.6 shows a lock-free implementation of a circular queue. It is very similar to the stack implementation, and will not be discussed further.
+      .code
+        %pre
+          :preserve
+            
+            Put(elem)
+            {
+            retry:
+                old_head = Q_head;
+                new_head = old_head + 1;
+                if(new_head >= Q_end)
+            	new_head = Q_begin;
+                if(new_head == Q_tail)
+            	return FULL;
+                old_elem = *new_head;
+                if(CAS2(&Q_head, new_head, old_head, old_elem, new_head, elem) == FAIL)
+            	goto retry;
+            }
+            
+            Get()
+            {
+            retry:
+                old_tail = Q_tail;
+                if(old_tail == Q_head)
+            	return EMPTY;
+                elem = *old_tail;
+                new_tail = old_tail + 1;
+                if(new_tail >= Q_end)
+            	new_tail = Q_begin;
+                if(CAS2(&Q_tail, old_tail, old_tail, elem, new_tail, elem) == FAIL)
+            	goto retry;
+                return elem;
+            }
+        %p.caption Figure 5.6: Queue Put and Get
+      %h3 5.2.3 General Linked Lists
+      %p
+        The "simple" linked lists described earlier allow operations only on the head and tail of the list. General linked lists also allow operations on interior nodes.
+      %p
+        Deleting nodes at the head of a list is easy. Deleting an interior node of the list is much harder because the permanence of its neighbors is not guaranteed. Linked list traversal in the presence of deletes is hard for a similar reason - a node may be deleted and deallocated while another thread is traversing it. If a deleted node is then reallocated and reused for some other purpose, its new pointer values may cause invalid memory references by the other thread still traversing it.
+      %p
+        Herlihy's solution [14] uses reference counts. The idea is to keep deleted nodes "safe." A deleted node is safe if its pointers continue to be valid; i.e., pointing to nodes that eventually take it back to the main list where the
+        %em Compare-&amp;-Swap
+        will detect the change and retry the operation. Nodes that have been deleted but not deallocated are safe.
+      .code
+        %pre
+          :preserve
+            
+            VisitNextNode(current)
+            {
+                nextp = & current->next;	// Point to current node's next-node field
+            retry:
+                next_node = *nextp;		// Point to the next node
+                if(next_node != NULL) {	// If node exists...
+            	refp = & next_node->refcnt; // Point to next node's ref. count
+            	old_ref = *refp;	// Get value of next node's ref. count
+            	new_ref = old_ref + 1;	// And increment
+            	if(CAS2(nextp, refp, next_node, old_ref, next_node, new_ref) == FAIL)
+            	    goto retry;
+                }
+                return next_node;
+            }
+            
+            ReleaseNode(current)
+            {
+                refp = & current->refcnt;	// Point to current node's ref. count field
+            retry:
+                old_ref = *refp;		// Get value of current node's ref. count
+                new_ref = old_ref - 1;	// ... Decrement
+                if(CAS(old_ref, new_ref, refp) == FAIL)
+            	goto retry;
+                if(new_ref == 0) {
+            	Deallocate(current);
+            	return NULL;
+                } else {
+            	return current;
+                }
+            }
+        %p.caption Figure 5.7: Linked List Traversal
+      %p
+        Figure 5.7 shows an implementation of Herlihy's idea, simplified by using a two-word
+        = succeed "." do
+          %em Compare-&amp;-Swap
+      %p
+        Optimizations are possible if we can eliminate some sources of interference. In the Synthesis run queue, for example, there is only one thread visiting a TTE at any time. So we simplify the implementation to use a binary marker instead of counters. We set the mark when we enter the node using a two-word
+        = succeed "." do
+          %em Compare-&amp;-Swap
+      %h3 5.2.4 Lock-Free Synchronization Overhead
+      %table.table
+        %caption
+          Table 5.1: Comparison of Different Synchronization Methods
+          %br/
+          Times in microseconds
+          %br/
+          %small 68030 CPU, 25MHz, 1-wait-state main memory, cold cache
+        %tr
+          %th.head Operation
+          %th Non Sync
+          %th Locked
+          %th
+            Lock-free
+            %sub noretry
+          %th
+            Lock-free
+            %sub oneretry
+        %tr
+          %th null procedure call in C
+          %td.number 1.4
+          %td -
+          %td -
+          %td
+            \-
+        %tr
+          %th Increment counter
+          %td.number 0.3
+          %td.number 2.4
+          %td.number 1.3
+          %td.number
+            2.3
+        %tr
+          %th Linked-list Insert
+          %td.number 0.6
+          %td.number 2.7
+          %td.number 1.4
+          %td.number
+            2.3
+        %tr
+          %th Linked-list Delete
+          %td.number 1.0
+          %td.number 3.2
+          %td.number 2.1
+          %td.number
+            4.1
+        %tr
+          %th Circular-Queue Insert
+          %td.number 2.0
+          %td.number 4.2
+          %td.number 3.3
+          %td.number
+            6.0
+        %tr
+          %th Circular-Queue Delete
+          %td.number 2.1
+          %td.number 4.3
+          %td.number 3.3
+          %td.number
+            6.0
+        %tr
+          %th Stack Push
+          %td.number 0.7
+          %td.number 2.8
+          %td.number 2.0
+          %td.number
+            3.5
+        %tr
+          %th Stack Pop
+          %td.number 0.7
+          %td.number 2.8
+          %td.number 2.0
+          %td.number
+            3.5
+        %tr
+          %th
+            get_semaphore Sony NEWS,
+            %span.smallcaps Unix
+          %td.number 8.74
+          %td -
+          %td -
+          %td
+            \-
+      Table 5.1 shows the overhead measured for the lock-free objects described in this section, and compares it with the overhead of two other implementations: one using locking and one that is not synchronized. The column labeled "Non Sync" shows the time taken to execute the operation without synchronization. The column labeled "Locked" shows the time taken by a locking-based implementation of the operation without interference. The column labeled "Lock-freenoretry" shows the time taken by the lock-free implementation when there is no interference. The column labeled "Lock-freeoneretry" shows the time taken when interference causes the first attempt to retry, with success on the second attempt.
+      %sup 1
+      For reference, the first line of the table gives the cost of a null procedure call in the C language, and the last line gives the cost of a get semaphore operation in Sony's RTX kernel. (The RTX kernel runs in the I/O processor of Sony's dual-processor workstation, and is meant to be a light-weight kernel.)
+      .footnote
+        %sup> 1
+        This case is produced by generating an interfering memory reference between the initial read and the
+        = succeed "." do
+          %em Compare-&amp;-Swap
+      .code
+        %pre
+          :preserve
+            
+            retry:	move.l	(head),d1		// Get head node into reg. d1
+            	move.l	d1,a0			// ... copy to register 'a0'
+            	beq	empty			// ... jump if list empty
+            	lea	(a0,next),a2		// Get address of head node's next ptr.
+            	move.l	(a2),d2			// Get 2nd node in list into reg. d2
+            	cas2.l	d1:d2,d2:d2,(head):(a2)	// Update head if both nodes still same
+            	bne	retry			// ... go try again if unsucessful
+        %p.caption Figure 5.8: Lock-Free Delete from Head of Singly-Linked List
+      %p
+        The numbers shown are for in-line assembly-code implementation and assume a pointer to the relevant data structure already in a machine register. The lock-free code measured is the same as that produced by the Synthesis kernel code generator. The nonsynchronized code is the best I've been able to do writing assembler by hand. The lockbased code is the same as the non-synchronized, but preceded by some code that disables interrupts and then obtains a spinlock, and followed by code to clear the spinlock and reenable interrupts. The reasoning behind disabling interrupts is to make sure that the thread does not get preempted in its critical section, guaranteeing that the lock is cleared quickly. This represents good use of spin-locks, since any contention quickly passes.
+      %p
+        Besides avoiding the problems of locking, the table shows that the lock-free implementation is actually faster than the lock-based one, even in the case of no interference. In fact, the performance of lock-free in the presence of interference is comparable to locking without interference.
+      .code
+        %pre
+          :preserve
+            
+            	move.w	%sr,d0		// Save CPU status reg. in reg. d0
+            	or.w	#0x0700,%sr	// Disable interrupts.
+            spin:	tas	lock		// Obtain lock
+            	bne	spin		// ... busy wait
+            	move.l (head),a0	// Get head node into reg. a0
+            	tst.l	a0		// Is there a node?
+            	bne	go		// ... yes, jump
+            	clr.l	lock		// ... no: Clear the lock
+            	move.w	d0,%sr		// Reenable interrupts
+            	bra	empty		// Go to 'empty' callback
+            go:	move.l	(a0,next),(head)// Make 'head' point to 2nd node
+            	clr.l	lock		// Clear the lock
+            	move.w	d0,%sr		// Reenable interrupts
+        %p.caption Figure 5.9: Locked Delete from Head of Singly-Linked List
+      %p
+        Let us study the reason for this surprising result. Figures 5.8 and 5.9 show the actual code that was measured for the linked-list delete operation. Figure 5.8 shows the lock-free code, while Figure 5.9 shows the locking-based code. The lock-free code closely follows the principles of operation described earlier. The lock-based code begins by disabling processor interrupts to guarantee that the process will not be preempted. It then obtains the spinlock; interference at this point is limited to that from other CPUs in a multiprocessor, and the lock should clear quickly. The linked-list delete is then performed, followed by clearing the lock and reenabling interrupts. (Don't be fooled by its longer length: part of the code is executed only when the list is empty.)
+      %p
+        Accounting for the costs, the actual process of deleting the element from the list takes almost the same time for both versions, with the the lock-free code taking a few cycles longer. (This is because the
+        %em Compare-&amp;-Swap
+        instruction requires its compare-operands to be in D registers while indirection is best done through the A registers, whereas the lockbased code can use whatever registers are most convenient.) The cost advantage of lock-free comes from the much higher cost of obtaining and clearing the lock compared to the cost of
+        %em Compare-&amp;-Swap
+        \.The two-word
+        %em Compare-&amp;-Swap
+        instruction takes 26 machine cycles to execute on the 68030 processor. By comparison, obtaining and then clearing the lock costs 46 cycles, with the following breakdown: 4 to save the CPU status register; 14 to disable interrupts; 12 to obtain the lock; 6 to clear the lock following the operation; and 10 to reenable interrupts. (For reference, fetching from memory costs 6 cycles and a single word
+        %em Compare-&amp;-Swap
+        takes 13 cycles.)
+      %p
+        Some people argue that one should not disable interrupts when obtaining a lock. They believe it is better to waste time spin-waiting in the rare occasion that the process holding the lock is preempted, than to pay the disable/enable costs each time.
+        %sup 2
+        I disagree. I believe that in operating systems, it is better that an operation perhaps cost a little more, than to have it be a little faster but occasionally exhibit very high cost. Repeatability and low variance are often times as important if not more important than low average cost. Furthermore, allowing interrupts in a critical section opens the possibility that a process which has been interrupted might not return to release the lock. The user may have typed Control-C, for example, terminating the program. Recovering from this situation or preventing it from happening requires tests and more code which adds to the cost - if not to the lock itself, then somewhere else in the system.
+      .footnote
+        %sup 2
+        For the data structures of interest here, not disabling interrupts makes the cost of locking when no process is preempted very nearly identical to the cost of lock-free.
+      %h2 5.3 Threads
+      %p
+        This section describes how thread operations can be implemented so they are lockfree and gives timing figures showing their cost.
+      %h3 5.3.1 Scheduling and Dispatching
+      %p
+        Section 3.3.2 described how thread scheduling and dispatching works using an executable data structure to speed context switching. Each thread is described by a thread table entry (TTE). The TTE contains the thread-specific procedures implementing the dispatcher and scheduler, the thread context save area, and other thread-specific data. The dispatcher is divided into two halves: the switch-out routine, which is executed from the currently running thread's TTE and which saves the thread's context; and the switch-in routine, which is executed from the new thread's TTE and loads new thread's context and installs its switch-out routine into the quantum clock interrupt handler.
+      %p
+        In the current version of Synthesis, the TTEs are organized into multiple levels of runqueues for scheduling and dispatching. The idea is that some threads need more frequent attention from the CPU than others, and we want to accommodate this while maintaining an overall round-robin-like policy that is easy to schedule cheaply. The policy works like this: on every second context switch, a thread from level 0 is scheduled, in round-robin fashion. On every fourth context switch, a thread from level 1 is scheduled, also in roundrobin fashion. On every eighth context switch, a thread from level 2 is scheduled. And so on, for 8 levels. Each level gets half the attention of the previous level. If there are no threads at a particular level, that level's quanta is distributed among the rest of the levels.
+      %p
+        A global counter and a lookup table tells the dispatcher which level's queue is next. The lookup table contains the scheduling policy described above -- a 0 every other entry, 1 every fourth entry, 2 every eighth entry, like this: (0, 1, 0, 2, 0, 1, 0, 3, 0, 1, ... ). Using the counter to follow the priority table, the kernel dispatches a thread from level 0 at every second context-switch, from level 1 at every fourth context-switch, level 2 at every eighth, and so on.
+        / Need Thread state transition diagram
+        / Numbers in parenthesis: (STOPME,STOPPED)
+      %p.caption Figure 5.10: Thread State Transition Diagram
+      / FINISH
+      %p
+        When multiple CPUs attempt to dispatch threads from the run-queues, each active dispatcher (switch-out routine) acquires a new TTE by marking it using
+        = succeed "." do
+          %em Compare-&amp;-Swap
+      %h3 5.3.2 Thread Operations
+      %p
+        We now explain how the other thread operations are made lock-free. The general strategy is the same. First, mark the intended operation on the TTE. Second, perform the operation. Third, check whether the situation has changed. If negative, the operation is done. If positive, retry the operation. An important observation is that all state transitions and markings are done atomically through
+        = succeed "." do
+          %em Compare-&amp;-Swap
+      %p
+        Figure 5.10 shows the thread state-transition diagram for the suspend and resume operations.
+      %p
+        %em> Suspend
+        \: The thread-suspend procedure sets the
+        %em STOPME
+        flag in the target thread's TTE indicating that it is to be stopped. If the target thread is currently running on a different CPU, a hardware interrupt is sent to that CPU by writing to a special I/O register, forcing a context-switch. We optimize the case when a thread is suspending itself by directly calling the scheduler instead. Thread-suspend does not actually remove the thread from the run-queue.
+      %p
+        When a scheduler encounters a thread with the
+        %em STOPME
+        flag set, it removes its TTE from the run-queue and sets the
+        %em STOPPED
+        flag to indicate that the thread has been stopped. This is done using the two-word compare-and-swap instruction to synchronize with other CPU's schedulers that may be operating on the adjacent queue elements. The mark on the TTE guarantees that only one CPU is visiting each TTE at any given time. This also makes the delete operation safe.
+      %p
+        %em> Resume
+        \: First, the
+        %em STOPME
+        and
+        %em STOPPED
+        flags are read and the
+        %em STOPME
+        flag is cleared to indicate that the thread is ready to run. If the previously-read
+        %em STOPPED
+        flag indicates that the thread had not yet been removed from the run-queue, we are done. Otherwise, we remove the TTE and insert the thread directly into the run queue. The main problem we have to avoid is the case of a neighboring TTE being deleted due to the thread being killed. To solve that problem, when a thread is killed, we mark its TTE as "killed," but do not remove it from the run-queue immediately. When a dispatcher realizes the next TTE is marked "killed" during a context switch, it can safely remove it.
+      %p
+        Signal: Thread-signal is synchronized in a way that is similar to thread-resume. Each thread's TTE has a stack for pending signals which contains addresses of signal-handler procedures. Thread-signal uses a two-word
+        %em Compare-&amp;-Swap
+        to push a new procedure address onto this stack. It then sets a signal-pending flag, which the scheduler tests. The scheduler removes procedures from the pending-signal stack, one at a time, and constructs procedure call frames on the thread's runtime stack to simulate the thread having called that procedure.
+      %p
+        %em> Step
+        \: Thread-step is intended for instruction-at-a-time debugging; concurrent calls defeats its purpose. So we do not give any particular meaning to concurrent calls of this function except to preserve the consistency of the kernel. In the current implementation, all calls after the first fail. We implement this using an advisory lock.
+      %h3 5.3.3 Cost of Thread Operations
+      %p
+        Table 5.2 shows the time taken to perform the various thread operations implemented using the lock-free synchronization methods of this chapter. They were measured on the Sony NEWS 1860 machine, a dual 68030 each at 25 MHz, with no interference from the other processor.
+      %table.table
+        %caption
+          Table 5.2: Thread operations
+        %tr.head
+          %th Thread Operation
+          %th
+            Time (µs)
+        %tr
+          %th
+            Create
+            %sub shared vector table
+          %td
+            19.2
+        %tr
+          %th
+            Create
+            %sub separate vector table
+          %td
+            97
+        %tr
+          %th Destroy
+          %td
+            2.2 + 6.1 in dispatcher
+        %tr
+          %th Suspend
+          %td
+            2.2 + 3.7 in dispatcher
+        %tr
+          %th Resume
+          %td
+            3.0 if in Q; 6.6 not in Q
+        %tr
+          %th Signal
+          %td
+            4.6 + 4.4 in scheduler
+        %tr
+          %th Step (no FP, no VM switch)
+          %td
+            25
+      %p
+        Thread suspend, destroy, and signal have been split into two parts: the part done by the requester and the part done by the dispatcher. The time for these are given in the form "X + Y ," the first number is the time taken by the requester, the second number is the time taken by the dispatcher. Thread resume has two cases, the case where the thread had been stopped but the scheduler had not removed it from the run queue yet, shown by the first number, and the case where it was removed from the run queue and must be re-inserted, shown by the second number.
+      %p
+        Thread create has been made significantly faster with a copy-on-write optimization. Recall from Section 4.3 that each thread has a separate vector table. The vector table contains pointers to synthesized routines that handle the various system calls and hardware interrupts. These include the 16 system-call trap vectors, 21 program exception vectors, 19 vectors for hardware failure detection, and, depending on the hardware configuration, from 8 to 192 interrupt vectors. This represents a large amount of state information that had to be initialized - 1024 bytes.
+      %p
+        Newly-created threads point their vector table to the vector table of their creator and defer the creation of their own until they need to change the vector table. There are only two operations that change a thread's vector table: opening and closing quajects. If a quaject is not to be shared, open and close test if the TTE is being shared, and if so they first make a copy of the TTE and then modify the new copy. Alternatively, several threads may share the changes in the common vector table. For example, threads can now perform system calls such as open file and naturally share the resulting file access procedures with the other threads using the same vector table.
+      %table.table
+        %caption
+          Table 5.3: Overhead of Thread Scheduling and Context Switch
+        %tr.head
+          %th Type of context switch
+          %th
+            Synthesis V.1 (µs)
+        %tr
+          %th Integer registers only
+          %td
+            14
+        %tr
+          %th Floating-point
+          %td
+            56
+        %tr
+          %th Integer, change address space
+          %td
+            20 + 1.6 * TLB
+            %sub fill
+        %tr
+          %th Floating-point, change address space
+          %td
+            60 + 1.6 * TLB
+            %sub fill
+      %p
+        Table 5.3 shows the cost of context switching and scheduling. Context-switch is somewhat slower than shown earlier, in Table 3.3, because now we schedule from multiple run queues, and because there is synchronization that was not necessary in the single-CPU version discussed in Section 3.3.2. When changing address spaces, loading the memory management unit's translation table pointer and flushing the translation cache increases the context switch time. Extra time is then used up to fill the translation cache. This is the "
+        %em>
+          +1.6 * TLB
+          %sub fill
+        " time. Depending on the thread's locality of reference, this can be as low as 4.5 microseconds for 3 pages (code, global data, and stack) to as high as 33 microseconds to fill the entire TLB cache.
+      %h2 5.4 Summary
+      %p
+        We have used only lock-free synchronization techniques in the implementation of Synthesis multiprocessor kernel on a dual-68030 Sony NEWS workstation. This is in contrast to other implementations of multiprocessor kernels that use locking. Lock-based synchronization methods such as disabling interrupts, spin-locking, and waiting semaphores have many problems. Semaphores carry high management overhead and spin-locks may waste significant amount of CPU. (A typical argument for spin-locks is that the processor would be idle otherwise. This may not apply for synchronization inside the kernel.) A completely lock-free implementation of a multiprocessor kernel demonstrates that synchronization overhead can be reduced, concurrency increased, deadlock avoided, and priority inversion eliminated.
+      %p
+        This completely lock-free implementation is achieved with a careful kernel design using the following five-point plan as a guide:
+      %ul
+        %li
+          Avoid synchronization whenever possible.
+        %li
+          Encode shared data into one or two machine words.
+        %li
+          Express the operation in terms of one or more fast lock-free data structure operations.
+        %li
+          Partition the work into two parts: a part that can be done lock-free, and a part that can be postponed to a time when there can be no interference.
+        %li
+          Use a server thread to serialize the operation. Communications with the server happens using concurrent, lock-free queues.
+      %p
+        First we reduced the kind of data structures used in the kernel to a few simple abstract data types such as LIFO stacks, FIFO queues, and linked lists. Then, we restricted the uses of these abstract data types to a small number of safe interactions. Finally we implemented efficient special-purpose instances of these abstract data types using single-word and doubleword
+        = succeed "." do
+          %em Compare-&amp;-Swap
+      %p
+        Two lessons were learned from this experience. The first is that a lock-free implementation is a viable and desirable alternative to the development of shared-memory multiprocessor kernels. The usual strategy -- to evolve a single-processor kernel into a multiprocessor kernel by surrounding critical sections with locks -- carries some performance penalty and potentially limits the system concurrency. The second is that single and double word
+        %em Compare-&amp;-Swap
+        are important for lock-free shared-memory multiprocessor kernels. Architectures that do not support these instructions may suffer performance penalties if operating system implementors are forced to use locks. Other synchronization instructions, such as the Load-Linked/Store-Conditional found on the MIPS processor, may also yield efficient lock-free implementations.
