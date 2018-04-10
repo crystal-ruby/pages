@@ -26,9 +26,9 @@
           %li
             %a{:href => "/project/motivation.html"} About
           %li
-            %a{:href => "{{site.posts.first.url}}"} News
-        %a{:href => "https://github.com/ruby-x"}
-          %img{:alt => "Logo", :src => "/assets/images/x-small.png", :style => "position: absolute; top: 15px; right: 15px; border: 0; width: 70px"}/
+            = link_to "News" , blog_post_url(Post.posts.keys.first)
+        =link_to "https://github.com/ruby-x" do
+          =image_tag "x-small.png", style: "position: absolute; top: 15px; right: 15px; border: 0; width: 70px"
     .container
       = yield
     %footer

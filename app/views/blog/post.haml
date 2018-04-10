@@ -1,0 +1,16 @@
+.social_box
+  .social
+    .social__item
+      %span.fa.icon-facebook{"data-count" => "", "data-social" => "fb"}
+    .social__item
+      %span.fa.icon-twitter{"data-count" => "", "data-social" => "tw"}
+    .social__item
+      %span.fa.icon-linkedin{"data-count" => "", "data-social" => "ln"}
+    .social__item
+      %span.fa.icon-gplus{"data-count" => "", "data-social" => "gp"}
+
+.blog
+  .center_col
+    %h1= @post.title
+  .center_col
+    = render( @post.template_name )

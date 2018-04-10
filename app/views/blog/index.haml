@@ -1,0 +1,9 @@
+.blog.blog_index
+  - @pages.each do |slug , page|
+    .row
+      .col-md-2
+      .col-md-8
+        %h2= link_to page.title , blog_page_url(page.slug)
+        = render( page.template_name )[0 ... 350].html_safe
+        %span.whole= link_to ". . . .Read whole post" , blog_page_url(page.slug)
+      .col-md-2

@@ -1,19 +1,19 @@
 class BlogController < ApplicationController
 
   def index
-      @pages = Page.pages
+    @posts = Post.posts
   end
 
-  def page
+  def post
     title = params[:title]
     return redirect_to(root_path) unless title
-    @page = get_page(title)
-    return redirect_to(root_path) unless @page
+    @post = get_post(title)
+    return redirect_to(root_path) unless @post
   end
 
-  def get_page(title)
-    page = Page.pages[title]
-    #puts "No #{title} in #{Page.pages.keys.join(':')}"
-    page
+  def get_post(title)
+    post = Post.posts[title]
+    #puts "No #{title} in #{Post.posts.keys.join(':')}"
+    post
   end
 end
