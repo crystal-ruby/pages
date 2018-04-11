@@ -1,5 +1,7 @@
 - title = "RubyX architectural layers"
 
+= render "pages/rubyx/menu"
+
 %h1#main-layers Main Layers
 %p
   To implement an object system to execute object oriented languages takes a large system.
@@ -13,18 +15,20 @@
   just push more functionality into the “virtual machine” and it is in fact only the
   compiling to binaries that gives static languages their speed. This is the reason
   to compile ruby.
-%p
-  %img{:alt => "Architectural layers", :src => "/assets/layers.jpg"}/
+%p.center
+  = image_tag "layers.jpg" ,  alt: "Architectural layers"
+
 %h3#ruby Ruby
 %p
   To compile and run ruby, we first need to parse ruby. While parsing ruby is quite
   a difficult task, it has already been implemented in pure ruby
-  %a{:href => "https://github.com/whitequark/parser"}> here
-  \. The output of the parser is
+  = succeed "." do
+    =ext_link "here" ,"https://github.com/whitequark/parser"
+  The output of the parser is
   an ast, which holds information about the code in instances of a single
   %em Node
   class.
-  Nodes have a type (which you sometimes see in s-expressions) and a list of children.
+  Nodes have a type attribute (which you sometimes see in s-expressions) and a list of children.
 %p There are two basic problems when working with ruby ast: one is the a in ast, the other is ruby.
 %p
   Since an abstract syntax tree only has one base class, one needs to employ the visitor
@@ -34,12 +38,13 @@
   The second, possibly bigger problem, is ruby itself: Ruby is full of programmer happiness,
   three ways to do this, five to do that. To simplify that, remove the duplication and
   make analyis easier, Vool was created.
+
 %h3#virtual-object-oriented-language Virtual Object Oriented Language
 %p
   Virtual, in this context, means that there is no syntax for this language; it is an
   intermediate representation which
   %em could
-  be targeted by several languages.
+  be targeted by several real languages.
 %p
   The main purpose is to simplify existing oo languages down to it’s core components: mostly
   calling, assignment, continuations and exceptions. Typed classes for each language construct
@@ -47,8 +52,14 @@
 %p
   Examples for things that exist in ruby but are broken down in Vool are
   %em unless
-  , ternary operator,
-  do while or for loops and other similar syntactic sugar.
+  ,
+  %em ternary operator
+  ,
+  %em do while
+  or
+  %em for
+  loops and other similar syntactic sugar.
+
 %h3#minimal-object-machine Minimal Object machine
 %p
   We compile Vool statements into Mom instructions. Mom is a machine, which means it has
@@ -61,19 +72,18 @@
   functionality is expressed through instructions. Methods are in fact defined (as vool) on classes
   and then compiled to Mom/Risc/Arm and the results stored in the method object.
 %p
-  Compilation to Mom happens in two stages:
-  1. The linear statements/code is translated to Mom instructions.
-  2. Control statements are translated to jumps and labels.
-%p
-  The second step leaves a linked list of machine instructions as the input for the next stage.
-  In the future a more elaborate system of optimisations is envisioned between these stages.
+  The Mom level exists to make the transition to Risc easier. It has a very abstract,
+  high level instruction set, where each single instruction may resolve to many tens
+  of lower level instructions. But it breaks down Vool's tree into an instruction
+  list, which is conceptually a much easier input for the next layer.
+
 %h3#risc Risc
 %p
   The Register machine layer is a relatively close abstraction of risc hardware, but without the
   quirks.
 %p
   The Risc machine has registers, indexed addressing, operators, branches and everything
-  needed for the next layer. It does not try to abstract every possible machine feature
+  needed to implement Mom. It does not try to abstract every possible machine feature
   (like llvm), but rather “objectifies” the general risc view to provide what is needed for
   the Mom layer, the next layer up.
 %p
@@ -93,6 +103,7 @@
   Visualizing the control flow and being able to see values updated immediately helped
   tremendously in creating this layer. And the interpreter helps in testing, ie keeping it
   working in the face of developer change.
+
 %h3#binary--arm-and-elf Binary , Arm and Elf
 %p
   A physical machine will run binaries containing instructions that the cpu understands, in a
@@ -100,9 +111,11 @@
   these layers.
 %p
   Arm is a risc architecture, but anyone who knows it will attest, with it’s own quirks.
-  For example any instruction may be executed conditionally in arm. Or there is no 32bit
-  register load instruction. It is possible to create very dense code using all the arm
-  special features, but this is not implemented yet.
+  For example any instruction may be executed conditionally, ie
+  %em every
+  instruction carries bits to make it check the status register. Or the fact that there
+  is no 32bit register load instruction. It is possible to create very dense code using
+  all the arm special features, but this is not implemented yet.
 %p
-  All Arm instructions are (ie derive from) Register instruction and there is an ArmTranslator
-  that translates RegisterInstructions to ArmInstructions.
+  The Arm::Translator translates that translates RegisterInstructions to ArmInstructions,
+  and the Elf::ObjectWriter creates Linux binaries.
