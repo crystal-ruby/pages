@@ -1,6 +1,14 @@
+@import "susy"
+$susy: ( columns: 12, gutters: 1/4,  gutter-position: inside )
+
 a
   color: #53a5ff
   text-decoration: none
+
+.container
+  width: 90%
+  max-width: 1000px
+  margin: 0 auto
 .container
   max-width: 90%
 
@@ -29,11 +37,8 @@ ul.nav
   width: 100%
 
 .tripple
-  width: 30%
-  float: left
-  margin-right: 3%
-  &:last-child
-    margin-right: 0%
+  @include span(4)
+
 .main
   width: 78%
 .menu

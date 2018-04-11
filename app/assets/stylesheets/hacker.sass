@@ -20,19 +20,11 @@ body
 
 /* General & 'Reset' Stuff */
 
-.container
-  width: 90%
-  max-width: 1000px
-  margin: 0 auto
-
 
 section
   display: block
   margin: 0 0 20px 0
 
-
-h1, h2, h3, h4, h5, h6
-  margin: 0 0 20px
 
 
 li
@@ -52,29 +44,25 @@ header
   border-bottom: 1px dashed $conifer //header
   padding: 20px 0
   margin: 0 0 40px 0
+  h1
+    font-size: 30px
+    line-height: 1.5
+    margin: 0 0 0 -40px
+    font-weight: bold
+    font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace
+    color: $conifer//$header
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1), 0 0 5px rgba(181, 232, 83, 0.1), 0 0 10px rgba(181, 232, 83, 0.1)
+    letter-spacing: -1px
+    -webkit-font-smoothing: antialiased
 
+  h1:before
+    content: "./ "
+    font-size: 24px
 
-header h1
-  font-size: 30px
-  line-height: 1.5
-  margin: 0 0 0 -40px
-  font-weight: bold
-  font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace
-  color: $conifer//$header
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1), 0 0 5px rgba(181, 232, 83, 0.1), 0 0 10px rgba(181, 232, 83, 0.1)
-  letter-spacing: -1px
-  -webkit-font-smoothing: antialiased
-
-
-header h1:before
-  content: "./ "
-  font-size: 24px
-
-
-header h2
-  font-size: 18px
-  font-weight: 300
-  color: #666
+  h2
+    font-size: 18px
+    font-weight: 300
+    color: #666
 
 
 #downloads .btn
@@ -82,12 +70,6 @@ header h2
   text-align: center
   margin: 0
 
-
-/* Main Content*/
-
-#main_content
-  width: 100%
-  -webkit-font-smoothing: antialiased
 
 section img
   max-width: 100%
@@ -100,30 +82,19 @@ h1, h2, h3, h4, h5, h6
   letter-spacing: -0.03em
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1), 0 0 5px rgba(181, 232, 83, 0.1), 0 0 10px rgba(181, 232, 83, 0.1)
 
-
-#main_content h1
+h1
   font-size: 30px
-
-
-#main_content h2
+h2
   font-size: 24px
-
-
-#main_content h3
+h3
   font-size: 18px
-
-
-#main_content h4
+h4
   font-size: 14px
-
-
-#main_content h5
+h5
   font-size: 12px
   text-transform: uppercase
   margin: 0 0 5px 0
-
-
-#main_content h6
+h6
   font-size: 12px
   text-transform: uppercase
   color: #999
@@ -205,7 +176,6 @@ hr
   text-decoration: none
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.75)
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05)
-
 
 .btn:hover
   background: -webkit-linear-gradient(top, rgba(40, 40, 40, 0.6), rgba(35, 35, 35, 0.6) 50%, rgba(10, 10, 10, 0.8) 50%, rgba(0, 0, 0, 0.8))
