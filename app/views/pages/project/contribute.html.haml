@@ -1,8 +1,7 @@
-%hr/
-%p
-  layout: project
-  title: Join the fun
-  —
+= render "pages/project/menu"
+
+%h1= title "Join the fun"
+
 %p
   I am very open for people to join. Say hello at the
   = succeed "." do
@@ -22,27 +21,19 @@
   (on mac)
 %p I wrote some ideas in the about page, but here some more code related guidelines
 %ul
-  %li
-    %p
-      Walk the straight line
-      Or “No futureproof” means not to design before you code. Not to anticipate, only to do the job that
-      needs doing. Better design should be extracted from working code.
-  %li
-    %p
-      tdd extreme
-      Having suffered from broken software (small feature add breaks whole software) so many times, the new tdd
-      wind is not just nice, it is essential. Software size is measured in tests passed, not lines written. Any
-      new feature is only accepted with enough tests, bugs fixed after a failed test is written.
-  %li
-    %p
-      Use names rightly
-      or the principle of least surprise. Programming is so much naming, so if done right will lead to a
-      natural understanding, even of code not read.
-      Good names are Formatter or compile, but unfortunately not everything we have learnt is named well, like
-      Array (should be ordered list), Hash (names implementation not function) or string (should be word, or bytebuffer).
-  %li
-    %p
-      No sahara
-      There has been much misunderstood talk about drying things up. Dry is good, but was never meant for code, but
-      for information (configuration). Trying to dry code leads to overly small functions, calling chains that
-      are difficult to understand and serve only a misundertood slogan.
+  %li Walk the straight line
+  Or “No futureproof” means not to design before you code. Not to anticipate, only to do the job that
+  needs doing. Better design should be extracted from working code.
+  %li tdd extreme
+  Having suffered from broken software (small feature add breaks whole software) so many times, the new tdd
+  wind is not just nice, it is essential. Software size is measured in tests passed, not lines written. Any
+  new feature is only accepted with enough tests, bugs fixed after a failed test is written.
+  %li Use names rightly
+  Or the principle of least surprise. Programming is so much naming, so if done right will lead to a
+  natural understanding, even of code not read.
+  Good names are Formatter or compile, but unfortunately not everything we have learnt is named well, like
+  Array (should be ordered list), Hash (names implementation not function) or string (should be word, or bytebuffer).
+  %li No sahara
+  There has been much misunderstood talk about drying things up. Dry is good, but was never meant for code, but
+  for information (configuration). Trying to dry code completely leads to overly interdependent functions,
+  calling chains that are difficult to understand and serve only a misunderstood slogan.

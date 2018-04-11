@@ -1,41 +1,37 @@
-\---
-layout: project
-title: RubyX, where it started
-\---
-.row.vspace10
-  .span12.center
-    %h1
-      %span
-    %p
+= render "pages/project/menu"
+
+%h1= title "RubyX, where it started"
+
 .row
-  .span1  
-  .span10
-    %p
-      Torsten Ruger started this on 10.04.2014 after having read the Blue Book 20 years earlier.
-      The main ideas were:
-    %p
-      %b> Mikrokernel
-      \: The microkernel idea: anything that can be left out, should, puts a nice upper limit
+  %p
+    Torsten Ruger started this on 10.04.2014 after having read the Blue Book 20 years earlier.
+    The main ideas were:
+  %p
+    %ul
+      %li Mikrokernel
+      The microkernel idea: anything that can be left out, should, puts a nice upper limit
       on things and at the same time provides a great cooking pot for everyone else to try out their ideas.
-      %br/
+      %br
       Given gems and bundler this also seems an obvious choice. I really hope to see things i hadn't even thought of.
-      %br/
-      = succeed ":" do
-        %b Layers represent an interface, not an implementation
-      %br/
-      = succeed ":" do
-        %b Empowerment
-      %br/
+      %li Layers represent an interface, not an implementation
+      It is said that every problem in computing can be solved by adding another layer
+      of indirection. And so we have many layers, which, when done right, help us to
+      understand the system. (Read, layers are for us, not the computer)
+      But implementing each layer comes with added cost, often unnecessary.
+      %li Empowerment
+      I like the openness of ruby. Everyone can do what and how they want.
+      And change other peoples code in an easy and sensible way.
+      The best ideas survive and even better ones are coming.
+      Friendly competition as it were, cooperation, independent improvement all make
+      ruby gems better all the time.
+      %br
       But ruby itself has not benefited from this in the same way (ie by ruby developers), because it is not in ruby.
-      %br/
-      = succeed ":" do
-        %b To get it done
-      %br/
+      %br
+      %li To get it done
+      Beats me why this hasn't been done before.
 .row
-  .span12.center
-    %h1
-      %span Thanks
-    %p This would not have happened without:
+  %h1.center Thanks
+  %p.center This would not have happened without:
 / About Us
 .row
   .tripple
@@ -94,10 +90,11 @@ title: RubyX, where it started
       %b
         %a{:href => "https://github.com/cyndis/as"} As
       ended up being the starting point for the assembly layer.
-      It was nice and small and produced working ARM code, which is what i wanted, as raspberry is arm.
-      = succeed "got" do
-        %b
-          %a{:href => "https://github.com/seattlerb/wilson"} Wilson
+      It was nice and small and produced working ARM code, which is what i wanted,
+      as raspberry is arm.
+      %b
+        %a{:href => "https://github.com/seattlerb/wilson"} Wilson
+      got assimilated for similar reasons, ie small and no dependencies.
     %p
       %b
         %a{:href => "http://kschiess.github.io/parslet/"} Parslet
@@ -107,11 +104,11 @@ title: RubyX, where it started
       %b
         %a{:href => "http://bundler.io/"} Bundler
       just makes you wonder how we managed before.
-      Thanks to Yahuda, for starting it and Andre for making it fantastic.
+      Thanks to Yahuda for starting it, and Andre for making it fantastic.
 .row
-  .span12.center
-    %p
-      Lastly, but most importantly there is a siritual side to this too. Actually to anything i have done for at
-      least 15 years, and i just mention it
-      = succeed "," do
-        %a{:href => "spiritual.html"} here
+  %p
+    Lastly, but most importantly there is a spiritual side to this too.
+    Actually to anything i have done for at
+    least 15 years, and i just mention it
+    = succeed "," do
+      %a{:href => "spiritual.html"} here
