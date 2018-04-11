@@ -1,0 +1,33 @@
+= render "pages/misc/menu"
+
+%h1=title "Optimisation ideas"
+
+%p I won’t manage to implement all of these idea in the beginning, so i just jot them down.
+
+%h3 Inlining
+%p
+  Ok, this may not need too much explanation. Just work. It may be interesting to experiment how much this saves, and how much
+  inlining is useful. I could imagine at some point it’s the register shuffling that determines the effort, not the
+  actual call.
+%p Again the key is the update notifications when some of the inlined functions have changed.
+%p
+  And it is important to code the functions so that they have a single exit point, otherwise it gets messy. Up to now this
+  was quite simple, but then blocks and exceptions are undone.
+
+%h3 Register negotiation
+%p
+  This is a little less baked, but it comes from the same idea as inlining. As calling functions is a lot of register
+  shuffling, we could try to avoid some of that.
+%p More precisely, usually calling conventions have registers in which arguments are passed. And to call an “unknown”, ie any function, some kind of convention is neccessary.
+%p
+  But on “cached” functions, where the function is know, it is possible to do something else. And since we have the source
+  of the function around, we can do things previously impossible.
+%p One such thing may be to recompile the function to accept arguments exactly where they are in the calling function. Well, now that it’s written down. it does sound a lot like inlining, except without the inlining:-)
+%p
+  An expansion if this idea would be to have a Negotiator on every function call. Meaning that the calling function would not
+  do any shuffling, but instead call a Negotiator, and the Negotiator does the shuffling and calling of the function.
+  This only really makes sense if the register shuffling information is encoded in the Negotiator object (and does not have
+  to be passed).
+%p
+  Negotiators could do some counting and do the recompiling when it seems worth it. The Negotiator would remove itself from
+  the chain and connect called and new receiver directly. How much is in this i couldn’t say though.

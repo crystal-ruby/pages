@@ -1,6 +1,26 @@
-= render "pages/soml/menu"
+= render "pages/misc/menu"
 
 %h1= title "Soml Syntax"
+
+Soml was a step on the way. While i was still thinking about VM's and c++ ,
+the year was 2015.
+%br
+I had thought that some kind of typed layer was needed, and that one could
+implement the higher level in a language. A typed language, sort of like c++,
+that would be used to implement the code of ruby.
+%br
+A little like PyPy has a core that only uses a small set of python, that can,
+a la crystal, be fully type inferred.
+%br
+This idea turned out to be wrong, or difficult. Because the bridge between the
+typed an untyped was unclear or i didn't get it to work. The current system
+works by typing self, but not it's instances. A difficult mix to express in a
+language.
+%br
+This led me to abandon soml and rewrite the functionality as vool and mom layers.
+But Soml was working, the parser is still about and there are some interesting
+=link_to "benchmarks" , "soml_benchmarks.html"
+that came from it and really validated the calling convention.
 
 %h2 Top level Class and methods
 %p The top level declarations in a file may only be class definitions
