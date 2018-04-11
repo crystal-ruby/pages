@@ -1,7 +1,7 @@
-.blog.blog_index
+.blog_index
   - @posts.each do |slug , post|
     %h2
-      = link_to post.title , blog_post_url(post.slug)
+      = link_to post.title.capitalize , blog_post_url(post.slug)
       %span
         (
         =post.date

@@ -1,16 +1,22 @@
-.social_box
-  .social
-    .social__item
-      %span.fa.icon-facebook{"data-count" => "", "data-social" => "fb"}
-    .social__item
-      %span.fa.icon-twitter{"data-count" => "", "data-social" => "tw"}
-    .social__item
-      %span.fa.icon-linkedin{"data-count" => "", "data-social" => "ln"}
-    .social__item
-      %span.fa.icon-gplus{"data-count" => "", "data-social" => "gp"}
+.row.blog_nav
+  .prev=raw(prev_post(@post))
+  .next=raw(next_post(@post))
 
-.blog
+.blog_post
   .center_col
-    %h1= @post.title
+    %h1
+      = @post.title.capitalize
+      %span
+        (
+        =@post.date
+        )
   .center_col
     = render( "posts/#{@post.template_name}" )
+
+.row
+  %ul.nav
+    - Post.posts.each do |slug, post|
+      %li
+        =link_to blog_post_path(slug) do
+          =post.title.capitalize
+          %small= post.date
