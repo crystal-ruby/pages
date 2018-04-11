@@ -1,4 +1,4 @@
-= render "pages/typed/menu"
+= render "pages/soml/menu"
 
 %h1= title "Simple soml performance numbers"
 
@@ -15,7 +15,8 @@
   Hello and itos and add run 100_000 iterations per program invocation to remove startup overhead.
   Call only has 10000 iterations, as it is much slower, executing about 10000 calls per invocation
 %p Gcc used to compile c on the machine. soml executables produced by ruby (on another machine)
-%h3#results Results
+
+%h2 Results
 %p
   Results were measured by a ruby script. Mean and variance was measured until variance was low,
   always under one percent.
@@ -23,8 +24,9 @@
   The machine was a virtual arm run on a powerbook, performance roughly equivalent to a raspberry pi.
   But results should be seen as relative, not absolute (some were scaled)
 %p
-  %img{:alt => "Graph", :src => "bench.png"}/
-%h3#discussion Discussion
+  = image_tag "typed/bench.png" ,alt: "Graph"
+
+%h2 Discussion
 %p
   Surprisingly there are areas where soml code runs faster than c. Especially in the hello example this
   may not mean too much. Printf does caching and has a lot functionality, so it may not be a straight

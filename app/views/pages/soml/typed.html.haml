@@ -1,4 +1,4 @@
-= render "pages/typed/menu"
+= render "pages/soml/menu"
 
 %h1= title "Typed intermediate representation"
 
@@ -12,7 +12,7 @@
   ruby above, and the register machine below. One can think of it as a mix between c and c++,
   minus the syntax aspect. While in 2015, this layer existed as a language, (see soml-parser), it
   is now a tree representation only.
-%h4#object-oriented-to-the-core-including-calling-convention Object oriented to the core, including calling convention
+%h2 Object oriented to the core, including calling convention
 %p
   Types are modeled by the class Type and carry information about instance variable names
   and their basic type.
@@ -36,7 +36,7 @@
 %p
   There is no non- object based memory at all. The only global constants are instances of
   classes that can be accessed by writing the class name in ruby source.
-%h4#runtime--parfait Runtime / Parfait
+%h2 Runtime / Parfait
 %p
   The typed representation layer depends on the higher layer to actually determine and instantiate
   types (type objects, or objects of class Type). This includes method arguments and local variables.

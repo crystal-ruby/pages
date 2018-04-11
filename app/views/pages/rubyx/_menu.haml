@@ -1,12 +1,8 @@
 .row
   %ul.nav
-    %li
-      %a{:href => "/rubyx/layers.html"} Layers of RubyX
-    %li
-      %a{:href => "/rubyx/parfait.html"} Parfait
-    %li
-      %a{:href => "/rubyx/memory.html"} Memory
-    %li
-      %a{:href => "/rubyx/threads.html"} Threads
-    %li
-      %a{:href => "/rubyx/optimisations.html"} Optimisation ideas
+    %li= link_to "Layers of RubyX" , "layers.html"
+    %li= link_to "Parfait", "parfait.html"
+    %li= link_to "Debugger", "debugger.html"
+    %li= link_to "Memory" , "memory.html"
+    %li= link_to "Threads" , "threads.html"
+    %li= link_to "Optimisation ideas" , "optimisations.html"

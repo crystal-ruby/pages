@@ -1,8 +1,8 @@
-= render "pages/typed/menu"
+= render "pages/soml/menu"
 
 %h1= title "Soml Syntax"
 
-%h4#top-level-class-and-methods Top level Class and methods
+%h2 Top level Class and methods
 %p The top level declarations in a file may only be class definitions
 %pre
   %code
@@ -28,7 +28,7 @@
 %p
   Classes are represented by class objects (instances of class Class to be precise) and methods by
   Method objects, so all information is available at runtime.
-%h4#expressions Expressions
+%h2 Expressions
 %p
   Soml distinguishes between expressions and statements. Expressions have value, statements perform an
   action. Both are compiled to Register level instructions for the current method. Generally speaking
@@ -90,7 +90,7 @@
   Operator expressions may be used in assignments and conditions, but not in calls, where the result
   would have to be assigned beforehand. This is one of those cases where soml’s low level approach
   shines through, as soml has no auto-generated temporary variables.
-%h4#statements Statements
+%h2 Statements
 %p
   We have seen the top level statements above. In methods the most interesting statements relate to
   flow control and specifically how conditionals are expressed. This differs somewhat from other
@@ -172,7 +172,7 @@
     :preserve
         counter = 0
 %p Any of the expressions, basic, call, operator, field access, may be assigned.
-%h3#code-generation-and-scope Code generation and scope
+%h2 Code generation and scope
 %p
   Compiling generates two results simultaneously. The more obvious is code for a function, but also an
   object structure of classes etc that capture the declarations. To understand the code part better
