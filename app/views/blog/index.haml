@@ -1,9 +1,12 @@
 .blog.blog_index
   - @posts.each do |slug , post|
-    .row
-      .col-md-2
-      .col-md-8
-        %h2= link_to post.title , blog_post_url(post.slug)
-        = render( "posts/#{post.template_name}" )[0 ... 350].html_safe
-        %span.whole= link_to ". . . .Read whole post" , blog_post_url(post.slug)
-      .col-md-2
+    %h2
+      = link_to post.title , blog_post_url(post.slug)
+      %span
+        (
+        =post.date
+        )
+    %div
+      = render( "posts/#{post.template_name}" )[0 ... 350].html_safe
+      %span.whole= link_to ". . . .Read whole post" , blog_post_url(post.slug)
+    %hr
