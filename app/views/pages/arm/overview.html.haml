@@ -1,9 +1,7 @@
-%hr/
-%p
-  layout: arm
-  title: Arm resources
-  —
-%h2#arm-is-the-target Arm is the target
+= render "pages/arm/menu"
+
+%h1= title "Arm is the target"
+
 %p
   So, since the first target is arm, some of us may need to learn a bit (yep, that’s me). So this is
   a collection of helpful resources (links and specs) with sometimes very very brief summaries.
@@ -15,36 +13,35 @@
 %h2#links Links
 %p
   A very good
-  %a{:href => "/arm/arm_inst.pdf"} summary pdf
-  was created by the arm university, which i converted
-  to
-  %a{:href => "/arm/target.html"} html for online reading
+  = ext_link "summary pdf" , "/arm/arm_inst.pdf"
+  from the arm university
 %p
-  %a{:href => "http://www.davespace.co.uk/arm/introduction-to-arm/why-learn.html"} Dave’s
+  = ext_link "Dave’s", "http://www.davespace.co.uk/arm/introduction-to-arm/why-learn.html"
   site explains just about
   everything about the arm in nice and easy to understand terms.
 %p
   A nice series on thinkgeek, here is the integer
-  %a{:href => "http://thinkingeek.com/2013/08/11/arm-assembler-raspberry-pi-chapter-15/"} division section
-  that has a
-  %a{:href => "https://github.com/rofirrim/raspberry-pi-assembler/blob/master/chapter15/magic.py"} code respository
+  =ext_link "division section" ,  "http://thinkingeek.com/2013/08/11/arm-assembler-raspberry-pi-chapter-15/"
+  that has
+  =ext_link "code repository", "https://github.com/rofirrim/raspberry-pi-assembler/blob/master/chapter15/magic.py"
   with code to generate code for constants.
 %p
   And off course there is the overwhelming arm infocenter,
-  %a{:href => "http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.dui0473c/CEGECDGD.html"} here with it’s bizarre division
+  = ext_link "here with it’s bizarre division" ,  "http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.dui0473c/CEGECDGD.html"
 %p
   The full 750 page specification for the pi , the
-  %a{:href => "/arm/big_spec.pdf"} ARM1176JZF-S pdf is here
+  = ext_link "ARM1176JZF-S pdf is here" , "/arm/big_spec.pdf"
   or
-  %a{:href => "http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.dui0553a/BABFADHJ.html"} online
+  =ext_link "online" , "http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.dui0553a/BABFADHJ.html"
 %p
   A nice list of
-  %a{:href => "http://docs.cs.up.ac.za/programming/asm/derick_tut/syscalls.html"} Kernel calls
-  \## Virtual pi
+  =ext_link "Kernel calls" , "http://docs.cs.up.ac.za/programming/asm/derick_tut/syscalls.html"
+
+%h2 Virtual pi
 %p
   And since not everyone has access to an arm, here is a description how to set up an
-  %a{:href => "/arm/qemu.html"} emulated pi
+  = link_to "emulated pi" , "qemu.html"
 %p
   And how to
-  %a{:href => "/arm/remote_pi.html"} access that
+  =link_to "access that" , "remote_pi.html"
   or any remote machine with ssl

@@ -1,15 +1,14 @@
-%hr/
-%p
-  layout: arm
-  title: How to configure Qemu
-  —
+= render "pages/arm/menu"
+
+%h1= title "How to configure Qemu"
+
 %h2#target-pi-on-mac Target Pi on Mac
 %p So even the idea is to run software on the Pi, not everyone has a Pi (yet :-)
 %p Others, like me, prefer to develop on a laptop and not carry the Pi around.
 %p For all those, this here explains how to emulate the Pi on a Mac.
 %p
   Even if you have a Pi,
-  %a{:href => "/remote_pi.html"} this explains
+  =link_to "this explains",  "remote_pi.html"
   a nice way to develop with it.
 %h3#replace-the-buggy-llvm Replace the buggy llvm
 %p Written April 2014: as of writing the latest and greatest llvm based gcc (5.1) on Maverick (10.9) has a bug that makes qemu hang.
@@ -94,10 +93,10 @@
 %h2#links Links
 %p
   Blog post:
-  %a{:href => "http://xecdesign.com/qemu-emulating-raspberry-pi-the-easy-way/"} http://xecdesign.com/qemu-emulating-raspberry-pi-the-easy-way/
+  =ext_link "http://xecdesign.com/qemu-emulating-raspberry-pi-the-easy-way/", "http://xecdesign.com/qemu-emulating-raspberry-pi-the-easy-way/"
 %p
   Kernel:
-  %a{:href => "http://xecdesign.com/downloads/linux-qemu/kernel-qemu"} http://xecdesign.com/downloads/linux-qemu/kernel-qemu
+  =ext_link "http://xecdesign.com/downloads/linux-qemu/kernel-qemu", "http://xecdesign.com/downloads/linux-qemu/kernel-qemu"
 %p
   Rasbian file system(preferably be torrent):
-  %a{:href => "http://www.raspberrypi.org/downloads/"} http://www.raspberrypi.org/downloads/
+  =ext_link "http://www.raspberrypi.org/downloads/", "http://www.raspberrypi.org/downloads/"
