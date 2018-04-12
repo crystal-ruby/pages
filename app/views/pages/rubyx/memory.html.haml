@@ -1,44 +1,136 @@
 = render "pages/rubyx/menu"
 
-%h1=title "Types, memory layout and management"
+%h1=title "Memory layout and management"
 
-%p Memory management must be one of the main horrors of computing. That’s why garbage collected languages like ruby are so great. Even simple malloc implementations tend to be quite complicated. Unnecessary so, if one used object oriented principles of data hiding.
-%h3#object-and-values Object and values
-%p As has been mentioned, in a true OO system, object tagging is not really an option. Tagging being the technique of adding the lowest bit as marker to pointers and thus having to shift ints and loosing a bit. Mri does this for Integers but not other value types. We accept this and work with it and just say “off course” , but it’s not modeled well.
-%p Integers are not Objects like “normal” objects. They are Values, on par with ObjectReferences, and have the following distinctive differences:
-%ul
-  %li equality implies identity
-  %li constant for whole lifetime
-  %li pass by value semantics
-%p If integers were normal objects, the first would mean they would be singletons. The second means you can’t change them, you can only change a variable to hold a different value. It also means you can’t add instance variables to an integer, neither singleton_methods. And the third means that if you do change the variable, a passed value will not be changed. Also they are not garbage collected. If you noticed how weird that idea is (the gc), you can see how natural is that Value idea.
-%p Instead of trying to make this difference go away (like MRI) I think it should be explicit and indeed be expanded to all Objects that have these properties. Words for examples (ruby calls them Symbols), are the same. A Table is a Table, and Toble is not. Floats (all numbers) and Times are the same.
-%h3#object-type Object Type
-%p So if we’re not tagging we must pass and keep the type information around separately. For passing it has been mentioned that a separate register is used.
-%p For keeping track of the type data we need to make a decision of how many we support. The register for passing gives the upper limit of 4 bits, and this fits well with the idea of cache lines. So if we use cache lines, for every 8 words, we take one for the type.
-%p Traditionally the class of the object is stored in the object. But this forces the dynamic lookup that is a good part of the performance problem. Instead we store the Object’s Type. The Type then stores the Class, but it is the type that describes the memory layout of the object (and all objects with the same type).
-%p This is is in essence a level of indirection that gives us the space to have several Types for one class, and so we can evolve the class without having to change the Type (we just create new ones for every change)
 %p
-  The memory layout of
-  %strong every
-  object is type word followed by “data”.
-%p That leaves the length open and we can use the 8th 4bits to store it. That gives a maximum of 16 Lines.
-%h4#continuations Continuations
+  Memory management must be one of the main horrors of computing.
+  That’s why garbage collected languages like ruby are so great.
+  Even simple malloc implementations tend to be quite complicated.
+  Unnecessary so, if one used object oriented principles of data hiding.
+
+%h3 Objects
+
 %p
-  But (i hear), ruby is dynamic, we must be able to add variables and methods to an object at any time.
-  So the type can’t be fixed. Ok, we can change the Type every time, but when any empty slots have
-  been used up, what then.
+  As has been mentioned, in a true OO system, object tagging is not really an option.
+  Tagging being the technique of adding the lowest bit as marker to pointers and thus
+  having to shift ints, loosing a bit, and having some check before any pointer access.
+  %br
+  Mri does this for Integers but not other value types.
+  We accept this and work with it and just say “off course” , but it’s not modelled well.
+
 %p
-  Then we use Continuations, so instead of adding a new variable to the end of the object, we use a
-  new object and store it in the original object. Thus extending the object.
+  In a real OO system,
+  %b everything really is an object.
+  Strings are objects, floats, symbols, arrays, and yes,
+  %b Integers are normal Objects
 %p
-  Continuations are pretty normal objects and it is just up to the object to manage the redirection.
-  Off course this may splatter objects a little, but in running application this does not really happen much. Most instance variables are added quite soon after startup, just as functions are usually parsed in the beginning.
-%p The good side of continuation is also that we can be quite tight on initial allocation, and even minimal with continuations. Continuations can be completely changed out after all.
-%h3#pages-and-spaces Pages and Spaces
+  The difference with Integers is that they are
+  %b immutable.
+  As are Symbols in Ruby 2.x and Strings in Ruby 3.x and Javascript. Sensibly so, and
+  in general the property of immutable should be modelled explicitly.
+
+%h3 Object Memory Layout
+
 %p
-  Now we have the smallest units taken care of, we need to store them and allocate and manage larger chunks. This is much
-  simpler and we can use a fixed size Page, as say 256 lines.
-%p The highest order is a Space, which is just a list of Pages. Spaces manage Pages in a very simliar way that Pages manage Objects, ie ie as liked lists of free Objects/Pages.
+  When we say everything in an Object, what does that mean in practise.
+  Well, in short it means every Object has a Type, and the type is the
+  %b first word
+  in the memory layout.
 %p
-  A Page, like a Space, is off course a normal object. The actual memory materialises out of nowhere, but then gets
-  filled immediately with objects. So no empty memory is managed, just objects that can be repurposed.
+  A Type stores the instance variable names, the methods, and refers to a class,
+  which in turn defines behaviour in a ruby.
+%p
+  As a further stipulation, making our life easier, we define objects to be of fixed
+  size (according to type) and a multiple of a cache line long.
+  Objects are managed in Pages of same sized objects and the ObjectSpace, see below.
+%p
+
+%h4 Continuations
+%p
+  But (i hear), ruby is dynamic, we must be able to add variables and methods to an object
+  at any time. So the type, or length, can’t be fixed. Ok, we can change the Type every
+  time, but when any empty slots have been used up, what then.
+%p
+  Then we use Continuations, so instead of adding a new variable to the end of the object,
+  we use a new object and store it in the original object. Thus extending the object.
+  A linked list basically.
+%p
+  Continuations are pretty normal objects and it is just up to the object to manage the
+  redirection. Off course this may splatter objects a little, but in running application
+  this does not really happen much. Most instance variables are added quite soon after
+  startup, just as functions are usually parsed in the beginning.
+%p
+  We can avoid the added redirection of Continuations by clever code analysis and
+  over dimensioning. While this, and the whole concept of fixed size objects, may seem
+  wasteful at first sight, it is
+  %em much
+  more efficient than using a hash (as in mri, that not only stores all those names
+  over and over, but also has buckets, list functionality and must use a cache line
+  for a single variable)
+
+%h3 Data
+
+%p
+  So if we’re not tagging and we only have
+  %em Objects
+  where is the data. Where is that int, that char, the byte-buffer.
+%p
+  Just to make that totally clear: The OO level has no access, no idea of data.
+%p
+  Data does off course exist, but it is hidden, beyond the instance variables,
+  inaccessible to ruby code.
+%p
+  The way this works, is that all access to data, or one should really say all
+  functionality that is needed to perform on data, is implemented in the lower
+  levels, mostly the Risc layer.
+%p
+  In the Builtin module, we can define methods in purely Risc terms. The Risc
+  layer does have access to the memory, and can thus do things with it. Let's
+  look at the simple example of Integer addition. The method is defined in Builtin,
+  on the Integer type. The method requires one argument and checks that that too
+  is an Integer. Then it loads the data from both objects, performs the operation,
+  "allocates" a new Integer object and saves the machine word into it.
+%p
+  We can also define Mom Instruction to manipulate data, but as work is done in
+  methods, the Builtin approach has been sufficient up to now.
+%p
+  Again one may think this is wasteful, the simplest of Integer operation thus taking
+  10-20 cpu instructions instead of one. But not only are we speed-wise up against
+  interpretation (ie not one), but number crunching is not really what ruby is made
+  for. And if it ever is, there is always the possibility to optimise those Builtin methods.
+
+%h3 Pages, Space and object allocation
+%p
+  A
+  %em Page
+  manages a fixed size number of objects of the same size. They do not need to be of
+  same Type, just same memory length.
+%p
+  The Space, manages Pages, and is ultimately responsible for "allocating" new memory.
+%p
+  Objects are
+  %b not
+  allocated in the same way as mri, but rather recycled. Mri used C and specifically
+  malloc to do memory allocation and freeing.
+%p
+  RubyX only every allocates Pages, or many pages (depending on object size), and
+  does so by getting it directly from the operating system (system call).
+%p
+  Objects are only every recycled. Pages keep free lists of the objects (of the size
+  they manage) that are not used, and hand them out upon request. When the garbage
+  collector deems an object to be "freed" it is put back on the free-list of the
+  appropriate Page. This is done by changing the type of the object.
+
+%h3 Status
+%p
+  Not all of this has been implemented yet, only the
+  %em static
+  side of this. Pages and Space are still barely existent in terms of functionality
+  and objects are only statically allocated at the moment.
+%p
+  But fixed size objects (and off course the type system) are done. When creating
+  a binary, only fixes sized objects are written. The next step will be to sort them
+  according to size and arrange them in Pages.
+%p
+  Integers and their basic operations are done, and strings have basic read/write
+  access, but no allocation yet.
