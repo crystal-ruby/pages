@@ -1,0 +1,116 @@
+= render "pages/rubyx/menu"
+
+%h1=title "Calling convention and method resolution"
+
+%p
+  Dynamic object oriented languages rely very heavily on dynamic method
+  resolution and calling. Dynamic method resolution is the process of finding a
+  method to call, and the calling convention defines how arguments are transferred and
+  control changes and returns.
+
+%h2 Calling
+%p
+  To start with the "easier" problem, we'd define the calling convention first,
+  and note that the process is very very similar when done dynamically at run-time.
+
+%h3 Previous approaches
+%p
+  A quick review of existing c-like, stack based conventions, will reveal what we
+  need to consider and solve. Coming from assembler, C uses a stack pointer to
+  push both return address and arguments. Subsequently the function may use the
+  the same stack to push/pop local variables, and off course it usually does calls
+  itself.
+%p
+  Without going into detail, there are clear problems with this. For me the biggest
+  is that this is not object oriented. The size of argument and frame (local)
+  sizes of the stack are not locally known and require extensive knowledge of the
+  compiler to extract at compile time.
+%p
+  The approach used a constant of the time: that a method returns to where it was called.
+  In the face of lambdas this is not true anymore. This is linked in with the
+  lifetime of variables that arises from having code live after the calling function has
+  returned.
+
+%h3 Linked List
+%p
+  To overcome some of the issues, and in general create an object oriented solution,
+  a linked list approach was chosen over the traditional stack based.
+  %br
+  In rubyx the class that represents the elements of the linked list is called
+  Message. In fact the linked list is doubly linked and holds several
+  other necessary data, like return address, return value and others.
+
+  The arguments and local variables are separated out as separate objects.
+  These instances are fully typed and as such the runtime information about the
+  argument is easily retrievable.
+
+%h2 Arguments and Locals
+%p
+  To detail the handling of arguments and locals we'll demonstrate the approach
+  with the arguments and not that locals are very very similar.
+%p
+  The Arguments are passed in what is basically a normal object. Currently
+  derived from NamedList, but this does not add much over basic object functionality.
+%p
+  Argument names, as defined in the method, map to instance variable names on the
+  object. This approach is logically equivalent to dynamically creating a class
+  for each methods arguments, but we only create the Type. The Type being a mapping
+  of names to indexes of where the variables are stored in the object.
+%p
+  To have the information available at run-time the object-type of the Arguments
+  instance has to be changed dynamically in the method setup. As the type is known
+  in in fact stored in the Method, this is quite easy.
+
+%h3 Allocation
+%p
+  When allocating the objects needed, ie Message, Arguments and Locals, we pay some
+  run-time price for this more explicit handling of information.
+  %br
+  But it is not as much as one might think. All the objects are of identical size
+  and can be kept in a linked list. "Allocation" is then just grabbing the first link
+  from a known (compile-time known) place and relinking. About 20 risc instructions
+  in total.
+  %br
+  Also we need to update the type information in the objects as stated above, but this
+  too is not much. (older) Test have shown that the calling convention is about 30-50%
+  slower than C. This makes it very much faster than Interpretation, even taken into
+  account the since added functionality. I would guess by now it is about 2x slower than
+  c, which is very acceptable, given that it buys us many a simplification regarding
+  lambdas, exceptions and fibers.
+
+%h3 Control
+%p
+  Transferring control is then quite simple, basically we jump to the next methods
+  binary address. Before the actual jump, we have to
+  %ul
+    %li Store the return address
+    %li Swap the current Message with the next one that we prepared
+  %br
+  This is quite equivalent to using the stack, and amounts to only one or two
+  instructions more.
+%p
+  Returning from a Method is equally simple. The convention is that any possible
+  return value will have been stored in the current Message before the
+  ReturnSequence is initiated. Then we:
+  %ul
+    %li Move the return address from the message to a register.
+    %li Swap the previous message in (replacing the current)
+    %li Jump to the stored address
+
+%h3 Summary
+%p
+  To summarise, we
+  %ul
+    %li use typed objects to store information
+    %li use a linked list
+    %li are well prepared for the future, lambdas etc
+    %li can easily implement fibres
+    %li do not have stack as a separate memory area, or concern
+    %li have performance closer to c than mri
+
+  And maybe most importantly we have a relatively easy to understand mechanism that
+  as such can be reviewed and improved by many.
+  %br
+  Which may in turn lead to an elaborate inlining scheme, thus eliminating the small
+  performance hit completely.
+  
