@@ -2,34 +2,79 @@
 
 %h1= title "Parfait, a minimal runtime"
 
-%h3#type-and-class Type and Class
+RubyX uses the these following classes at compile time to build the base of an object
+oriented system.
 %p
-  Each object has a type that describes the instance variables and basic types of the object.
-  Types also reference the class they implement.
-  Type objects are unique and constant, may not be changed over their lifetime.
-  When a field is added to a class, a new Type is created. For a given class and combination
-  of instance names and basic types, only one instance every exists describing that type (a bit
-  similar to symbols)
+  In RubyX every object really is an object and data is hidden to the language level.
 %p
-  A Class describes a set of objects that respond to the same methods (the methods source is stored
-  in the RubyMethod class).
-  A Type describes a set of objects that have the same instance variables.
-%h3#method-message-and-frame Method, Message and Frame
+  Objects have a Type and constant size. See memory for more on memory layout and
+  management.
+
+%h3 Types
+%ul
+  %li every object has a type as it's first variable
+  %li types are immutable
+  %li an object's type may change at run-time
+  %li
+    a type describes a class
+    %em at a certain time
+%p
+  If we would be talking about a language, this would be like Javascript, or previously
+  =ext_link "Self." , "https://en.wikipedia.org/wiki/Self_(programming_language)"
+  Basically rubyx's types would be (immutable) prototypes in a
+  =ext_link "prototype based language." , "https://en.wikipedia.org/wiki/Prototype-based_programming"
+
+%p
+  It may be easiest to understand types by how they are used. When rubyx parses a class,
+  it creates a Vool::Class, which in turn creates a Parfait::Class. This class carries
+  the Vool methods, basically the language code for the methods.
+  %br
+  At this point a type, representing the object layout as known at the time, is created.
+  Vool::Methods are compiled to binary (Parfait::Method) according to the type information
+  and stored in the type.
+  %br
+  If the class changes at run-time, ie variables are added or removed, a new type object is
+  created (with the updated layout) and the same ruby code is compiled to new Parfait::Methods.
+
+%h3 Method, Message and Frame
 %p
   The TypedMethod class describes a callable method. It carries a name, argument and local variable
-  type and several descriptions of the code.
-  The typed ast is kept for debugging, the register model instruction stream for optimisation
-  and further processing and finally the cpu specific binary
-  represents the executable code.
+  type and several descriptions of the code:
+  %ul
+    %li The risc instructions
+    %li Cpu level instructions
+    %li Binary code
 %p
   When TypedMethods are invoked, A message object (instance of Message class) is populated.
-  Message objects are created at compile time and form a linked list.
   The data in the Message holds the receiver, return addresses, arguments and a frame.
   Frames are also created at compile time and just reused at runtime.
-%h3#space-and-support Space and support
+  =link_to "Calling" , "calling.html"
+  describes more detail about the calling convention, while
+  =link_to "method resolution" ,"method_resolution.html"
+  described how the methods are found, mainly at run-time.
+
+%h3 Memory
 %p
-  The single instance of Space hold a list of all Types and all Classes, which in turn hold
+  The single instance of
+  %b Space
+  holds a list of all Types and all Classes, which in turn hold
   the methods.
-  Also the space holds messages and will hold memory management objects like pages.
-%p Words represent short immutable text and other word processing (buffers, text) is still tbd.
-%p Lists (aka Array) are number indexed, starting at one, and dictionaries (aka Hash) are mappings from words to objects.
+  The space also holds messages and will hold memory management objects like pages.
+%p
+  %b Pages
+  are currently not implemented but will be used to realise the aproach described in
+  the page about
+  =link_to "memory management." , "memory.html"
+
+%h3 Util
+%p
+  There are off course several utility classes necessary just to implement the type
+  and class system.
+  %ul
+    %li Words represent short immutable text and other word processing (buffers, text) is still tbd.
+    %li Lists (aka Array) are number indexed containers
+    %li Dictionaries (aka Hash) are mappings from words to objects.
+    %li
+      DataObjects are just objects that hold data. Data can not be accessed at the
+      language level, only through methods that are programmed at the risc level.
+    %li Integers, which are DataObjects that hold data interpreted as an integer
