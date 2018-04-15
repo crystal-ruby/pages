@@ -1,0 +1,98 @@
+= render "pages/rubyx/menu"
+
+%h1=title "Dynamic Method resolution"
+
+%p
+  Dynamic method resolution is the process of finding a method to call.
+  The
+  =link_to "calling convention" , "calling.html"
+  defines how arguments are transferred and control changes and returns.
+
+%h2 Resolution in general
+%p
+  To determine a Method in Rubyx, we need to determine the
+  %b Type.
+%p
+  Types store the methods, and with the method name we can then find the appropriate
+  Method.
+%p
+  Ruby has a fallback for when a method is not found: we then call
+  %em method_missing.
+  This is defined on Object, and as every object is an object,
+  %em method_missing
+  is guaranteed to be found.
+%p
+  This is the same process for dynamic and static resolution.
+
+%h2 Static Resolution
+%p
+  The need to resolve a method dynamically stems from an inability to determine
+  the Method at compile-time.
+%p
+  Currently the only way to be sure of an expressions type, or the only case
+  the compiler recognises, is an assignment directly before the call. This
+  "types" the variable that is assigned and we can retrieve the method.
+%p
+  Off course calls on constants are also recognised. But otherwise
+  a dynamic resolution is initiated.
+
+%h2 Dynamic Method Resolution
+%p
+  When static resolution has failed, the compiler emits code to resolve the
+  method at runtime. This process resolves around a cache, and currently a
+  cache of one, captured by the class
+  =ext_link "CacheEntry" , "https://github.com/ruby-x/rubyx/blob/master/lib/parfait/cache_entry.rb"
+
+%h3 Vool
+%p
+  Static resolution is done at the Vool level, where the CacheEntry is also created
+  and then used as any other constant. Ie there is exactly one CacheEntry for every
+  call site (SendStatement).
+%p
+  Vool breaks the resolution into it's logical component steps, ie:
+  %ul
+    %li Check the current type against cached type
+    %li Update cached type if needed
+    %li Update cached method if needed
+    %li Call the cached method
+
+  Breaking down means that Mom Instructions are emitted to effect the logic above.
+  Most of the logic (like the if that is needed) already exists. But the last two
+  steps require special instructions described below.
+
+%h3 Mom
+%p
+  The method cache update described above is basically an assignment where
+  we assign the resolved method to the cache. But to do that, we need to finally
+  do the method resolution.
+%p
+  The implementation of the
+  %em ResolveMethod
+  is quite a bit longer than most other Mom instructions, but basically does:
+  %ul
+    %li Load methods from current (cached) type
+    %li Enter a while loop until we hit nil (goto NOT_FOUND if nil)
+    %li compare the name of the method with the given name and goto OK if equal
+    %li get the next method (they too are a linked list) and start at while
+    %li NOT_FOUND find method_missing and save in cache (similar process)
+    %li OK: save method in cache
+  To achieve readable code for this low level assembler programming a DSL is
+  used. The
+  =ext_link "result", "https://github.com/ruby-x/rubyx/blob/master/lib/mom/instruction/resolve_method.rb#L32"
+  is quite understandable.
+
+%p
+  The actual dynamic call does differ from it's static counterpart, but maybe
+  surprising little. In essence both static and dynamic calls:
+  %ul
+    %li create a label and save the return address
+    %li load the methods jump address
+    %li swap in the next message, replacing the current
+    %li jump to the address
+%p
+  The main difference is in loading the method's address (step 2). Where a static
+  setup just loads the method constant, the dynamic one load the CacheEntry first, and
+  the method from that.
+  %br
+  That is basically the main difference. Currently (4/18) a FunctionCall/DynamicJump is
+  still issued, but they are so similar that they will probably be unified soon.
