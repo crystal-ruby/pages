@@ -2,3 +2,7 @@
 *= require css/menu
 *= require css/app
 */
+
+ul li {
+  list-style-image: none;
+}
