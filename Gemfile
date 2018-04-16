@@ -12,8 +12,10 @@ gem "susy" , "2.2.12"
 
 gem 'high_voltage'
 
-gem 'opal-rails'
-gem 'opal-browser'
+gem 'opal', '~> 0.11.0'
+gem 'opal-rails' , "0.9.4"
+gem 'opal-jquery', github: 'opal/opal-jquery'
+gem 'opal-browser' , "0.2.0"
 gem "rubyx-debugger" , "0.3" , path: "../rubyx-debugger" , require: false
 gem "rubyx" , "0.6" , :path => "../rubyx" , require: false
 gem "rx-file" , :git => "https://github.com/ruby-x/rx-file"

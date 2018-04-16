@@ -1,3 +1,2 @@
 require "opal"
-
 require "debugger"
