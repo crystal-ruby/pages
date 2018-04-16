@@ -11,8 +11,13 @@ gem "haml-rails"
 gem "susy" , "2.2.12"
 
 gem 'high_voltage'
-gem "kramdown"
-gem "maruku"
+
+gem 'opal-rails'
+gem 'opal-browser'
+gem "rubyx-debugger" , "0.3" , path: "../rubyx-debugger" , require: false
+gem "rubyx" , "0.6" , :path => "../rubyx" , require: false
+gem "rx-file" , :git => "https://github.com/ruby-x/rx-file"
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]

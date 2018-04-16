@@ -18,5 +18,11 @@ module RubyxWebpage
     config.assets.paths << Gem.loaded_specs['susy'].full_gem_path+'/sass'
 
     config.blog_path = Rails.root.to_s + "/app/views/posts"
+
+    config.assets.configure do |env|
+      env.cache = ActiveSupport::Cache.lookup_store(:memory_store,
+                                                    { size: 64.megabytes })
+    end
+
   end
 end
