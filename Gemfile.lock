@@ -1,27 +1,29 @@
 GIT
-  remote: git://github.com/opal/opal-jquery.git
+  remote: https://github.com/opal/opal-jquery
   revision: f47a9b42da366cea270f743b05acf529f3077d35
   specs:
     opal-jquery (0.4.2)
       opal (>= 0.10.0, < 0.12.0)
 
 GIT
-  remote: https://github.com/ruby-x/rx-file
-  revision: c1de10352d8af105fe532008ceafcdd30b5fbdab
-  specs:
-    rx-file (0.3.0)
-
-PATH
-  remote: ../rubyx-debugger
-  specs:
-    rubyx-debugger (0.3)
-
-PATH
-  remote: ../rubyx
+  remote: https://github.com/ruby-x/rubyx
+  revision: 7c33f19bee4a87afda31ba9d01354d5513be9f2c
   specs:
     rubyx (0.6.0)
       parser (~> 2.3.0)
       rx-file (~> 0.3)
+
+GIT
+  remote: https://github.com/ruby-x/rubyx-debugger
+  revision: 2e3475e040822ee48cfffaadcd019ebd47b43b84
+  specs:
+    rubyx-debugger (0.3)
+
+GIT
+  remote: https://github.com/ruby-x/rx-file
+  revision: c1de10352d8af105fe532008ceafcdd30b5fbdab
+  specs:
+    rx-file (0.3.0)
 
 GEM
   remote: https://rubygems.org/
