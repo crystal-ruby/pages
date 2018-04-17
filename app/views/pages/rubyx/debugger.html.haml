@@ -1,88 +1,152 @@
 = render "pages/rubyx/menu"
 
-%h1= title "Register Level Debugger / simulator"
+%h1= title "Register Level Debugger / Interpreter"
 
-%h2#views Views
+%h2 Interpreter
+%p
+  To understand and debug RubyX better, an Interpreter was created for the Risc layer.
+  Risc defines a relatively easy abstraction, that is both far away from the language
+  level, yet still machine independent.
+%p
+  Risc has only 12 registers and almost as little instructions. Mostly moving data around,
+  jumping and testing.
+%p
+  But since it is so simple, it it a little challenging to understand what is happening
+  in terms of ruby language constructs, or even the Mom abstraction.
+
+%p
+  Many test use the Interpreter to test conversion output also dynamically. But to test
+  successfully, one does need to know what
+  %em should
+  be happening.
+%p
+  To understand the Risc layer even better. A Graphical User Interface was created.
+
+%h2 Visual Debugger
+
+%h3 Web - tech
+%p
+  The application is implemented with web technology, in essence it is a JavaScript
+  One Page Application. Luckily
+  =ext_link "opal" , "http://opalrb.com/"
+  came to the rescue, and so not only the
+  %b whole of Rubyx
+  is running in the browser, but also all the application code is in ruby.
+%p
+  The app is so small it defines is own micro framework (2 classes), and basically
+  only shows different list views.
 %p
   From left to right there are several views showing different data and controls.
-  All of the green boxes are in fact pop-up menus and can show more information.
+  All of the boxes with green border are in fact pop-up menus and can show more
+  information. They represent memory/objects and by hovering one can
   %br/
   Most of these are implemented as a single class with the name reflecting what part.
-  I wrote 2 base classes that handle element generation (ie there is hardly any html involved, just elements)
+  I wrote 2 base classes that handle element generation (ie there is no static
+  html involved, just elements)
+
+%h3 Code switch view
 %p
-  %img{:alt => "Debugger", :src => "https://raw.githubusercontent.com/ruby-x/rubyx-debugger/master/static/debugger.png", :width => "100%"}/
-%h3#switch-view Switch view
+  Top left at the top is a little control to switch programs.
+  Currently there is a short hardcoded list of tiny tiny programs.
 %p
-  Top left at the top is a little control to switch files.
-  The files need to be in the repository, but at least one can have several and switch between
-  them without stopping the debugger.
+  When one is selected, the Ruby is parsed and, Risc machine booted,
+  the Interpreter (re)started and one can use the buttons to step through
+  the code at various speeds.
+
+%h3 Status View
 %p
-  Parsing is the only thing that opal chokes on, so the files are parsed by a server script and the
-  ast is sent to the browser.
-%h3#classes-view Classes View
+  The last view at the top right show the status of the interpreter, the
+  instruction count, flags and any stdout.
 %p
-  The first column on the left is a list of classes in the system. Like on all boxes one can hover
-  over a name to look at the class and it’s instance variables (recursively)
-%h3#source-view Source View
+  Current controls include stepping and three speeds of running the program.
+  %ul
+    %li
+      Next (first green button) will execute exactly one instruction when clicked.
+      Mostly useful when debugging the compiler, ie inspecting the generated code.
+    %li
+      Run (second button) runs the program at a higher speed where register instruction
+      fly by, but one can still follow the source view. Mainly used to verify that the
+      source executes as expected and also to get to a specific place in the
+      program (in the absence of breakpoints).
+    %li
+      Wizz (third button) makes the program run so fast that it’s only useful function
+      is to fast forward in the code (while debugging). One can follow the program counter
+      to get to the same position as a previous session.
+%p.debug_pic
+  =image_tag "debugger"
+
+%h3 Space View
 %p
-  Next is a view of the Soml source. The Source is reconstructed from the ast as html.
-  Soml (RubyX object machine language) is is a statically typed language,
-  maybe in spirit close to c++ (without the c). In the future RubyX will compile ruby to soml.
-%p While stepping through the code, those parts of the code that are active get highlighted in blue.
+  The second down on the left gives a view of the Space. It is the only instance of the
+  class and the only global being used. It carries classes, types, singleton objects
+  and some linked lists.
 %p
-  Currently stepping is done only in register instructions, which means that depending on the source
-  constructs it may take many steps for the cursor to move on.
-%p Each step will show progress on the register level though (next view)
-%h3#register-instruction-view Register Instruction view
+  like other views it updates, so when for example an integer is "allocated" one can
+  follow the list being relinked (the next free integer being swapped out)
+
+%h3 Classes View
 %p
-  RubyX defines a register machine level which is quite close to the arm machine, but with more
-  sensible names. It has 16 registers (below) and an instruction set that is useful for Soml.
+  The lower column on the left is a list of classes in the system. Like on all boxes one
+  can hover over a name to look at the class and it's instance type and so one, recursively.
+
+%h3 Source View
 %p
-  Data movement related instruction implement an indexed get and set. There is also Constant load and
-  integer operators and off course branches.
-  Instructions print their name and used registers r0-r15.
-%p The next instruction to be executed is highlighted in blue. A list of previous instructions is shown.
+  Next is a view code to the right is currently broken, but should  be the ruby code.
+%p
+  The next view on the right is Risc Machine Instruction panel.
+  The are the instructions the Interpreter interprets. The next one is
+  highlighted in blue.
+
+%h3 Register Instruction view
+%p
+  RubyX defines a register machine level which is quite close to the arm machine, but
+  with more sensible names. It has 12 registers (below) and an instruction set that is
+  useful for the compiler.
+%p
+  Data movement related instruction implement an indexed get and set. There is also
+  Constant load and integer operators and off course branches.
+  Instructions print their name and used registers r0-r11.
+
+%p
+  The next instruction to be executed is highlighted in blue. A list of previous
+  instructions is shown.
+
 %p One can follow the effect of instruction in the register view below.
-%h3#status-view Status View
+
+%h3 Register view
 %p
-  The last view at the top right show the status of the machine (interpreter to be precise), the
-  instruction count and any stdout
-%p Current controls include stepping and three speeds of running the program.
-%ul
-  %li
-    Next (green button) will execute exactly one instruction when clicked. Mostly useful when
-    debugging the compiler, ie inspecting the generated code.
-  %li
-    Crawl (first blue button) will execute at a moderate speed. One can still follow the
-    logic at the register level
-  %li
-    Run (second blue button) runs the program at a higher speed where register instruction just
-    whizz by, but one can still follow the source view. Mainly used to verify that the source executes
-    as expected and also to get to a specific place in the program (in the absence of breakpoints)
-  %li
-    Wizz (third blue button) makes the program run so fast that it’s only useful function is to
-    fast forward  in the code (while debugging)
-%h3#register-view Register view
+  The bottom part of the screen is taken up by the 12 register. As we execute an
+  object oriented language, we show the object contents if it is an object in a register.
+  Data may occupy registers at this level, in which case the hex value is shown.
 %p
-  The bottom part of the screen is taken up by the 16 register. As we execute an object oriented
-  language, we show the object contents if it is an object (not an integer) in a register.
+  The (virtual) machine only uses objects, and specifically a linked list of Message
+  objects to make calls. The current message is always in register 0 (analogous to a stack
+  pointer). All other registers are scratch for statement use.
+
 %p
-  The (virtual) machine only uses objects, and specifically a linked list of Message objects to
-  make calls. The current message is always in register 0 (analgous to a stack pointer).
-  All other registers are scratch for statement use.
+  The Register view is now greatly improved, especially in it’s dynamic features:
+  %ul
+    %li when the contents update the register obviously updates
+    %li when the object that the register holds updates, the new value is shown immediately
+    %li
+      hovering over a variable will
+      %strong expand that variable.
+    %li
+      the hovering works recursively, so it is possible to drill down into
+      objects for up to four levels
 %p
-  In Soml expressions compile to the register that holds the expressions value and statements may use
-  all registers and may not rely on anything other than the message in register 0.
-%p The Register view is now greatly improved, especially in it’s dynamic features:
-%ul
-  %li when the contents update the register obviously updates
-  %li when the object that the register holds updates, the new value is shown immediately
-  %li
-    hovering over a variable will
-    %strong expand that variable
-    \.
-  %li the hovering works recursively, so it is possible to drill down into objects for several levels
-%p
-  The last feature of inspecting objects is show in the screenshot. This makes it possible
+  This last feature of inspecting objects is show in the screenshot. This makes it possible
   to very quickly verify the programs behaviour. As it is a pure object system , all data is in
   objects, and all objects can be inspected.
+
+%h2 Running the debugger
+%p
+  The debugger is online
+  =ext_link "here." , "/debugger"
+  Because of the 10k lines of code it is a bit slow to load.
+%p
+  Also it is not yet possible to write one's own code yet. Just the basic examples.
+%p
+  You can off course clone the debugger from
+  =ext_link "github" , "https://github.com/ruby-x/rubyx-debugger"
+  and then change the codes.
