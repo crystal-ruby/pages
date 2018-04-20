@@ -6,78 +6,87 @@
         Putting wings on ruby to let you fly (may take X years).
 .row
   .tripple
-    %h2.center Goal
+    %h2.center What
     %p
-      The goal is to execute (not interpret) object oriented code without external dependencies,
-      on modern hardware.
+      RubyX
+      %b compiles
+      ruby code to binary.
+      %br
+      In
+      %b 100%
+      pure ruby.
     %p
-      This means compiling dynamic code into binary. Using type knowledge at run-time we
-      optimise and cache method dispatch for know types.
-
-      As the system is 100% in ruby, the ultimate goal is to carry on the compilation at run-time,
-      ie after the program has started.
-      %b No interpretation.
+      The goal here is to prove that dynamic languages do not have to be slow.
+      %br
+      Only interpretation is slow, but when
+      ruby is
+      %b compiled to binary
+      ,it can be really fast.
     %p
-      Using the compilation method on it's own runtime (and bootstraping with an exising ruby),
-      it is possible to write the whole system in a dynamic oo language (ruby), thus
-      %b removing the two language problem
-      (having to choose between nice and fast)
+      How fast (X times), will eventually depend on the community.
+      The RubyX approach works, but to create an mri compatible ruby will
+      take many more man-years than i have.
+    %p
+      RubyX is here to
+      =succeed "," do
+        =link_to "empower you" , "/project/motivation.html"
+      to make your ruby shine as much as you like.
   .tripple
     %h2.center Status
     %p
-      Work is progressing on the ruby compiler. This uses a pure
-      %a{:href => "https://github.com/whitequark/parser"} ruby parser
-      to create:
+      The RubyX compiler is working, and the
+      =link_to "architecture", "/rubyx/layers.html"
+      has been refined over several years.
+    %p
+      While the
+      =ext_link "parser" , "https://github.com/whitequark/parser"
+      parses 100% of ruby, currently basics are implemented:
     %ul
       %li
-        An Object model of
+        Object oriented
+        =succeed "." do
+          =link_to "calling semantics" , "/rubyx/calling.html"
+      %li
+        Dynamic
+        = succeed "." do
+          =link_to "method resolution" ,"/rubyx/method_resolution.html"
+      %li
+        Control Structures, variables and assignment, integer operators.
+      %li
+        Object based
+        =succeed "." do
+          =link_to "memory" ,"/rubyx/memory.html"
+      %li
+        A minimal Runtime of
         = succeed "," do
-          %a{:href => "/typed/parfait.html"} classes, types
+          =link_to "classes, types" , "/rubyx/parfait.html"
         methods and basic types.
-      %li Methods for every type (may be several per class)
-    %p
-      The lower level, strongly typed layer is
-      = succeed "." do
-        %a{:href => "/typed/typed.html"} finished
-      While it has well known typed language data semantics,
-      it introduces several new concept:
-    %ul
-      %li Object based memory (no global memory)
-      %li Object oriented calling semantics (not stack based)
-      %li Inline method caching.
       %li
-        %a{:href => "https://github.com/ruby-x/ruby/tree/master/lib/register", :target => "_blank"} Register machine abstraction
+        =ext_link "Risc machine abstraction" , "https://github.com/ruby-x/rubyx/tree/master/lib/risc"
+        (includes extensible instruction)
       %li
-        Extensible instruction set, with arm implementations
-    %p
-      An abstract risc like register level defines some abstraction from the actual hardware. The
-      type compiler compiles to this level, but a mapping to Arm is provided to produce
-      = succeed "." do
-        %b working binaries
-    %p
-      There is also an interpreter (mostly for testing) and a basic
-      %a{:href => "https://github.com/ruby-x/rubyx-debugger"} visual debugger
-      which not only helps
-      debugging, but also understanding of the machine.
+        A minimal Arm and Elf implementation to create
+        = succeed "." do
+          %b working binaries
+
   .tripple
     %h2.center Docs
     %p
       The short introduction is under the
-      %a{:href => "/rubyx/layers.html"} architecture
+      =link_to "architecture" , "/rubyx/layers.html"
       menu.
     %p
-      The section on the intermediate representation is
-      = succeed "." do
-        %a{:href => "/typed/typed.html"} here
+      To get to know the system, there is also an interpreter and a basic
+      =succeed "." do
+        =link_to "visual debugger" , "rubyx/debugger.html"
     %p
       The
-      %a{:href => "/project/motivation.html"} about
-      section has some info of when and how this
-      started. If you feel like contributing
-      %a{:href => "/contribute.html"} read this
+      =link_to "about", "/project/motivation.html"
+      section has some info of when and how this started. If you feel like contributing
+      =link_to "read this", "/project/contribute.html"
       or write a
       = succeed "." do
-        %a{:href => "https://groups.google.com/forum/#!forum/ruby-x"} mail
+        =ext_link "mail to the group" , "https://groups.google.com/forum/#!forum/ruby-x"
     %h2.center News
     %p
       Last but not least, i try to get recent developments down on paper when they are
