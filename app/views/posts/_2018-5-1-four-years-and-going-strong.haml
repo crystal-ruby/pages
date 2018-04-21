@@ -1,0 +1,86 @@
+%p
+  After finishing the code, now i updated al the docs too!
+
+%h2 The rewrite
+%p
+  Doing something for the first time is not so easy. I have taught enough by now to see
+  how central guidance, the experience of another, is to the process of learning.
+  %br
+  I was so much thinking about Vm's in the beginning that a lot went sideways.
+%p
+  Now it feels
+  =link_to "the abstractions", "rubyx/layers.html"
+  are coming into focus, the code is clean and relatively easy to understand.
+%p
+  During this latest wobble, maybe 500 commits in all, almost everything above the
+  Risc layer was rewritten. At the low point, i was down to just over 400 tests, but
+  now, back strong, at over 800. That's 94% coverage with a
+  =ext_link "CodeClimate A", "https://codeclimate.com/github/ruby-x/rubyx/"
+  so that's ok.
+%p
+  In the process i got much closer to the actual goal, which i'll go into more detail.
+
+%h2 The docs
+%p
+  Now i have also cleaned up all the documentation. This does not mean that everything
+  is documented, but i hope one can get a good idea from the docs, and then just
+  read the code.
+%h3 Architecture
+%p
+  The
+  =link_to "Architecture" , "/rubyx/layers.html"
+  section given an overview over the new layers.
+  %ul
+    %li Ruby Simplified: Vool
+    %li Mom, a simple machine with object memory
+    %li Risc, the old abstraction of a CPU
+    %li Arm and Elf, to actually generate binaries
+    %li Parfait and Builtin to get the the system up
+%h3 Parfait
+%p
+  There is a separate document describing the classes needed to boot the system.
+  A little about the current state of Types and Classes.
+%p
+  But it should definitely be expanded, and there is nothing about Builtin.
+  Builtin is the way to write methods that can not be expressed in ruby. And since
+  writing them got so messy i wrote a DSL, which is only documented in
+  =link_to "code." , "https://github.com/ruby-x/rubyx/blob/master/lib/risc/builder.rb"
+%h3 Calling
+%p
+  Since Calling is now done, i documented both the
+  =link_to "calling convention,", ""
+  and the way
+  =link_to "method resolution", ""
+  is done.
+%h3 Interpreter
+%p
+  Off course the
+  =link_to "Interpreter", "rubyx/debugger.html"
+  is still working, (since the Risc layer didn't change much) and is a large part of
+  the testing scheme.
+%p
+  And i even go the
+  =link_to "Debugger" , "/debugger"
+  working again and integrated into the new site (which is now a rails app).
+%h3 Misc
+%p
+  Finally i cleaned up the old mumble jumble docs and sorted them a bit into what
+  is ideas, plans and just background info, in the
+  =link_to "Misc section" , "/misc/index.html"
+
+%h2 Next Steps
+%p
+  The plan for the near future is something like this
+  %ul
+    %li
+      More complicated tests. Whole methods that do something and
+      test containing several methods. All just testing results.
+    %li Better test framework for testing binaries.
+    %li Blocks
+    %li Baby steps towards Stdlib
+%p   As one can see, work happens when i have time and inspiration.
+%p.full_width
+  =image_tag "github-timeline-2018.jpg"
+
+  But even after 4 years, i haven't given up yet :-)
+  Though i may have given up on any time estimates.
