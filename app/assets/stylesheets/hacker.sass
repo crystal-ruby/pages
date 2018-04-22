@@ -104,10 +104,12 @@ dt
   font-style: italic
   font-weight: bold
 
-
 ul li
-  list-style-image: image-url('bullet.png')
-
+  list-style: none
+  margin-left: -30px
+  &:before
+    color: #b5e853
+    content: ">> "
 
 blockquote
   color: $blockquote-color
