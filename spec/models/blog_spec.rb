@@ -31,10 +31,10 @@ RSpec.describe Post, type: :model do
       expect(@post.month).to eq 2
     end
     it "returns date" do
-      expect(@post.date).to eq "1993-2-4"
+      expect(@post.date).to eq Date.new(1993,2,4)
     end
     it "returns file_name" do
-      expect(@post.template_name).to eq "1993-2-4-title"
+      expect(@post.template_name).to eq "1993-02-04-title"
     end
   end
 

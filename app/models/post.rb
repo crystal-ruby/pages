@@ -21,10 +21,10 @@ class Post
     @words.join(" ")
   end
   def template_name
-    "#{date}-#{@words.join("-")}"
+    "#{year}-#{month.to_s.rjust(2, '0')}-#{day.to_s.rjust(2, '0')}-#{@words.join("-")}"
   end
   def date
-    "#{year}-#{month}-#{day}"
+    Date.new(year,month,day)
   end
   def parse_int( value , max)
     ret = value.to_i
