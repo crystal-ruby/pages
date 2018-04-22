@@ -1,32 +1,21 @@
-# config valid only for current version of Capistrano
-lock '3.10.2'
+# config valid for current version and patch releases of Capistrano
+lock "~> 3.10.2"
 
-set :application, 'ruby-s'
-set :repo_url, 'https://github.com/ruby-x/rubyx.github.com'
+set :application, "ruby-x"
+set :repo_url, "https://github.com/ruby-x/ruby-x.github.io.git"
+#set :repo_url, "git@github.com:ruby-x/ruby-x.github.io.git"
 
 # Default deploy_to directory is /var/www/my_app_name
-set :deploy_to, '/var/www/vhosts/rubydesign/ruby-x.org'
+set :deploy_to, '/var/www/vhosts/rubydesign.fi/ruby-x.org'
 
 # Default value for :linked_files is []
-set :linked_files, fetch(:linked_files, []).push('config/database.yml')
+#append :linked_files, "config/database.yml"
 
 # Default value for linked_dirs is []
-# set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', 'public/system')
+append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/system"
 
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
 
-set :passenger_restart_command, 'passenger-config restart-app'
-
-namespace :deploy do
-
-  after :restart, :clear_cache do
-    on roles(:web), in: :groups, limit: 3, wait: 10 do
-      # Here we can do anything such as:
-      # within release_path do
-      #   execute :rake, 'cache:clear'
-      # end
-    end
-  end
-
-end
+# Default value for local_user is ENV['USER']
+set :local_user, -> { 'rubydesign' }
