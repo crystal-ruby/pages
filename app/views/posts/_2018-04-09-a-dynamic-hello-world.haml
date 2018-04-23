@@ -11,6 +11,7 @@
   Yet all this time i have been running circles around this mother of a problem, because
   (after all) it is a BIG one. It must be the one single most important reason why dynamic
   languages are interpreted and not compiled.
+
 %h2#a-brief-recap A brief recap
 %p
   Last year already i started on a rewrite. After hitting this exact same wall for the fourth
@@ -22,34 +23,30 @@
   and off course i’ll update the architecture soon. But in case you didn’t click, here is the
   very very short summary:
 %ul
-  %li
-    %p
-      Vool is a Virtual Object Oriented Language. Virtual in that is has no own syntax. But
-      it has semantics, and those are substantially simpler than ruby. Vool is Ruby without
-      the fluff.
-  %li
-    %p
-      Mom, the Minimal Object Machine layer is the first machine layer. Mom has no concept of memory
-      yet, only objects. Data is transferred directly from object
-      to object with one of Mom’s main instructions, the SlotLoad.
-  %li
-    %p
-      Risc layer here abstracts the Arm in a minimal and independent way. It does not model
-      any real RISC cpu instruction set, but rather implements what is needed for rubyx.
-  %li
-    %p
-      There is a minimal
-      %em Arm
-      translator that transforms Risc instructions to Arm instructions.
-      Arm instructions assemble themselves into binary code. A minimal
-      %em Elf
-      implementation is
-      able to create executable binaries from the assembled code and Parfait objects.
-  %li
-    %p
-      Parfait: Generating code (by descending above layers) is only half the story in an oo system.
-      The other half is classes, types, constant objects and a minimal run-time. This is
-      what is Parfait is.
+  %li Vool is a Virtual Object Oriented Language.
+  Virtual in that is has no own syntax. But
+  it has semantics, and those are substantially simpler than ruby. Vool is Ruby without
+  the fluff.
+
+  %li Mom, the Minimal Object Machine layer is the first machine layer.
+  Mom has no concept of memory
+  yet, only objects. Data is transferred directly from object
+  to object with one of Mom’s main instructions, the SlotLoad.
+  %li Risc layer here abstracts the Arm in a minimal and independent way.
+  It does not model
+  any real RISC cpu instruction set, but rather implements what is needed for rubyx.
+  %li Arm and Elf:
+  There is a minimal
+  %em Arm
+  translator that transforms Risc instructions to Arm instructions.
+  Arm instructions assemble themselves into binary code. A minimal
+  %em Elf
+  implementation is
+  able to create executable binaries from the assembled code and Parfait objects.
+  %li Parfait:
+  Generating code (by descending above layers) is only half the story in an oo system.
+  The other half is classes, types, constant objects and a minimal run-time. This is
+  what is Parfait is.
 %h2#compiling-and-building Compiling and building
 %p
   After having finished all this layering work, i was back to square
@@ -83,15 +80,17 @@
 %h2#the-proof The proof
 %p
   Previous, static, Hello Worlds looked like this:
-  \&gt; “Hello world”.putstring
+  %blockquote
+    “Hello world”.putstring
 %p
   Off course we can know the type that putstring applies to and so this does not
   involve any method resolution at runtime, only at compile time.
 %p
   Todays step is thus:
-  \&gt; a = “Hello World”
 %blockquote
-  %p a.putstring
+  a = “Hello World”
+  %br
+  a.putstring
 %p
   This does involve a run-time lookup of the
   %em putstring
@@ -99,14 +98,14 @@
   it is indeed found and called.(1) Hurray.
 %p
   And maths works too:
-  \&gt; a = 150
 %blockquote
-  %p a.div10
+  a = 150
+  %br
+  a.div10
 %p
-  Does indeed result in 15. Even with the
+  Does indeed result in 15. Also most operator (+,- <<) work. Even with the
   %em new
-  integers. Part of the rewrite was to upgrade
-  integers to first class objects.
+  integers. Part of the rewrite was to upgrade integers to first class objects.
 %p
   PS(1): I know with more analysis the compiler
   %em could
