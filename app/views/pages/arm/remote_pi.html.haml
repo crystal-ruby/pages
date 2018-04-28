@@ -2,7 +2,7 @@
 
 %h1= title "How to use a remote pi"
 
-%h3#headless Headless
+%h3 Headless
 %p The pi is a strange mix, development board and full pc in one. Some people use it as a pc, but not me.
 %p I use the pi because it is the same price as an Arduino, but much more powerful.
 %p As such i don’t use the keyboard or display and that is called headless mode, logging in with ssh.
@@ -11,7 +11,7 @@
     :preserve
       ssh -p 2222 -l pi localhost
 %p the -p 2222 is only needed for the qemu version, not the real pi.
-%h3#authorized Authorized
+%h3 Authorise yourself
 %p
   Over ssh one can use many other tools, but the password soon gets to be a pain.
   So the first thing i do is copy my public key over to the pi. This will allow login without password.
@@ -22,20 +22,33 @@
 %p
   This assumes a fresh pi, otherwise you have to append your key to the authorized ones. Also if it complains about no
   id_rsa.pub then you have to generate a key pair (public/private) using ssh-keygen (no password, otherwise you’ll be typing that)
-%h3#syncing Syncing
+
+%h3 Sync the working tree
 %p
-  Off course I do all that to be able to actually work on my machine. On the Pi my keyboard doesn’t even work and
-  i’d have to use emacs or nano instead of TextMate. So i need to get the files accross.
-  For this there is a million ways, but since i just go one way (mac to pi) i use rsync (over ssh).
-%p I set up a directory (home) in my pi directory (on the mac), that i copy to the home directory on the pi using:
+  Off course I do all that to be able to actually work on my machine.
+  On the Pi my keyboard doesn’t even work and i’d have to use emacs or nano instead
+  of Atom. So i need to get the files across.
+  %br
+  For this there is a million ways, but since i just go one way (mac to pi)
+  i use rsync (over ssh).
+%p
+  I set up a directory (home) in my pi directory (on the mac),
+  that i copy to the home directory on the pi using:
 %pre
   %code
     :preserve
       rsync -r -a -v -e "ssh -l pi -p 2222" ~/pi/home/ localhost:/home/pi
+
 %p The pi/home is on my laptop and the command transfers all files to /home/pi , the default directory of the pi user.
-%h3#automatic-sync Automatic sync
-%p Transferring files is off course nice, but having to do it by hand after saving quickly becomes tedious.
-%p Fswatch to the rescue. It will watch the filesystem (fs) for changes. Install with brew install fswatch
+
+%h3 Automatic sync
+
+%p
+  Transferring files is off course nice, but having to do it by hand after
+  saving quickly becomes tedious.
+%p
+  Fswatch to the rescue. It will watch the filesystem (fs) for changes.
+  Install with 'brew install fswatch'
 %p
   Then you can store the above rsync command in a shell script, say sync.sh.
   Add afplay “/System/Library/Sounds/Morse.aiff” if you like to know it worked.
@@ -43,15 +56,18 @@
 %pre
   %code
     :preserve
-      fswatch ~/pi/home/ sync.sh
-%p And hear the ping each time you save.
-%h2#conclusion Conclusion
+      fswatch -o ~/pi/home | xargs -n1 -I{} ~/sync.sh
+%p
+  And hear the ping each time you save. (btw -I{} makes it so the file name that changed
+  does not get passed on. Rsync figures that out)
+
+%h2 Conclusion
 %p So the total setup involves the qemu set up as described. To work i
 %ul
   %li start the terminal (iterm)
   %li start the pi, with my alias “pi” *
   %li log in to the pi in it’s window
-  %li open textmate with the directory i work (within the home)
-  %li
-    %p edit, save, wait for ping, alt-tab to pi window, run my whatever and repeat until it’s time for tea
-  %li (i don’t log into the prompt it gives in item so as not to accidentally quit the qemu session with ctr-c )
+  %li open atom with the directory i work (within the home)
+  %li edit, save, wait for ping, alt-tab to pi window, run my whatever and repeat until it’s time for tea
+
+PS: (i don’t log into the prompt it gives in item so as not to accidentally quit the qemu session with ctr-c )

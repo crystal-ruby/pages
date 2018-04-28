@@ -2,7 +2,7 @@
 
 %h1= title "How to configure Qemu"
 
-%h2#target-pi-on-mac Target Pi on Mac
+%h2 Target Pi on Mac
 %p So even the idea is to run software on the Pi, not everyone has a Pi (yet :-)
 %p Others, like me, prefer to develop on a laptop and not carry the Pi around.
 %p For all those, this here explains how to emulate the Pi on a Mac.
@@ -10,30 +10,33 @@
   Even if you have a Pi,
   =link_to "this explains",  "remote_pi.html"
   a nice way to develop with it.
-%h3#replace-the-buggy-llvm Replace the buggy llvm
-%p Written April 2014: as of writing the latest and greatest llvm based gcc (5.1) on Maverick (10.9) has a bug that makes qemu hang.
-%p So type gcc -v and if the output contains “LLVM version 5.1”, you must install gcc4.2. Easily done with homebrew:
+
+%h3 Qemu
+%p Get the Qemu. There may be other emulators out there, and i have read of armulator, but this is what i found discribed and it works and is “easy enough”.
 %pre
   %code
     :preserve
-      brew install https://raw.github.com/Homebrew/homebrew-dupes/master/apple-gcc42.rb
-%p This will not interfere with the systems compiler as the gcc4.2 has postfixed executables (ie gcc-4.2)
-%h3#qemu Qemu
-%p Then its time to get the Qemu. There may be other emulators out there, and i have read of armulator, but this is what i found discribed and it works and is “easy enough”.
-%pre
-  %code
-    :preserve
-      brew install qemu --env=std --cc=gcc-4.2
-%p For people not on Maverick it may work without the -cc option.
-%h3#pi-images Pi images
+      brew install qemu
+
+%h3 Pi images
+
 %p Create a directory for the stuff on your mac, ie pi.
 %p Get the latest Raspian image.
-%p There seems to be some chicken and egg problem, so quemu needs the kernel seperately. There is one in the links.
-%h3#configure Configure
 %p
-  In the blog post there is some fun configuration, I did it and it works. Not sure what happens if you don’t.
-  The booting is described below (you may or may not need an extra init=/bin/bash in the root… quotes), so boot your Pi and then configure:
-%p nano /etc/ld.so.preload
+  There seems to be some chicken and egg problem, so qemu needs the kernel separately.
+  There is one in the links.
+
+%h3 Configure
+
+%p
+  In the blog post there is some fun configuration, I did it and it works.
+  Not sure what happens if you don’t.
+  The booting is described below (you may or may not need an extra init=/bin/bash in the root… quotes),
+  so boot your Pi and then configure:
+%p
+  %pre
+    %code
+      nano /etc/ld.so.preload
 %p Put a # in front of the first to comment it out. Should just be one line there.
 %p Press ctrl-x then y then enter to save and exit.
 %p (Optional) Create a file /etc/udev/rules.d/90-qemu.rules with the following content:
@@ -53,8 +56,8 @@
     :preserve
       qemu-system-arm -kernel kernel-qemu -cpu arm1176 -m 256 -M versatilepb -no-reboot -serial stdio -append 'root=/dev/sda2 panic=1 rootfstype=ext4 rw' -hda raspbian.img -redir tcp:2222::22
 %ul
-  %li the cpu is what braodcom precifies, ok
-  %li memory is unfortuantely hardcoded in the versatilepb “machine”
+  %li the cpu is what broadcom specifies, ok
+  %li memory is unfortunately hardcoded in the versatilepb “machine”
   %li the kernel is the file name of the kernel you downloaded (or extracted)
   %li raspbian.img is the image you downloaded. Renamed as it probably had the datestamp on it
   %li the redir redircts the port 2222 to let you log into the pi
@@ -92,11 +95,14 @@
       resize2fs
 %h2#links Links
 %p
-  Blog post:
+  Blog post (i used):
   =ext_link "http://xecdesign.com/qemu-emulating-raspberry-pi-the-easy-way/", "http://xecdesign.com/qemu-emulating-raspberry-pi-the-easy-way/"
+%p
+  More Recent post (i googled):
+  =ext_link "https://blog.agchapman.com/using-qemu-to-emulate-a-raspberry-pi/", "https://blog.agchapman.com/using-qemu-to-emulate-a-raspberry-pi/"
 %p
   Kernel:
   =ext_link "http://xecdesign.com/downloads/linux-qemu/kernel-qemu", "http://xecdesign.com/downloads/linux-qemu/kernel-qemu"
 %p
-  Rasbian file system(preferably be torrent):
+  Rasbian file system(preferably by torrent):
   =ext_link "http://www.raspberrypi.org/downloads/", "http://www.raspberrypi.org/downloads/"
