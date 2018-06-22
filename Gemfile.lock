@@ -15,7 +15,7 @@ GIT
 
 GIT
   remote: https://github.com/ruby-x/rubyx-debugger
-  revision: 89e221c74883e1db2c56faab6481b0b6546ef037
+  revision: 3451b546c38584c3636f0a758bcd0d5f97d64fdc
   specs:
     rubyx-debugger (0.3)
 
