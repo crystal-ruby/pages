@@ -1,0 +1,184 @@
+%p
+  Off course the
+  =link_to "architecture" , "/rubyx/layers.html"
+  gives a good overview of the system as it is. But it does not explain how we got
+  there. And sometimes knowing the journey makes it easier to understand where
+  one is. So i shall try to highlight the four or five main
+
+%h2 Macbook + Ruby == Rasperry Pi
+
+%p.full_width
+  =image_tag "mac_plus.png"
+  When i bought my first 30Euro Pi i noticed that ruby is unusable on it.
+  Looking at how slow ruby actually is, it occurred to me that ruby just about turns
+  the Pi into my first 286 laptop (running at 6MHz), which is the same as turning my
+  MacBook Pro into a Pi.
+%p
+  Off course, while working on web-apps, which can be parallelized so easily, and with
+  a company paying both developer and hardware, the std ruby argument holds.
+  But since i wanted to use my pi for demanding projects something had to be done.
+
+%h2 Judy, the importance of cpu cache
+
+%p
+  =ext_link "Judy" , "http://judy.sourceforge.net/"
+  is a really really fast digital tree, kind of hash. I actually built a memory
+  database with it that was also really really fast. When connecting it to rails i
+  ran into the above problem, the niceties of ActiveRecord (ruby) brought performance
+  of my extension (c) down by a factor of 40.
+%p
+  But anyway, the point is that Judy's speed is based on a radical optimisation for
+  cache lines (and key compression). This means all data structures are exactly a cpu
+  cache line big. As i learned, cpu's do not access memory in word sizes, but instead, always
+  a cache line at a time. This basically lead to ruby-x's memory model, which is
+  fixed sized objects, multiples of a cache-line.
+
+%h3 Microkernel
+%p
+  As a young engineer, i thought, as my peers, that Linux (then 0.93) was the greatest
+  thing. Only much later did i learn that it is just a copy really, and the reason
+  it got popular was not technical, but licensing (Same reason it is in Android i
+  believe). The reason it stayed popular is inertia, in other words writing device
+  drivers is hard.
+%p
+  =ext_link "Synthesis," , "https://en.wikipedia.org/wiki/Self-modifying_code#Massalin's_Synthesis_kernel"
+  =ext_link "L4,", "https://en.wikipedia.org/wiki/L4_microkernel_family"
+  and
+  =ext_link "Minix," , "http://www.minix3.org/"
+  are good proof that the superior architecture is the Microkernel. Eg L4 can run
+  another OS as an application with about 4% performance degradation. Or Minix can
+  recover from a device driver failure.
+%p
+  This, plus the fact that we have bundler, brought me to the approach that:
+  If you can leave it out, do. Much of the functionality that is in ruby (mri),
+  will never be in RubyX, but rather supplied by gems.
+
+%h3 System interrupts
+%p
+  In the beginning i was off course contemplating how much of c based systems i would use.
+  Like LLVM, which is off course a great tool, though made for c-ish applications.
+  Or libc, which again is really for c apps to access the kernel.
+%p
+  The sheer size of the functionality one inherits almost swayed me. Even i had long
+  since determined that one of ruby's biggest flaws, it's std-lib, came from modelling
+  and using libc.
+%p
+  Then i learned assembler and looked at libc implementations and learned what i
+  believe made the decision: Kernel calls are not really calls at all. They are
+  software interrupts, which basically means you fill some registers, flick the
+  switch, and the next instruction you can collect the result in a specified
+  register. This may look like a call, and off course, by using libc it is presented
+  as a call, but it is not. It is a very simple set of assembler instructions.
+%p
+  For me this meant there is very very little benefit in using c, either in it's
+  libc form, or assembler/linker (i had found a ruby gem to do that easily),
+  or, maybe most importantly, the c calling convention. All of these things
+  are great for c programs, but they are just not made for dynamic languages
+  and that would have brought a whole sloth of problems.
+
+%h3 Return address is a parameter
+%p
+  In C calling (probably other languages too), the return address is determined
+  in the callee, usually by pushing the pc to the stack. But Arm has a different
+  way, an instruction called Branch With Link, that actually stores the pc in a
+  separate register called Link.
+%p
+  And this made me realise, that really, the return address is always a parameter
+  to a function. Like other parameters it uses a register. It is the C way to
+  hide this implicit parameter, much in the same way it is the oo way of hiding
+  the self parameter.
+%p
+  By this time i was already coding some rudimentary calling convention and it
+  did not take long to verify this in code. It is in fact quite easy to determine
+  the return address at compile time and pass it explicitly. (Easy if one does not
+  use a c linker that is)
+
+%h3 OO calling convention
+%p
+  Another thing that deterred me from C is the way they use the stack. It is so
+  completely not oo and cryptic. It is in other words very difficult to unwind,
+  and almost impossible to implement closures.
+%p
+  Since the assembly had progressed easily, i made performance tests with an oo
+  calling convention, and determined that the price would be
+  =link_to "about 50%." , "/misc/soml_benchmarks.html"
+  Since currently the gap is more than an order of magnitude, this seemed ok,
+  given that it would make the compilation process so much easier.
+%p
+  The resulting calling convention uses normal Message objects that form a linked
+  list, rather than a stack. Since they are completely standard objects, manipulation
+  both at run and compile time is totally integrated.
+%p
+  Funation calling has been working for years, but recently i cracked dynamic method
+  dispatch too, which was not that hard really. Currently the work is progressing to
+  blocks, and the clear structure does help a lot.
+  And while exceptions (or bindings) are not started, i think they will come with
+  relative ease (compared to the c way), since the structures are very simple.
+
+%h2 Decisions that affect the future
+
+%h3 Mesasm
+%p
+  I gave
+  =ext_link "Metasm" , "https://github.com/jjyg/metasm/"
+  several long looks. After all it has assembler and disassembler for at least
+  10 cpu's, and support for several binary formats, including elf. The
+  reason not to use it was not that it is big (including much we don't need).
+  But rather that it is unmaintained and unresponsive.
+%p
+  It would be great to split all that code into several gems, a core and one
+  per cpu / binary format / assembly, disassembly. Only the core would need
+  to be integrated into rubyx, and one could just use the platform specific
+  gems. But I am not the one to do this work, was the decision.
+
+%h3 Lock free Concurrency
+%p
+  Concurrency will have to be part of the core, even if it is just to get a gc
+  working. The work that
+  =ext_link "Massalin did" , "http://valerieaurora.org/synthesis/SynthesisOS/abs.html"
+  already showed how effective lock free
+  concurrency is, but Dr Cliff took it into the modern (java) world by
+  publishing a
+  =ext_link "lock free hash" , "https://www.youtube.com/watch?v=HJ-719EGIts"
+  that he later run on some crazy machine with 800 cpus.
+%p
+  I am not sure whether it will be better to port the java code, or try a
+  =ext_link "diy" , "https://preshing.com/20130605/the-worlds-simplest-lock-free-hash-table/"
+  version. And off course to even get started on this rubyx will need the
+  compare and swap primitives that underly the lock free approach.
+  But all in due time.
+%p
+  The actual concurrency i am envisioning as two os-threads per core. One for kernel
+  interaction and one for normal operation. Kernel calls
+  would never be executed on the second, but always queued on dedicated kernel
+  threads. The non kernel threads would be used to run fibers.
+  If we insert some little check into the calling, switching could happen very often
+  and because of the linked list approach would be very very fast. And because of
+  the offloading of kennel calls would never stall (completely). This way one can
+  achieve the sort of millions of fibers erlang is known for.
+
+%h3 House keeping and garbage collection
+%p
+  Often, in systems that are designed to be collected, the base object has some
+  field to support this. This was deliberately left out. RubyX only has objects,
+  so the field would have to be an Object, which is too much overhead.
+  Or there would have to be dedicated instruction to deal with a raw data word
+  which is too much overhead in another way.
+%p
+  Gc will be a completely external gem, so experimenting will be easy and
+  encouraged. Gc implementers will just have to use their own structures to keep
+  track of the state that they need. Judy style digital trees can do this by actually
+  using less memory than a field would use, but handcrafted bitfields will also be good.
+%p
+  The actual marking phase should be relatively easy, as the world is known completely.
+  There are no grey stack areas where one has to guess, as all objects are typed
+  and the type determines which slots are objects. Not even registers are grey
+  area, as we switch cooperatively; only the Message register is ever valid.
+%p
+  In fact, all this makes even moving objects relatively easy. Though there is off
+  course the effort of going through the world to find all backlinks. But if that
+  done during a mark, it comes at relatively low cost.
+%p
+  All in all a very interesting topic, and surely someone will come up with some
+  great idea. And off course we there will have e to be the most rudimentary from
+  the start, just enough to work and give someone motivation to improve it.
