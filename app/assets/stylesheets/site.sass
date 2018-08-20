@@ -1,10 +1,6 @@
 @import "susy"
 $susy: ( columns: 12, gutters: 1/4,  gutter-position: inside )
 
-a
-  color: #53a5ff
-  text-decoration: none
-
 .container
   width: 90%
   max-width: 1000px
@@ -25,66 +21,66 @@ a
     @media only screen and (max-width: 880px)
       @include span(12)
 
-ul.nav
-  text-align: center
-  li
-    display: inline
-    margin-left: 5px
-    &:before
-      color: #b5e853
-      content: ">> "
-      width: 30px
-      height: 30px
-      left: -30px
-    a
-      border-bottom: 1px dashed #53a5ff
-      &:hover
-        border-bottom: 0px
-      small
-        color: lightgrey
-.center
-  text-align: center
+main , header , footer
+  a
+    color: #53a5ff
+    text-decoration: none
 
-.row
-  clear: both
-  width: 100%
+  ul.nav
+    text-align: center
+    li
+      display: inline
+      margin-left: 5px
+      &:before
+        color: #b5e853
+        content: ">> "
+        width: 30px
+        height: 30px
+        left: -30px
+      a
+        border-bottom: 1px dashed #53a5ff
+        &:hover
+          border-bottom: 0px
+        small
+          color: lightgrey
+  .center
+    text-align: center
 
-.tripple
-  @include span(4)
-  @media only screen and (max-width: 880px)
-    @include span(12)
-
-.main
-  width: 78%
-.menu
-  width: 20%
-
-.full_width
-  img
-    width: 100%
-.debug_pic
-  border-color: white
-  border-width: 8px
-  border-style: solid
-  border-radius: 6px
-  img
+  .row
+    clear: both
     width: 100%
 
-.blog_nav
-  .next_post , .prev_post
-    width: 20%
-  .next_post
-    float: right
-  .prev_post
-    float: left
-.blog_post
-  h1
-    span
-      font-size: 18px
-.blog_index
-  h1
-    font-size: 20px
-  h2
-    font-size: 16px
-    span
-      font-size: 14px
+  .tripple
+    @include span(4)
+    @media only screen and (max-width: 880px)
+      @include span(12)
+
+  .full_width
+    img
+      width: 100%
+  .debug_pic
+    border-color: white
+    border-width: 8px
+    border-style: solid
+    border-radius: 6px
+    img
+      width: 100%
+
+  .blog_nav
+    .next_post , .prev_post
+      width: 20%
+    .next_post
+      float: right
+    .prev_post
+      float: left
+  .blog_post
+    h1
+      span
+        font-size: 18px
+  .blog_index
+    h1
+      font-size: 20px
+    h2
+      font-size: 16px
+      span
+        font-size: 14px

@@ -4,82 +4,83 @@
 //
 @import "colors"
 
-.highlight
-  $plaintext: $alto !default
-  $string: $chelsea-cucumber !default
-  $literal: $chelsea-cucumber !default
-  $keyword: $bouquet !default
-  $error-foreground: $cod-grey !default
-  $error-background: $apple-blossom !default
-  $comment: $grey !default
-  $preprocessor: $rajah !default
-  $name-space: $rajah !default
-  $name-attribute: $hippie-blue !default
-  $operator: $rajah !default
-  $keyword-type: $raw-sienna !default
-  $regex: $gulf-stream !default
-  $string-escape: $potters-clay !default
-  $deleted: $apple-blossom !default
-  $header: $hippie-blue !default
+main , header , footer
+  .highlight
+    $plaintext: $alto !default
+    $string: $chelsea-cucumber !default
+    $literal: $chelsea-cucumber !default
+    $keyword: $bouquet !default
+    $error-foreground: $cod-grey !default
+    $error-background: $apple-blossom !default
+    $comment: $grey !default
+    $preprocessor: $rajah !default
+    $name-space: $rajah !default
+    $name-attribute: $hippie-blue !default
+    $operator: $rajah !default
+    $keyword-type: $raw-sienna !default
+    $regex: $gulf-stream !default
+    $string-escape: $potters-clay !default
+    $deleted: $apple-blossom !default
+    $header: $hippie-blue !default
 
-  color: $plaintext
-
-  table td
-    padding: 5px
-  table pre
-    margin: 0
-  .w
     color: $plaintext
 
-  .err
-    color: $error-foreground
-    background-color: $error-background
+    table td
+      padding: 5px
+    table pre
+      margin: 0
+    .w
+      color: $plaintext
 
-  .c,  .cd,  .cm,  .c1,  .cs
-    color: $comment
+    .err
+      color: $error-foreground
+      background-color: $error-background
 
-  .cp
-    color: $preprocessor
+    .c,  .cd,  .cm,  .c1,  .cs
+      color: $comment
 
-  .o,  .ow
-    color: $operator
+    .cp
+      color: $preprocessor
 
-  .p,  .pi
-    color: $plaintext
+    .o,  .ow
+      color: $operator
 
-  .gi
-    color: $string
+    .p,  .pi
+      color: $plaintext
 
-  .gd
-    color: $deleted
+    .gi
+      color: $string
 
-  .gh
-    color: $header
-    font-weight: bold
+    .gd
+      color: $deleted
 
-  .k,  .kn,  .kp,  .kr,  .kv
-    color: $keyword
+    .gh
+      color: $header
+      font-weight: bold
 
-  .kc, .kt, .kd
-    color: $keyword-type
+    .k,  .kn,  .kp,  .kr,  .kv
+      color: $keyword
 
-  .s,  .sb,  .sc,  .sd,  .s2,  .sh,  .sx,  .s1
-    color: $string
+    .kc, .kt, .kd
+      color: $keyword-type
 
-  .sr
-    color: $regex
+    .s,  .sb,  .sc,  .sd,  .s2,  .sh,  .sx,  .s1
+      color: $string
 
-  .si, .se
-    color: $string-escape
+    .sr
+      color: $regex
 
-  .nt, .nn,  .nc, .no
-    color: $name-space
+    .si, .se
+      color: $string-escape
 
-  .na
-    color: $name-attribute
+    .nt, .nn,  .nc, .no
+      color: $name-space
 
-  .m,  .mf,  .mh,  .mi,  .il,  .mo,  .mb,  .mx
-    color: $literal
+    .na
+      color: $name-attribute
 
-  .ss
-    color: $string
+    .m,  .mf,  .mh,  .mi,  .il,  .mo,  .mb,  .mx
+      color: $literal
+
+    .ss
+      color: $string
