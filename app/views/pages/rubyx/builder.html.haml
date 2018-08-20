@@ -1,0 +1,121 @@
+= render "pages/rubyx/menu"
+
+%h1=title "Generating assembler by dsl"
+
+%p
+  In the end everything boils down to risc instruction generation. From there on down,
+  it is pretty much mechanics. And everything between ruby and the risc layer is to make
+  the step towards risc easier.
+%p
+  Risc is after all very much like assembler, and programming any system in assembler is
+  challenging. The simple object model helps, and so does the simple risc instruction set,
+  but for a long time i was struggling to create readable code that generates the risc.
+%p
+  The main places we find this code is the mom layer, eg in the
+  =link_to "calling convention" , "calling.html"
+  and in the Builtin module, generating code that can not be expressed in ruby.
+
+%h2 Compiler
+%p
+  When the code goes from ruby to vool, or vool to mom, methods on the previous (tree)
+  structure return the next structure. But going to risc the code evolved to use a different
+  approach. The unit of compilation is a block or method, and the respective
+  %b Compiler
+  is passed into the generating method.
+%p
+  The risc code is then added directly to the compiler. If anything is returned it is
+  used by the caller for other things. This change happened as the compiler needed to
+  be passed in as it carries the scope, ie is needed for variable resolution.
+%p
+  It is also easier to understand (albeit maybe after getting used to it), as the generation
+  of the structure after the return was not intuitive.
+  The Compiler's central method to capture the code, is
+  %b add_code,
+  and the argument must be a risc instruction.
+%p
+  While this worked (and works) the resulting code is not very concise, cluttered with all
+  kind of namespace issues and details.
+
+%h2 Builder
+%p
+  From these difficulties was born the DSL approach that is implemented in the
+  %b Builder.
+  The Builder uses method_missing to resolve names to registers. Those registers, or more
+  precisely RegisterValues, are then used to generate risc instruction by overloading
+  operators.
+%p
+  Most of the work at the risc level , probably 60% or more, is shuffling data around.
+  This is covered by the four instruction SlotToReg, RegToSlot, Transfer and LoadConstant
+  using the
+  %b <<
+  operator with different arguments. See below:
+  .container_full
+    .half_left
+      :coderay
+        #!ruby
+          def build_message_data( builder )
+            builder.build do
+              space? << Parfait.object_space
+              next_message? << space[:next_message]
+
+              next_message_reg! << next_message[:next_message]
+              space[:next_message] << next_message_reg
+              ....
+            end
+    .half_right
+      %ul
+        %li Variable definitions with ? or ! . Variables must be defined before use.
+        %li space becomes a variable, or a named register
+        %li First line generates a constant_load, because the right side is a constant
+        %li second (and third) line generates a SlotToReg , because the left is a register and the right is a slot
+        %li fourth line generates a RegToSlot, as the left side is a slot, and the right a register
+        %li all generated instructions are automatically added to the compiler
+%p
+  As you can see the code is quite readable. Mapping names to the registers makes them
+  feel like normal variables. (They are not off course, they are instances of RegisterValue
+  stores in a hash in Builder).
+  The overloading of [] , which just creates an intermediate RValue, makes the it look like
+  the result of the array access is transferred to the register. And that is exactly what is
+  happening. The next_message on the right is a register, and the array indexing access the
+  "register" is an object. The "index", also called next_message is an instance variable.
+  The builder magic looks up the index in the type (Message) and does an indexed
+  memory access, which is exactly what a SlotToReg is.
+
+%p{style: "clear: both;"}
+  There are also other ways to use the Builder: One is by just using the instance
+  methods, ie any code can be added with add_code, also inside the block
+  .container_full
+    .half_left
+      :coderay
+        #!ruby
+          if_zero ok_label
+          ...
+          branch  while_start_label
+          add_code exit_label
+    .half_right
+      %ul
+        %li Here we use the if_zero method, that generates a IfZero instruction
+        %li The second line is a creates a Branch, much the same way
+        %li The last line adds a label, using the add_code
+%p{style: "clear: both;"}
+  And in these last examples we see how operators can be called, or indeed any
+  generating function can be called
+  .container_full
+    .half_left
+      :coderay
+        #!ruby
+          builder.build do
+            integer_const! << 1
+            integer_tmp.op :>> , integer_const
+            ...
+            Risc::Builtin::Object.emit_syscall( builder , :exit )
+            ...
+    .half_right
+      %ul
+        %li The first line load a fixnum, which is LoadData in risc terms
+        %li
+          The second line calls an operator >>, which gets translated to an
+          OperatorInstruction, that leaves the result in the second argument
+        %li
+          The last line invokes some shared code that does an system exit.
+          This is in essence much like inlining the exit code.

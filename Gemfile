@@ -19,6 +19,8 @@ gem "rubyx" , "0.6" , git: "https://github.com/ruby-x/rubyx" , require: false
 gem "rubyx-debugger" , "0.3" , git: "https://github.com/ruby-x/rubyx-debugger" , require: false
 gem "rx-file" , git: "https://github.com/ruby-x/rx-file"
 
+gem "haml-coderay"
+
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'rspec-rails'
