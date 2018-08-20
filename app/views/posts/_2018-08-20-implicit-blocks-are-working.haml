@@ -1,0 +1,147 @@
+%p
+  Basic enumerator style blocks were not as bad as i though. Admittedly i thought they
+  would be close to impossible, so compared to that a few hundred commits are really
+  quite little.
+
+%h2 Different kind of blocks
+%p
+  To start with let me lay the ground. In ruby code, i see blocks used in basically
+  two kind of ways. I call the first one the
+  %b implicit block
+  which is what you do when using iterators/enumerable. Ruby let's you pass the
+  block as an
+  %em implicit
+  argument. This is the kind that is implemented and that i will go into detail about.
+%p
+  The other kind i shall call
+  %em explicit
+  is when you define blocks as variables, either with lambda or proc syntax.
+  As a slight complication implicit blocks may be captured and used in the same
+  way as explicit blocks, but let's forget for a moment that i said that.
+  Explicit blocks are good for a more functional style of programming and used much
+  (much?) less. Also they are the ones that will need some expansion on what we have now.
+
+%h2 Implicit Block properties
+%p
+  Since i never had to implement blocks before, it was a bit of a surprise how simple
+  it was.
+  After dynamic dispatch was done i had planned to improve the std library. But i
+  quickly ran into loops, and doing loops without blocks in ruby is just too weird.
+  So i started on blocks instead, which i must admit i thought would be very (very)
+  difficult.
+%p
+  But then i found that actually blocks are very similar to methods, just with a
+  twist:
+  As it turns out, the implicit block calling basically guarantees that the caller's caller
+  is the method where the block is defined. This means one knows all local variables and
+  method args, while compiling the block. And can thus resolve all variable access
+  at compile time, who knew!
+%p
+  Ok, just in case that slipped off too quick, i'll say it again: For the
+  %em implicit
+  blocks, all variable (local/args/instance) are statically known at compile time.
+  And since basic control structures (if/while) are obviously the same inside
+  a block and method, the whole problem of blocks reduces to variable access.
+
+%h2 Base classes
+%p
+  When we have things that are the same in oo, the big oo hammer comes out: inheritance.
+  So i made a base class for Block and Method, called Callable. And similarly
+  a base class for MethodCompiler and it's new equivalent BlockCompiler, called
+  CallableCompiler.
+
+%p
+  The reason i mention this much detail is just because i was so surprised how little
+  difference there is between the derived classes. In the case of Block and Method over
+  95% of the code is in the base class, and for the compilers it's still over 80%.
+  It really is only that scope resolution.
+%p
+  The difference is that a Method resolves a variable in it's own frame, whereas a Block
+  resolves it in the frame of the callers caller, ie where it was defined. And since
+  we have a nice and simple calling convention, it is just two extra instruction per
+  variable access.
+
+%p
+  So, in the hope of proving how crazy fast it would be, i started on benchmarks.
+  But here we come to another story. RubyX does consume memory quite fast, but has
+  no allocation yet. So i could fix it by creating megabytes of shell objects at
+  compile time, or bite the bullet and implement
+  %b "new". 'Cause i'll do that, means we have to wait for the numbers.
+
+%h2 Dynamic Blocks
+%p
+  Since i pushed the Procs aside up there, i just want to say that this was not without
+  consideration. I think the solution to Procs is not too difficult and the current state
+  can be expanded to handle them thus: We need to check the method of the callers caller
+  when entering the block code. If the implicit assumption holds, the code can execute.
+  If not, we need to jump to an alternate version of the code that does the variable
+  resolution dynamically.
+%p
+  Basically that means compiling two alternate versions of the code and having the switch
+  when entering the block code. Again though, since the calling convention is simple,
+  the runtime resolution is relatively simple. And it can even be coded in ruby,
+  since we can call out to a method from the generated code.
+
+%h2 Ying and Yang of Methods and Blocks
+%p
+  Sending for methods is sort of equivalent to yielding for blocks. The two use the exact same
+  calling convention. In fact yield is almost identical to ".send", so when the time
+  comes to do that, we're almost set.
+%p
+  In methods we have the static case, where the method is known
+  at compile time. And then we have dynamic dispatch, where the the method is resolved
+  at run-time and called dynamically. But in both cases variable resolution is
+  completely compile-time.
+%p
+  And then we have blocks with the "static" version, where the block that is passed
+  is known at compile-time, but only to the caller, not the callee. So the callee needs
+  to invoke (yield) dynamically, but still the variable resolution is static (compile-time).
+%p
+  And then the dynamic block version (Procs) where no resolution is necessary to
+  call the Proc (since it is given as a variable), but instead the variables
+  have to be resolved at run-time.
+%p
+  To me they are sort of reversely symmetric. I'll have to try and make a diagram
+  one day.
+
+%h2 Side note on Builder
+%p
+  Since i started with the builder and the associated dsl, i got more and more into it.
+  The dsl provides quite readable code, there is sort of assignment and a few shortcuts
+  to other risc instructions. But at the risc level one is really quite busy shuffling
+  data from here to there, so the "assignment" which covers
+  =ext_link "RegToSlot" , "https://github.com/ruby-x/rubyx/blob/master/lib/risc/instructions/reg_to_slot.rb"
+  ,
+  =ext_link "SlotToReg" , "https://github.com/ruby-x/rubyx/blob/master/lib/risc/instructions/slot_to_reg.rb"
+  and
+  =ext_link "Transfer" , "https://github.com/ruby-x/rubyx/blob/master/lib/risc/instructions/transfer.rb"
+  helps a lot.
+
+%p
+  Because of this, i  have now rewritten all of the to_risc functions in Mom, that generate
+  risc instructions using the dsl. Also the builtin code (including div10, shudder) uses
+  the dsl. It is
+  %em much
+  easier to understand, and gets rid of a fair few crutches i created on the way.
+  It's even
+  =link_to  "documented", "/rubyx/builder.html.haml"
+
+%h2 Future
+%p
+  As i said, what i really would want to do now is some benchmarking.
+  At least i got the Fibonacci of 30 to work. That's something! It took 7632 instructions.
+  That doesn't sound too bad, and is in fact twice as fast as mri (theoretically).
+  That means 1000 times fibo(30) per second on a PI.
+%p
+  Alas, we need
+  %b new
+  first, even to count to 1000. That's not too bad in itself, but it does need allocate.
+  That in itself is also not too bad, until you get to that else case,
+  where the memory has run out.
+%p
+  Then there is a mmap syscall and ... what? I guess i'll find out.
+%p
+  A note for the far future: Since we now have different compilers, and we will need
+  alternative code paths before long, inlining doesn't sound so impossible anymore
+  either. Just another compiler with different scoping rules, another type test, another
+  path.
