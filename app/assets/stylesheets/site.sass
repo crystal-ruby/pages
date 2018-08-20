@@ -11,6 +11,19 @@ a
   margin: 0 auto
 .container
   max-width: 90%
+.container_full
+  min-width: 100%
+  width: 100%
+  &:after
+    clear: both
+  .half_left
+    @include span(6)
+    @media only screen and (max-width: 880px)
+      @include span(12)
+  .half_right
+    @include span(6)
+    @media only screen and (max-width: 880px)
+      @include span(12)
 
 ul.nav
   text-align: center
@@ -38,6 +51,8 @@ ul.nav
 
 .tripple
   @include span(4)
+  @media only screen and (max-width: 880px)
+    @include span(12)
 
 .main
   width: 78%

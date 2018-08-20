@@ -65,8 +65,8 @@
   wasteful at first sight, it is
   %em much
   more efficient than using a hash (as in mri, that not only stores all those names
-  over and over, but also has buckets, list functionality and must use a cache line
-  for a single variable)
+  over and over, but also has buckets, list functionality and just about uses a cache
+  line for a single variable)
 
 %h3 Data
 
@@ -78,7 +78,7 @@
   Just to make that totally clear: The OO level has no access, no idea of data.
 %p
   Data does off course exist, but it is hidden, beyond the instance variables,
-  inaccessible to ruby code.
+  inaccessible to normal ruby code.
 %p
   The way this works, is that all access to data, or one should really say all
   functionality that is needed to perform on data, is implemented in the lower
@@ -86,7 +86,8 @@
 %p
   In the Builtin module, we can define methods in purely Risc terms. The Risc
   layer does have access to the memory, and can thus do things with it. Let's
-  look at the simple example of Integer addition. The method is defined in Builtin,
+  look at the simple example of Integer addition. The method is defined in
+  =ext_link "Builtin," , "https://github.com/ruby-x/rubyx/blob/master/lib/risc/builtin/integer.rb#L82"
   on the Integer type. The method requires one argument and checks that that too
   is an Integer. Then it loads the data from both objects, performs the operation,
   "allocates" a new Integer object and saves the machine word into it.

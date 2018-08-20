@@ -5,7 +5,7 @@
 %p
   Dynamic object oriented languages rely very heavily on dynamic method
   resolution and calling.
-  =link_to "Dynamic method resolution" , "method_resolution.html" 
+  =link_to "Dynamic method resolution" , "method_resolution.html"
   is the process of finding a
   method to call, and the calling convention defines how arguments are transferred and
   control changes and returns.
@@ -17,7 +17,7 @@
 
 %h3 Previous approaches
 %p
-  A quick review of existing c-like, stack based conventions, will reveal what we
+  A quick review of existing c-like, stack based conventions will reveal what we
   need to consider and solve. Coming from assembler, C uses a stack pointer to
   push both return address and arguments. Subsequently the function may use the
   the same stack to push/pop local variables, and off course it usually does calls
@@ -26,7 +26,7 @@
   Without going into detail, there are clear problems with this. For me the biggest
   is that this is not object oriented. The size of argument and frame (local)
   sizes of the stack are not locally known and require extensive knowledge of the
-  compiler to extract at compile time.
+  compiler to extract at run-time.
 %p
   The approach used a constant of the time: that a method returns to where it was called.
   In the face of lambdas this is not true anymore. This is linked in with the
