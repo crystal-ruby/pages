@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: https://github.com/ruby-x/rubyx
-  revision: 9687d6611f2d03612774bb4539a430ad898161d2
+  revision: fb6a1a0e017861be26d5b8dbceea801a22542416
   specs:
     rubyx (0.6.0)
       parser (~> 2.3.0)
@@ -15,7 +15,7 @@ GIT
 
 GIT
   remote: https://github.com/ruby-x/rubyx-debugger
-  revision: bba8f787d531d9e9cb1a9ce2f6b93bbb1e22dd3a
+  revision: dbb400ac08feee88ac636517949c1527f2b889df
   specs:
     rubyx-debugger (0.3)
 
