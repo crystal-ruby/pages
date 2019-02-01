@@ -34,18 +34,20 @@
   .tripple
     %h2.center Status
     %p
-      The RubyX compiler is working, and the
+      The RubyX compiler is working (ie creates binaries), and the
       =link_to "architecture", "/rubyx/layers.html"
       has been refined over several years.
     %p
-      While the
-      =ext_link "parser" , "https://github.com/whitequark/parser"
-      parses 100% of ruby, currently basics are implemented:
+      A substantial part of the ruby language has been implemented:
     %ul
       %li
         Object oriented
         =succeed "." do
           =link_to "calling semantics" , "/rubyx/calling.html"
+      %li
+        Basic
+        =link_to "block creation" , "/blog/implicit-blocks-are-working"
+        and passing.
       %li
         Dynamic
         = succeed "." do
@@ -68,13 +70,13 @@
         A minimal Arm and Elf implementation to create
         = succeed "." do
           %b working binaries
-    %h2.center Upcomping work
+    %h2.center Upcoming work
     %p
-      Obviously there is still a lot of work, here are just the next few topics
+      But there is still a lot of work, here are just the next few topics
       %ul
-        %li Benchmarks for calling and integer (ie fibo)
-        %li Blocks
-        %li Start stdlib with String
+        %li Dynamic Memory management
+        %li Benchmarks for calling and integer
+        %li Start stdlib with String and files
       By then we may be in the foothills, but nowhere near even basecamp, let alone there.
   .tripple
     %h2.center Docs
@@ -82,6 +84,10 @@
       The short introduction is under the
       =link_to "architecture" , "/rubyx/layers.html"
       menu.
+    %p
+      A
+      = ext_link "short talk" , "/rubyx_goa_2019.pdf"
+      i held at rubyconf india 2019. Only pdf, while we wait for the video.
     %p
       To get to know the system, there is also an interpreter and a basic
       =succeed "." do
