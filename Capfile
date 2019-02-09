@@ -12,3 +12,10 @@ Dir.glob("lib/capistrano/tasks/*.rake").each { |r| import r }
 
 require 'capistrano/rails'
 require 'capistrano/passenger'
+
+namespace :deploy do
+   desc "Override Capistrano's default behavior, do not migrate on deploy"
+   task :migrate do
+     puts 'No migrate'
+   end
+ end
