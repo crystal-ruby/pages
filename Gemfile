@@ -1,8 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'rails'
-gem 'sqlite3'
-gem 'puma', '~> 3.11'
+gem 'puma'
 gem 'sass-rails'
 gem 'uglifier'
 gem "haml-rails"
@@ -11,8 +10,8 @@ gem "susy" , "2.2.12"
 gem 'high_voltage'
 
 gem 'opal', '~> 0.11.0'
-gem 'opal-rails' , "0.9.4"
-gem 'opal-jquery', git: 'https://github.com/opal/opal-jquery'
+gem 'opal-rails'
+gem 'opal-jquery'
 gem 'opal-browser' , "0.2.0"
 
 gem "rubyx" , "0.6" , git: "https://github.com/ruby-x/rubyx" , require: false
