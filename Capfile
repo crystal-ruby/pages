@@ -13,9 +13,10 @@ Dir.glob("lib/capistrano/tasks/*.rake").each { |r| import r }
 require 'capistrano/rails'
 require 'capistrano/passenger'
 
+Rake::Task["deploy:migrate"].clear_actions
 namespace :deploy do
-   desc "Override Capistrano's default behavior, do not migrate on deploy"
-   task :migrate do
-     puts 'No migrate'
-   end
+ desc "Override Capistrano's default behavior, do not migrate on deploy"
+ task :migrate do
+   puts 'No migrate'
  end
+end
