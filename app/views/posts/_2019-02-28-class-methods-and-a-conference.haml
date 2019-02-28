@@ -1,0 +1,128 @@
+%p
+  In short, class methods are working. Plus is some meta stuff that and gotchas that
+  i will explain below. Also i was at presenting rubyx at the first international
+  conference, and there are a couple of misc improvements.
+
+%h2 Classes are Singleton objects
+%p
+  Class methods came up when parsing Parfait. To create objects we usually use new, a
+  class method. After briefly contemplating to hack that and use the global space
+  object, i decided to at least check it out. And since it wasn't so bad, i continued.
+%p
+  At some point i thought class methods would be very simple, as they are just methods on
+  another object. After all the way we write code in classes is just a way to define methods
+  on a group of objects. And defining class methods "just" changes which objects we
+  define the methods on. And for the most part, this view is true. The only main difference
+  is that class objects are singletons.
+
+%h2 Singletons means singleton classes
+%p
+  Since we want to define methods on the single object, (and we are not programming
+  javascript) we need a class like object that allows us to define these methods and
+  manages them. There are several ways to do this, and i opted for a rather explicit
+  one for now.
+%p
+  So i created a class called MetaClass, that is more or less like a Class. It does
+  currently not derive, just implements the same protocol. In the compiler it can
+  be used as a replacement for a class object, and that is exactly what we do.
+  A metaclass instance is created for every class instance and there is a one to one
+  relation with the class object.
+%p
+  Ruby does this in a more general way, and that off course means that at some point
+  rubyx will have to move there too. In ruby every object has a singleton (meta) class.
+  This must be implemented with lasy creation, otherwise it seems very wasteful.
+  In Ruby the Metaclass is just a class, which means it has a metaclass, and
+  at the moment i have other problems than keeping my brain from melting by thinking
+  in circles like that.
+
+%h2 Compiling class methods
+%p
+  Actual compilation now becomes very simple. Before we were passing the class in
+  when compiling a method. Now we have methods and class methods, and depending on
+  which kind it is, we use a different object. The class object for method, and the classes
+  metaclass object for class methods.
+%p
+  Sort of surprisingly, none of the code further down had to be changed. But there are
+  no tests yet for all the possible features, so there may be surprises. Also interpreting
+  a class method call worked straight away, no changes needed there.
+%p
+  Class instance variables also have no tests, and so i don't know if they work or how
+  much work that would be. I sort of hope not much, but there clearly is an issue with
+  the types changing that will have to be addressed.
+
+%h2 Change, specifically changing types
+%p
+  As Types never change, we always create new instances. This works for normal objects, as
+  we can just use the new type for new objects. Also while compiling a binary (ie not on
+  the fly yet), we can just use the latest type for all existing objects of a class
+  when we create the binary.
+%p
+  For singletons this hack does not work. Especially when adding class instance variables,
+  the actual type of the existing class object changes. This means we have to change
+  the type reference in the class object. This in turn means the new type has to be
+  binary compatible with the old, which basically means it can't grow beyond the
+  allocated size.
+%p
+  This has been on the horizon for objects since the whole type idea was implemented.
+  Just the horizon was always far away, and now i have to see how much of this can
+  be done easily, how much later. We'll see, tests will tell.
+
+%h2 Misc other
+%p
+  Other things have happened that are maybe worth mentioning.
+
+%h3 Ruby integer upgrade
+%p
+  Since i started before 2.4 there were still uses of Fixnum. In 2.4 Integer and Fixnum
+  were united and later versions created a whole ton of warning. So i had stuck with 2.3
+  until now.
+%p
+  Now all Fixnums are gone and i have upgraded to use 2.6.
+
+%h3 Object creation
+%p
+  When doing the Factories i hardcoded some page sizes. Hardcoding always bites you, as
+  they should teach everyone in kindergarten, and so it did. It massively increased
+  the test times, as for every Parfait boot (almost every test) several pages worth
+  of objects were created.
+%p
+  I have now made the page size configurable and for good measure am passing some
+  config into the compiler. The compiler then passes a parfait key down, a mechanism
+  that could easily be extended to other subsystems.
+%p
+  The result was that test times have more than halved. Which means my new machine
+  (the one i am just choosing) does not have to be quite as expensive :-)
+
+%h3 Command Line Interface
+%p
+  Since i am hoping that people will start playing with ruby-x at some point i thought
+  to make that easier. This has been out there for a while as well, but since the set
+  of features was so small it just didn't get done before.
+%p
+  So now we have a thor based cli in the bin directory. Not that it does so terribly much
+  yet, but at least you can invoke it, get some help, and compile a ruby to binary.
+  Platforms are not supported (as we only have arm) and those Parfait options neither.
+  But a start.
+
+%h3 Rubyconf talk
+.container
+  %p.full_width
+    =image_tag "rubyconf.jpg"
+%p
+  Last but not least, i had the
+  =ext_link "first talk" , "https://twitter.com/_swanand/status/1087279289672785920"
+  at a conference. At the RubyConf in India, Goa
+  to be specific. Many people were really interested, and Sherif and the organisers we very
+  friendly. Off course we had a nice holiday too. No video yet, but i put the slides up on
+  the homepage.
+
+%h2 Work continues
+%p
+  When starting two big projects at work last year i didn't have so much time, and there
+  were months when i had no juice to code. Now i am on part time (physical) work again
+  and am back chipping away at it.
+%p
+  I am still looking for people to join and will increase the effort a bit now that
+  at least a reasonable subset is working.
+%p
+  Welcome!
