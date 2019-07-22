@@ -2,10 +2,10 @@
 
 %h1= title "How to configure Qemu"
 
-%h2 Target Pi on Mac
+%h2 Target Pi on Mac or Linux
 %p So even the idea is to run software on the Pi, not everyone has a Pi (yet :-)
 %p Others, like me, prefer to develop on a laptop and not carry the Pi around.
-%p For all those, this here explains how to emulate the Pi on a Mac.
+%p For all those, this here explains how to emulate the Pi on a unix.
 %p
   Even if you have a Pi,
   =link_to "this explains",  "remote_pi.html"
@@ -20,15 +20,22 @@
 %p
   Get the Qemu. There may be other emulators out there, and i have read of armulator,
   but this is what i found described and it works and is “easy enough”.
-%pre
-  %code
-    :preserve
+%p
+
+  On Mac:
+  %pre
+    %code
       brew install qemu
+
+  On Linux with debian/ubuntu:
+  %pre
+    %code
+      sudo apt-get qemu-system-arm
 
 %h3 Pi images
 
 %p
-  Create a directory for the stuff on your mac, ie pi.
+  Create a directory for the stuff on your computer, ie pi.
   %pre
     %code
       mkdir pi
@@ -36,27 +43,41 @@
   pi is in the gitignore, and the scripts in bin, will assume pi.
 
 %p
-  Get the latest Raspian image. The
-  =ext_link "lite version" "https://www.raspberrypi.org/downloads/raspbian/"
+  Get the latest Raspian image. Currently (2019) the
+  =ext_link "buster lite version" "https://www.raspberrypi.org/downloads/raspbian/"
   without Gui is fine, and smaller.
 %p
   Change the file format with something like:
   %pre
     %code
-      qemu-img convert -f raw -O qcow2 2017-08-16-raspbian-stretch-lite.img raspbian-stretch-lite.qcow
-  So we can then resize the file, without it taking extra space
+      qemu-img convert -f raw -O qcow2 2019-07-10-raspbian-buster-lite.img raspbian-buster-lite.qcow
+
+  So we can then resize the file, without it taking extra space (optional)
   %pre
     %code
-      qemu-img resize raspbian-stretch-lite.qcow +6G
-  Put the resulting file into the pi directory.
+      qemu-img resize raspbian-buster-lite.qcow +2G
+  Put the resulting file into the pi directory. After booting you will need to change the
+  partition to take the newly created space. This can be done with
+  %pre
+    %code
+      sudo fdisk /dev/sda
+  but for the buster image there is an extra little problem. A small free space is before
+  the partition, but the new partion must be at the exact sector as the old. So copy the start
+  sector before deleting the root partion and give fdisk the start sector when creatin the new.
+  %p
+    Also the file system has to be enlarged after another reboot:
+    %pre
+      %code
+        sudo resize2fs /dev/sda2
+
 
 %h3 Kernel
 %p
   One still needs a kernel (even there is one on the image?), and Druv kindly keeps a
-  repository of them. Since we downloaded the stretch image, grap the
-  =ext_link "stretch kernel" , "https://github.com/dhruvvyas90/qemu-rpi-kernel/raw/master/kernel-qemu-4.9.59-stretch"
+  repository of them. Since we downloaded the buster image, grab the
+  =ext_link "buster kernel" , "https://github.com/dhruvvyas90/qemu-rpi-kernel/blob/master/kernel-qemu-4.19.50-buster"
   and also the mysterious
-  =ext_link "tdb file." , "https://github.com/dhruvvyas90/qemu-rpi-kernel/raw/master/versatile-pb.dtb"
+  =ext_link "dtb file." , "https://github.com/dhruvvyas90/qemu-rpi-kernel/blob/master/versatile-pb.dtb"
   Both go into the pi directory.
 
 %h3 Boot
@@ -66,14 +87,14 @@
 %pre
   %code
     :preserve
-      qemu-system-arm -kernel pi/kernel-qemu-4.9.59-stretch -dtb pi/versatile-pb.dtb -cpu arm1176 -m 256 -M versatilepb -no-reboot -serial stdio -append 'root=/dev/sda2 panic=1 rootfstype=ext4 rw' -hda pi/raspbian-stretch-lite.qcow -net nic -net user,hostfwd=tcp::2222-:22
+      qemu-system-arm -kernel pi/kernel-qemu-4.19.50-buster -dtb pi/versatile-pb.dtb -cpu arm1176 -m 256 -M versatilepb -no-reboot -serial stdio -append 'root=/dev/sda2 panic=1 rootfstype=ext4 rw' -hda pi/raspbian-buster-lite.qcow -net nic -net user,hostfwd=tcp::2222-:22
 %ul
   %li the cpu is what broadcom specifies, ok
   %li memory is unfortunately hardcoded in the versatilepb “machine”
   %li the kernel is the file name of the kernel you downloaded (or extracted)
   %li raspbian.img is the image you downloaded. Renamed as it probably had the datestamp on it
   %li the "-net user,hostfwd=tcp::2222-:22" redircts the port 2222 to let you log into the pi
-%p So
+%p So (after the configuring the ssh, as shown below)
 %pre
   %code
     :preserve
@@ -99,5 +120,5 @@
 %h2#links Links
 %ul#selector
   %li=ext_link "Post used for instructions", "https://blog.agchapman.com/using-qemu-to-emulate-a-raspberry-pi/"
-  %li=ext_link "stretch kernel" , "https://github.com/dhruvvyas90/qemu-rpi-kernel/raw/master/kernel-qemu-4.9.59-stretch"
-  %li=ext_link "Rasbian image file", "http://www.raspberrypi.org/downloads/"
+  %li=ext_link "kernel repo" , "https://github.com/dhruvvyas90/qemu-rpi-kernel/"
+  %li=ext_link "Rasbian image file", "http://www.raspberrypi.org/downloads/raspbian/"
