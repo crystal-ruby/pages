@@ -13,8 +13,8 @@
   just push more functionality into the “virtual machine” and it is in fact only the
   compilation to binaries that gives static languages their speed. This is the reason
   to compile ruby.
-%p.center.full_width
-  = image_tag "layers.jpg" ,  alt: "Architectural layers"
+%p.center.three_width
+  = image_tag "architecture.png" ,  alt: "Architectural layers"
 
 %h3#ruby Ast + Ruby
 %p
@@ -61,26 +61,30 @@
 %h3#minimal-object-machine Minimal Object machine
 %p
   We compile Vool statements into Mom instructions. Mom is a machine, which means it has
-  instructions. But unlike a cpu (or the risc layer below) it does not have memory, only objects.
-  It also has no registers, and together these two things mean that all information is stored in
-  objects. Also the calling convention is object based and uses Frame and Message instances to
-  save state.
+  instructions. But unlike a cpu (or the risc layer below) it does not have memory, only
+  objects.
+  It also has no registers, and together these two things mean that all information is
+  stored in objects. Also the calling convention is object based and uses Frame and
+  Message instances to save state.
 %p
   Objects are typed, and are in fact the same objects the language operates on. Just the
-  functionality is expressed through instructions. While source methods are in defined on
+  functionality is expressed through instructions. While source methods are defined on
   classes as Vool, when they are compiled to binary, they are made type specific. These
   TypedMethods hold the binary and are stored in the Type.
 %p
   The Mom level exists to make the transition to Risc easier. It has a very abstract,
-  high level instruction set, where each single instruction may resolve to many (even tens of)
-  lower level instructions. But it breaks down Vool's tree into an instruction
+  high level instruction set, where each single instruction may resolve to many (even
+  tens of) lower level instructions. But it breaks down Vool's tree into an instruction
   list, which is conceptually a much easier input for the next layer.
+%p
+  Mom instruction may also be used to extend the systm functionality. This feature is used
+  in the Builtin layer of functions. These functions are coded at the Mom level, as they
+  can not be expressed in ruby. Examples include instance variable access, integer ops...
 
 %h3#risc Risc
 %p
-  The Register machine layer is a relatively close abstraction of risc hardware, but without the
-  quirks.
-%p
+  The Register machine layer is a relatively close abstraction of risc hardware,
+  but without the quirks that for example arm has.
   The Risc machine has registers, indexed addressing, operators, branches and everything
   needed to implement Mom. It does not try to abstract every possible machine feature
   (like llvm), but rather “objectifies” the general risc view to provide what is needed for
@@ -91,23 +95,25 @@
   instructions may be defined and used later, as long as translation is provided for them too.
   In other words the instruction set is extensible (unlike cpu instruction sets).
 %p
-  Basic object oriented concepts are needed already at this level, to be able to generate a whole
-  self contained system. Ie what an object is, a class, a method etc. This minimal runtime is called
-  parfait, and the same objects will be used at runtime and compile time.
+  Basic object oriented concepts are needed already at this level, to be able to generate
+  a whole self contained system. Ie what an object is, a class, a method etc.
+  This minimal runtime is called parfait, and the same objects will be used at runtime
+  and compile time.
 %p
-  Since working with at this low machine level (essentially assembler) is not easy to follow for
-  everyone (me :-), an interpreter was created (by me:-). Later a graphical interface, a kind of
+  Since working with at this low machine level (essentially assembler) is not easy to
+  follow for everyone (me :-), an interpreter was created (by me:-). Later a graphical
+  interface, a kind of
   %a{:href => "https://github.com/ruby-x/rubyx-debugger"} visual debugger
   was added.
   Visualizing the control flow and being able to see values updated immediately helped
   tremendously in creating this layer. And the interpreter helps in testing, ie keeping it
   working in the face of developer change.
 
-%h3#binary--arm-and-elf Binary , Arm and Elf
+%h3 Target assembler
 %p
-  A physical machine will run binaries containing instructions that the cpu understands, in a
-  format the operating system understands (elf). Arm and elf subdirectories hold the code for
-  these layers.
+  Risc is the last abstract layer, it is then translated into machine dependent code.
+  This is not binary yet, more an oo version of assembler, where each instruction
+  is represented by an object.
 %p
   Arm is a risc architecture, but anyone who knows it will attest, with it’s own quirks.
   For example any instruction may be executed conditionally, ie
@@ -116,5 +122,14 @@
   is no 32bit register load instruction. It is possible to create very dense code using
   all the arm special features, but this is not implemented yet.
 %p
-  The Arm::Translator translates that translates RegisterInstructions to ArmInstructions,
+  The Arm::Translator translates RegisterInstructions to ArmInstructions.
+
+%h3#binary-and-elf Elf and Binary
+%p
+  A physical machine will run binaries containing instructions that the cpu understands,
+  in a format the operating system understands (elf).
+%p
+  The previously generated objects must be able to convert themselves to binary.
+  These binary codes are wrapped and stored into binary files of elf format.
+  Arm and elf subdirectories hold the code for these layers.
   and the Elf::ObjectWriter creates Linux binaries.
