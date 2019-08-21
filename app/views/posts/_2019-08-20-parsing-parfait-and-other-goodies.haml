@@ -1,6 +1,6 @@
 %p
-  As we rubyx will eventually need to parse and compile itself, i am very happy to
-  report success on the first steps on that journey. Also benchmarks, better design
+  As rubyx will eventually need to parse and compile itself, i am very happy to
+  report success on the first steps towards that goal. Also better design, benchmarks,
   and another conference are on the list.
 
 %h2 Compiling parfait
@@ -14,23 +14,23 @@
   and so Parfait must be available at run-time, ie parsed and compiled. Since i have been
   busy doing the basics, this has been on the ToDo for a long while.
 %p
-  Now, finally, most the basics are inplace and i have started what feels like a tremendous
-  task. In fact i have succefully compiled
+  Now, finally, most the basics are in place and i have started what feels like a tremendous
+  task. In fact i have successfully compiled
   %em three files.
   Object, DataObject and Integer, to be precise.
 %p
-  The significance of this is actually much greater (especially since there are no tests)
-  yet. Parfait, as part of rubyx, is what one may call ideomatic ruby, ie real world ruby.
-  Off course i have to smoothen out a few bugs before compiling actually worked, but
+  The significance of this is actually much greater (especially since there are no tests
+  yet). Parfait, as part of rubyx, is what one may call ideomatic ruby, ie real world ruby.
+  Off course i had to smoothen out a few bugs before compiling actually worked, but
   surprisingly little. In other words the compiler is functional enough to
-  compile larger more feature ritch ruby programs, but more on that below.
+  compile larger, more feature rich ruby programs, but more on that below.
 
 %h2 Design improvements
 %p
   The overall design has been like in the picture below for a while already.
-  Alas, the implementation oof this architecture was slightly lacking.
+  Alas, the implementation of this architecture was slightly lacking.
   To be precise, when mom code was generated, it was immediately converted to risc.
-  In other words the layer only existed conceptually, or in transit.
+  In other words the layer existed only conceptually, or in transit.
 %p.center.three_width
   = image_tag "architecture.png" ,  alt: "Architectural layers"
 %p
@@ -39,42 +39,43 @@
   as advertised. Ruby comes in from the top and binary code out at the bottom.
   But more than that, every layer is a distinct step, in fact there are methods on the
   topmost compiler object to create every level down from ruby. This is obviously
-  very handy for testing.
+  very handy for testing, and by iself sped up testing by 30%, as risc is not renerated
+  before really needed.
 
 %h2 Automated binary tests
 %p
   Speaking of testing, we are at over 1600 tests, which is more than 200 up from before
-  the design rewrite. At over 15000 assertions this is still 95%, in other words everything
-  apart from a few fails. And with parallel execution still fast.
+  the design rewrite. At over 15000 assertions this is still 95% of the code, in other
+  words everything apart from a few fails. And with parallel execution still fast.
 
 %p.center.full_width
   = image_tag "1600_tests.png" ,  alt: "Lots of test, never boring"
 %p
   But the main achievement a couple of weeks ago was the integration of binary testing
-  int the automated test flow. Specifically on
+  into the automated test flow. Specifically on
   %em Travis.
 %p
   This uses a feature of Qemu that i had not know before, namely that one can get qemu
   to run binaries from a different target on a machine, by simply calling it with
   qemu-arm.
 %p
-  I had done previous testing of binaries via ssh, usually to an qemu emulated pi on my
+  Previously i had done testing of binaries via ssh, usually to an qemu emulated pi on my
   machine. This setup is vastly more complicated, as described
   =ext_link "here" , "/arm/qemu.html"
-  and i had shied away from that. Meaning they would happen irregularily and all that.
-  My only consolation was that the test would run on the interpreter, but off course that
-  does not test the arm and elf genertion.
+  and i had shied away from automating that. Meaning they would happen irregularily and
+  all that. My only consolation was that the test would run on the interpreter, but off
+  course that does not test the arm and elf genertion.
 %p
   The actual tests that i am talking about are a growing number of "mains" tests, found in
-  the tets/mains directory.
-  These are actal programs that calculate or output stuff. They are complete system
-  tests in the sense that we only test their output (system output).
+  the tests/mains directory.
+  These are actual programs that calculate or output stuff. They are complete system
+  tests in the sense that we only test their output (system output and exit code).
 %p
   As we usually link to "a.out" files (thus overwriting and avoiding cleanup), the actual
   invocation of qemu for a binary is really simple:
   %pre
     %code
-      qemnu-arm ./a.out
+      qemu-arm ./a.out
   but that still leaves you to generate that binary. This can be done by using the
   rubyxc compiler and linking the resulting object file (see bug #13). But sine i too am a
   lazy programmer i have automated these steps into the rubyxc compiler, and so one
@@ -83,11 +84,11 @@
     %code
       :preserve
         ./bin/rubyxc execute test/mains/source/fibo__8.rb
-  This will compile, link and execute this specific fibonachi test. This output
+  This will compile, link and execute this specific fibonacci test. The exit code
   of this test will be 8, as encoded in the file name.
-  So this and 20 others will be tested as binaries now every time travid does its thing.
+  Now this test, and 20 others, will be run as binaries every time travis does its thing.
 %p
-  BTW, i have also created arubyxc command to execute a file via the interpreter.
+  BTW, i have also created a rubyxc command to execute a file via the interpreter.
   This can sometimes yield better errors when things go wrong.
   %pre
     %code
@@ -98,20 +99,23 @@
 
 
 %h2 Misc other news
+
 %h3 Microbenchmarks
 %p
   At the last conference in Hamburg, someone asked the fair question: So how fast is it?
-  It's been so long that i did tests, that i could only mumble.
+  It's been so long that i did
+  =ext_link "tests," , "/misc/soml_benchmarks.html"
+  that i could only mumble.
   Now i finished updating the tests, but it will be a while before i can answer the
   question more fully.
 %p
   So for starters, because the functionality of the compiler is limited, i did very small
   benchmarks. Very small means 20 lines or less, loops, string output, fibonacchi, both
-  linear and recursive. I realized too late, that that will tell most about integer
+  linear and recursive. I realized too late, that all that will tell about is integer
   performance.
 %p
-  Now because of the early days, i will not go into detail here. In general speed was not
-  as fast as i had hoped from by 4 year old benchmarks, about the same as mri. I
+  Now because it's early days, i will not go into detail here. In general speed was not
+  as fast as i had hoped for, about the same as mri. I
   will have to do some work on the calling convention and probably some on integer
   handling too. I think i can quite easily shave 30-50% off, and that alone should
   verify the saying that all benchmarks are lies. Like the one where rubyx is doing
@@ -126,7 +130,7 @@
   As part of parsing Parfait, i implemented a first version of implicit returns.
   Low hanging fruits, and in fact most common use cases, included constants and calls.
   So when a method ends in a simple variable, constant, or a call, a return will be added.
-  More complex rules like returns for if's or while will ave to wait, but i found that i
+  More complex rules like returns for if's or while will have to wait, but i found that i
   personally don't tend to use them anyway.
 %p
   Since class methods are basically methods (of the meta class), adding the unified
@@ -135,8 +139,8 @@
 %h3 Improved Block handling
 %p
   Block handling, at least the simple implicit kind, has worked for a while, but was in
-  several ways too complicated. The block was unneccessarily assigned to a local, and
-  compiling was handled by picking them out.
+  several ways too complicated. The block was unnecessarily assigned to a local, and
+  compiling was handled by looking for blocks statements, not during the normal flow.
 %p
   This all stemmed from a misunderstanding, or lack of understanding: Blocks, or should
   i say Lambdas, are constants. Just like a string or integer. They are created once at
@@ -145,7 +149,7 @@
   before Statements.
 %p
   So now the Lambda Expression is created and just added as an argument to the send.
-  Compiling thee Lambda is triggered by the constant creation, ie the step down from
+  Compiling the Lambda is triggered by the constant creation, ie the step down from
   vool to mom, and the block compiler added to method compiler automatically.
 
 %h3 Vool coming into focus
@@ -158,38 +162,39 @@
   recursive calls are flattened into a list, and as such the calling does not rely on a
   stack as in ruby.
 %p
-  Secondly, Vool distinguishes between expressions and statements. Like other lower level,
-  but not ruby. As a rule of thumb, Statements do things, Expression are things. In other
-  words, only expressions have value, statements (lke if or while) do not.
+  Secondly, Vool distinguishes between expressions and statements. Like other lower level
+  languages, but not ruby. As a rule of thumb, Statements do things, Expression are things.
+  In other words, only expressions have value, statements (like if or while) do not.
 
 %h2 Plans
-%h4 GrillRB conference
-%p
-  I will speak in
-  =ext_link "Wrazlaw" , "https://grillrb.com/"
-  in about a week. The plan is to make a comparison with rails and focus on the
-  possibilities, rather than technical detail.
 
 %h4 Calling
 %p
   The Calling can do with work and i noticed two mistakes i did. One is that creating
-  a new message for every call is unneccessarily complicated. Its is only in the
-  special case that a Proc is created that the return sequence (a mom instruciton) needs
+  a new message for every call is unneccessarily complicated. It is only in the
+  special case that a Proc is created that the return sequence (a mom instruction) needs
   to keep the message alive.
+%p
+  The other is that having arguments and local variables as seperate arrays may be handy
+  and easy to code. But it does add an extra indirection for every access _and_ store.
+  Since Mom is memory based, and Mom translates to risc, that does amount to a lot of
+  instructions.
+
 %h4 Integers
 %p
   I still want to hang on to Integers being objects, though creation is clealy costly.
   In the future a full escape analysis will help off course, but for now it should be easy
-  enough to figure out wether an int is passed down. If not loops can be
-  destructively change the int. A simple special case is a the times method.
+  enough to figure out wether an int is passed down. If not loops can be made to
+  destructively change the int.
 
 %h4 Mom instruction invocation
 %p
   I have this idea of being able to code more stuff higher up. To make that more
   efficient i am thinking of macros or instruction invocation at the vool level.
   Only inside Parfait off course. The basic idea would be to save the call/return
-  code, and have eg X.return_jump map to the Mom::ReturnJump Instruction. "Just" have
-  to figure out the passing semantics, or how that integrates intot the vools code.
+  code, and have the compiler map eg X.return_jump to the Mom::ReturnJump Instruction. "Just" have
+  to figure out the passing semantics, or how that integrates into the vool code.
+
 %h4 Better Builtin
 %p
   The generation of the current builtin methods has always bothered me a bit.
@@ -197,8 +202,22 @@
   alternative mechanism is needed (even in c one can embed assembler).
 %p
   The main problem i have is that those methods don't check their arguments and as such
-  may cause core dumps. So they are to high level and hopefully all we really need is
+  may cause core dumps. So they are too high level and hopefully all we really need is
   that previous idea of being able to integrate Mom code into vool. As Mom is extensible
   that should take care of any possible need. And we could code the methods normally as
-  part of Parfait, make them safe, and just use the lower level inside them. Lets see!.
-  
+  part of Parfait, make them safe, and just use the lower level inside them. Lets see!
+
+%h4 Compiling Parfait tests
+%p
+  Since Parfait is part of rubyx, we have off course unit tests for it. The plan is to
+  parse the tests too, and run them as a test for both Prfait and the compiler.
+  Off course this will involve writing some mini version of minitest that the compiler
+  can actually handle (Why do i have the feeling that the real minitest involves too much
+  mmagic).
+
+%h4 GrillRB conference
+%p
+  Last, but not least, i will speak in
+  =ext_link "Wrocław" , "https://grillrb.com/"
+  in about a week. The plan is to make a comparison with rails and focus on the
+  possibilities, rather than technical detail. See you there :-)
