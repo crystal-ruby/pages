@@ -2,6 +2,8 @@ Rails.application.routes.draw do
 
   root to: 'high_voltage/pages#show' , id: 'index'
 
+  get "/slides/*slide" , to: 'slides#index', :as => :slide
+
   get "/debugger" , to: "debugger#index" , as: :debugger_index
 
   get "/blog" , to: "blog#index" , as: :blog_index
