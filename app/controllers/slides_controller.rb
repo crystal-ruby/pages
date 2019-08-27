@@ -1,7 +1,7 @@
 class SlidesController < ApplicationController
 
   def index
-    render( template: "slides/#{params[:slide]}" ,   layout: false )
+    render( template: "slides/#{params[:slide]}/index" ,   layout: false )
   end
 
 end
