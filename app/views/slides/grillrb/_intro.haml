@@ -33,35 +33,36 @@
   %p.fragment why
   %p.fragment how
   %p.fragment future
-%section#story
-  %h2 Short Story
-  %p About the 60’s
-  %p uncle Bob
-  %p going to Mars
-  %p the Energy solution
-%section#mars
-  %h2 Mission to the Moon
-  %p ‘61 goal declared by Kennedy
-  %p.fragment ‘69 achieved by Appollo 9
-  %p.fragment 4bit , 2k RAM , 1Mhz
-  %p.fragment Mars 2020, maybe
-%section#thorium
-  %h2 Molten-Salt Reactor
-  %p Early 60’s nuclear research (Thorium)
-  %p.fragment sucessful run '64-'69 , 7MW
-  %p.fragment Walk away safe , small , little waste
-  %p.fragment Rediscovered  by Kirk Sorensen 2008
-%section#bob
-  %h2 Programming
-  %p Uncle Bob “Future of programming”
-  %p.fragment C ,Unix,Smalltalk ,Lisp ,invented 60’s
-  %p.fragment Engineers doubling every 5 years
-  %p.fragment Go 2009 , Rust 2010 , Julia 2012
-%section#60s
-  %h2 Theory of 60’s
-  %p Programming, spaceflight, energy
-  %p.fragment Major advancement in 60’s
-  %p.fragment New advancements recently
+%section
+  %section#story
+    %h2 Short Story
+    %p About the 60’s
+    %p uncle Bob
+    %p going to Mars
+    %p the Energy solution
+  %section#mars
+    %h2 Mission to the Moon
+    %p ‘61 goal declared by Kennedy
+    %p.fragment ‘69 achieved by Appollo 9
+    %p.fragment 4bit , 2k RAM , 1Mhz
+    %p.fragment Mars 2020, maybe
+  %section#thorium
+    %h2 Molten-Salt Reactor
+    %p Early 60’s nuclear research (Thorium)
+    %p.fragment sucessful run '64-'69 , 7MW
+    %p.fragment Walk away safe , small , little waste
+    %p.fragment Rediscovered  by Kirk Sorensen 2008
+  %section#bob
+    %h2 Programming
+    %p Uncle Bob “Future of programming”
+    %p.fragment C ,Unix,Smalltalk ,Lisp ,invented 60’s
+    %p.fragment Engineers doubling every 5 years
+    %p.fragment Go 2009 , Rust 2010 , Julia 2012
+  %section#60s
+    %h2 Theory of 60’s
+    %p Programming, spaceflight, energy
+    %p.fragment Major advancement in 60’s
+    %p.fragment New advancements only recently
 %section#now
   %h2 Why now
   %p Simula invented OO concepts in 67
@@ -84,10 +85,14 @@
   %p.fragment Limited domains accessible
   %p.fragment Smaller community
   %p.fragment less tools
-%section#problem
-  %h2 Real problem
+%section#cause
+  %h2 Problem cause
   %p Speed is symptom
-  %p.fragment Interpretation is cause
+  %p.fragment
+    Interpretation is cause
+    %br
+    (walking with a map)
+    %br
   %p.fragment Compilation is the solution
 %section#meta_problem
   %h2 Meta problem
@@ -121,6 +126,12 @@
   %p.fragment with you
 
 %section#demo
-  %h2 Demo
+  %h2
+    Demo of
+    =link_to "cli" , "https://github.com/ruby-x/rubyx/blob/master/lib/rubyx/rubyxc.rb"
   %p
+    %br
     =link_to "www.ruby-x.org" , "http://www.ruby-x.org"
+  %p
+    %br
+    =link_to "github.com/ruby-x" , "https://github.com/ruby-x/rubyx"
