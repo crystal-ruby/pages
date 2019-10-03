@@ -11,17 +11,17 @@
   challenging. The simple object model helps, and so does the simple risc instruction set,
   but for a long time i was struggling to create readable code that generates the risc.
 %p
-  The main places we find this code is the mom layer, eg in the
+  The main places we find this code is the SlotMachine layer, eg in the
   =link_to "calling convention" , "calling.html"
   and in the Builtin module, generating code that can not be expressed in ruby.
 
 %h2 Compiler
 %p
-  When the code goes from ruby to vool, or vool to mom, methods on the previous (tree)
+  When the code goes from ruby to Sol, or Sol to SlotMachine, methods on the previous (tree)
   structure return the next structure. But going to risc the code evolved to use a different
   approach. The unit of compilation is a block or method, and the respective
   %b Compiler
-  is passed into the generating method.
+  is passed into the generating ruby method.
 %p
   The risc code is then added directly to the compiler. If anything is returned it is
   used by the caller for other things. This change happened as the compiler needed to

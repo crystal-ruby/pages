@@ -33,22 +33,19 @@
   that basically models the ast in a concrete syntax tree. This means there is one class
   per node type.
 %p
-  The Ruby layer is then used to transform the data into the Vool layer. Eg: Implicit
+  The Ruby layer is then used to transform the data into the Sol layer. Eg: Implicit
   block passing is made explicit, conditions are simplified, arguments are simplified,
   and syntactic sugar is removed.
 
-%h3#virtual-object-oriented-language Virtual Object Oriented Language
+%h3#simple-object-language Simple Object Language
 %p
-  Virtual, in this context, means that there is no syntax for this language; it is an
-  intermediate representation which
-  %em could
-  be targeted by several real languages.
+  Simpe, in this context, means that it is much simpler than ruby.
 %p
   The main purpose is to simplify existing oo languages down to it’s core components: mostly
   calling, assignment, continuations and exceptions. Typed classes for each language
-  construct exist and are responsible to transform a statement into Mom level below.
+  construct exist and are responsible to transform a statement into SlotMachine level below.
 %p
-  Examples for things that exist in ruby but are broken down in Vool are
+  Examples for things that exist in ruby but are broken down in Sol are
   %em unless
   ,
   %em ternary operator
@@ -58,27 +55,28 @@
   %em for
   loops and other similar syntactic sugar.
 
-%h3#minimal-object-machine Minimal Object machine
+%h3#slot-machine SlotMachine
 %p
-  We compile Vool statements into Mom instructions. Mom is a machine, which means it has
-  instructions. But unlike a cpu (or the risc layer below) it does not have memory, only
-  objects.
+  We compile Sol statements into SlotMachine instructions. SlotMachine is a machine,
+  which means it has instructions. But unlike a cpu (or the risc layer below) it does not
+  have memory, only objects.
   It also has no registers, and together these two things mean that all information is
   stored in objects. Also the calling convention is object based and uses Frame and
   Message instances to save state.
 %p
   Objects are typed, and are in fact the same objects the language operates on. Just the
   functionality is expressed through instructions. While source methods are defined on
-  classes as Vool, when they are compiled to binary, they are made type specific. These
-  TypedMethods hold the binary and are stored in the Type.
+  classes as Sol, when they are compiled to binary, they are made type specific. These
+  CallableMethods hold the binary and are stored in the Type.
 %p
-  The Mom level exists to make the transition to Risc easier. It has a very abstract,
+  The SlotMachine level exists to make the transition to Risc easier. It has a very abstract,
   high level instruction set, where each single instruction may resolve to many (even
-  tens of) lower level instructions. But it breaks down Vool's tree into an instruction
+  tens of) lower level instructions. But it breaks down Sol's tree into an instruction
   list, which is conceptually a much easier input for the next layer.
 %p
-  Mom instruction may also be used to extend the systm functionality. This feature is used
-  in the Builtin layer of functions. These functions are coded at the Mom level, as they
+  SlotMachine uses a class hierachy to represent instructions, and this fact may be used to
+  extend the systm functionality. This feature is used in the Builtin layer of functions.
+  These functions are coded at the SlotMachine level, as they
   can not be expressed in ruby. Examples include instance variable access, integer ops...
 
 %h3#risc Risc
@@ -86,9 +84,9 @@
   The Register machine layer is a relatively close abstraction of risc hardware,
   but without the quirks that for example arm has.
   The Risc machine has registers, indexed addressing, operators, branches and everything
-  needed to implement Mom. It does not try to abstract every possible machine feature
+  needed to implement SlotMachine. It does not try to abstract every possible machine feature
   (like llvm), but rather “objectifies” the general risc view to provide what is needed for
-  the Mom layer, the next layer up (and actually Builtin functions).
+  the Slot layer, the next layer up (and actually Builtin functions).
 %p
   The machine has it’s own (abstract) instruction set, and the mapping to arm is quite
   straightforward. Since the instruction set is implemented as derived classes, additional

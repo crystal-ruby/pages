@@ -26,11 +26,11 @@ oriented system.
 
 %p
   It may be easiest to understand types by how they are used. When rubyx parses a class,
-  it creates a Vool::Class, which in turn creates a Parfait::Class. This class carries
-  the Vool methods, basically the language code for the methods.
+  it creates a Sol::ClassExpression, which in turn creates a Parfait::Class. This class carries
+  the Sol methods, basically the language code for the methods.
   %br
   At this point a type, representing the object layout as known at the time, is created.
-  Vool::Methods are compiled to binary (Parfait::Method) according to the type information
+  Parfait::SolMethod are compiled to binary (Parfait::Callable) according to the type information
   and stored in the type.
   %br
   If the class changes at run-time, ie variables are added or removed, a new type object is
