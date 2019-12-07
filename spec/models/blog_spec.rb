@@ -4,23 +4,23 @@ RSpec.describe Post, type: :model do
 
   describe "creation" do
     it "ok with valid slug" do
-      post = Post.new("_1993-2-4-title")
+      post = Post.new("1993/_2-4-title")
       expect(post).not_to eq nil
     end
     it "raises with invalid slug" do
-      expect{Post.new("_1993-4-title")}.to raise_error RuntimeError
+      expect{Post.new("1993/_4-title")}.to raise_error RuntimeError
     end
     it "must start with a year" do
-      expect{Post.new("_no-num-4-title")}.to raise_error RuntimeError
+      expect{Post.new("no-num/_4-title")}.to raise_error RuntimeError
     end
     it "must start with a underscore" do
-      expect{Post.new("_no-num-4-title")}.to raise_error RuntimeError
+      expect{Post.new("1999/4-4-title")}.to raise_error RuntimeError
     end
   end
 
   describe "basic api" do
     before :each do
-      @post = Post.new("_1993-2-4-title")
+      @post = Post.new("1993/_2-4-title.haml")
     end
     it "returns title" do
       expect(@post.title).to eq "title"
@@ -34,25 +34,25 @@ RSpec.describe Post, type: :model do
       expect(@post.date).to eq Date.new(1993,2,4)
     end
     it "returns file_name" do
-      expect(@post.template_name).to eq "1993-02-04-title"
+      expect(@post.template_name).to eq "1993/02-04-title"
     end
   end
 
   describe "precise api definition" do
     it "returns whole title" do
-      post = Post.new("_1993-2-4-Multi-word-title")
+      post = Post.new("1993/_2-4-Multi-word-title")
       expect(post.title).to eq "Multi word title"
     end
     it "returns slug" do
-      post = Post.new("_1993-2-4-Multi-word-title")
+      post = Post.new("1993/_2-4-Multi-word-title")
       expect(post.slug).to eq "multi-word-title"
     end
     it "returns title without extension if given file name" do
-      post = Post.new("_1993-2-4-title.rb")
+      post = Post.new("1993/_2-4-title.rb")
       expect(post.title).to eq "title"
     end
     it 'slugs are downcase' do
-      post = Post.new("_1993-2-4-Multi-word-title")
+      post = Post.new("1993/_2-4-Multi-word-title")
       slug = post.slug
       expect(slug.downcase).to eq slug
     end
@@ -75,7 +75,7 @@ RSpec.describe Post, type: :model do
       expect(@posts.length).to be > 0
     end
     it "post template exists" do
-      file = Post.blog_path + "/_" + @first.template_name + ".haml"
+      file = Post.blog_path + "/" + @first.template_file + ".haml"
       expect(File.exists?(file)).to eq true
     end
   end
