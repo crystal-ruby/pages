@@ -8,7 +8,7 @@
   (2 Megs). Since it provides a defined api (posix) and large functionality on a plethora of systems (os’s) and cpu’s. Even for different ABI’s (application binary interfaces) and compilers/linkers it is no wonder.
 %p ucLibc or dietLibc get the size down, especially diet quite a bit (130k). So that’s ok then. Or is it?
 %p Then i noticed that the real issue is not the size. Even my pi has 512 Mb, and of course even libc gets paged.
-%p The real issue is the step into the C world. So, extern functions, call marshelling, and the question is for what.
+%p The real issue is the step into the C world. So, extern functions, call marshalling, and the question is for what.
 %p Afer all the c library was created to make it easier for c programs to use the kernel. And i have no intention of coding any more c.
 %h2#ruby-corestd-lib ruby core/std-lib
 %p Off course the ruby-core and std libs were designed to do for ruby what libc does for c. Unfortunately they are badly designed and suffer from above brainwash (designed around c calls)
