@@ -13,7 +13,7 @@ Rails.application.config.opal.dynamic_require_severity = :ignore
 # application.js, application.css, and all non-JS/CSS in the app/assets
 # folder are already added.
 Rails.application.config.assets.precompile += %w( debug.js debug.css
-                              reveal/reveal.css  reveal.js highlight.js)
+                              slides.css reveal.js highlight.js)
 
 Rails.application.config.assets.paths << "#{Gem.loaded_specs["rubyx-debugger"].gem_dir}/assets/"
 Rails.application.config.assets.paths << "#{Gem.loaded_specs["rubyx-debugger"].gem_dir}/lib/"

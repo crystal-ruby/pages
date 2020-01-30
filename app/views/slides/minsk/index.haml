@@ -1,0 +1,47 @@
+!!!
+%html{:lang => "en"}
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %meta{:charset => "utf-8"}/
+    %title Minsk 2020
+    %meta{:content => "RubyX, community's ruby implementation", :name => "description"}/
+    %meta{:content => "Torsten Ruger", :name => "author"}/
+    %meta{:content => "yes", :name => "apple-mobile-web-app-capable"}/
+    %meta{:content => "black-translucent", :name => "apple-mobile-web-app-status-bar-style"}/
+    %meta{:content => "width=device-width, initial-scale=1.0", :name => "viewport"}/
+    = stylesheet_link_tag  'slides', media: 'all'
+  %body
+    .reveal
+      .slides
+        = render partial: "slides/minsk/intro"
+        = render partial: "slides/minsk/what"
+        = render partial: "slides/minsk/how"
+        = render partial: "slides/minsk/next"
+
+        %section#end{:style => "text-align: left;"}
+          %h1 RubyX
+          %p
+            Read up
+            =link_to "ruby-x.org", "https://ruby-x.org"
+            %br/
+            Start coding
+            = link_to "github.com/ruby-x/" , "http://github.com/ruby-x"
+            %br
+            Make contact
+            =link_to "google group ruby-x" , "https://groups.google.com/forum/#!forum/ruby-x"
+
+    = javascript_include_tag "reveal"
+    = javascript_include_tag "highlight"
+    :javascript
+      // More info https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+      	controls: true,
+      	progress: true,
+      	center: true,
+      	hash: true,
+
+      	transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+        width: 950,
+        height: 600,
+      });
