@@ -20,12 +20,12 @@
   %br
   %h3.fragment compiler compiles methods
   %br
-  %h4.fragment controller = compiler part
+  %h4.fragment controller = compiler
 
 %section#http
   %h3 rack handles http
   %br
-  %h3.fragment assembler and elf handles binary creation
+  %h3.fragment assembler binary creation
   %br
   %h4.fragment lower levels don't matter to most
 
@@ -36,77 +36,77 @@
   %br
   %h4.fragment same same, but different :-)
 
-%section#compiler_layers
-  %h2 Compiler layers
-  %p Ruby source (parser gem)
-  %p.fragment Virtual oo language (vool)
-  %p.fragment Minimal oo Machine (mom)
-  %p.fragment Risc abstraction
-  %p.fragment Target (arm)
-  %p.fragment Elf / binary
-
-%section#vool
-  %h2 Vool, virtual oo language
-  %p virtual == no syntax
-  %p.fragment oo == object model like ruby
-  %p.fragment ruby without the fluff ( splats / unless ..)
-  %p.fragment Statements + Expression
-  %p.fragment nothing implicit
-
-%section#machines
-  %h2 Language vs Machine
-  %p next level is (abtract) machine
-  %p.fragment statement tree vs instruction list
-  %p.fragment variables vs memory
-  %p.fragment control structures vs jumps
-  %p.fragment abstract vs basic
-
-%section#mom
-  %section#mom1
-    %h2 Mom, minimal object machine
-    %p 16 instructions
-    %p.fragment Works only on memory
-    %p.fragment higher level than next
-    %p.fragment ease transition to next level
-    %p.fragment 1 vool → 2-8 mom
-
-  %section#mom2
-    %h2 MOM instructions
-    %p simple call , argument transfer , return sequence
-    %p.fragment dynamic call , method resolve
-    %p.fragment checks with implicit jumps
-    %p.fragment ruby truth check , identity check
-    %p.fragment yield . . .
 %section
-  %section#risc1
-    %h2 Risc abstraction
-    %p arm without the fluff
-    %p.fragment arm like registers
-    %p.fragment 20 instructions
-    %p.fragment extensible (for builtin + more)
-    %p.fragment last virtual layer
-    %p.fragment interpreter + visual debugger
+  %section#compiler_layers
+    %h2 Compiler layers
+    %p Ruby source (parser gem)
+    %p.fragment Simple Object Language
+    %p.fragment SlotMachine
+    %p.fragment Risc abstraction
+    %p.fragment Target (arm)
+    %p.fragment Elf / binary
 
-  %section#risc2
-    %h2 Risc instructions
-    %p mem/reg + reg/reg
-    %p.fragment arithmetic operators
-    %p.fragment tests on operation result
-    %p.fragment jump , call , return
-    %p.fragment syscall
+  %section#sol
+    %h2 Sol, Simple Object language
+    %p simple, ruby without the fluff ( splats / unless ..)
+    %p object model like ruby
+    %p Statements + Expression
+    %p nothing implicit
+
+  %section#machines
+    %h2 Language vs Machine
+    %p next level is (abtract) machine
+    %p.fragment statement tree vs instruction list
+    %p.fragment variables vs memory
+    %p.fragment control structures vs jumps
+    %p.fragment abstract vs basic
+
+  %section#mom
+    %section#mom1
+      %h2 SlotMachine
+      %p 16 instructions
+      %p.fragment Works only on memory
+      %p.fragment higher level than next
+      %p.fragment ease transition to next level
+      %p.fragment 1 Sol → 2-8 slot
+
+    %section#mom2
+      %h2 SlotMachine instructions
+      %p simple call , argument transfer , return sequence
+      %p.fragment dynamic call , method resolve
+      %p.fragment checks with implicit jumps
+      %p.fragment ruby truth check , identity check
+      %p.fragment yield . . .
+  %section
+    %section#risc1
+      %h2 Risc abstraction
+      %p arm without the fluff
+      %p.fragment arm like registers
+      %p.fragment 20 instructions
+      %p.fragment extensible (for builtin + more)
+      %p.fragment last virtual layer
+      %p.fragment interpreter + visual debugger
+
+    %section#risc2
+      %h2 Risc instructions
+      %p mem/reg + reg/reg
+      %p.fragment arithmetic operators
+      %p.fragment tests on operation result
+      %p.fragment jump , call , return
+      %p.fragment syscall
 
 %section#code
   %h2 Code generation
   %br
   %br
-  %h2.fragment object generation
+  %h2.fragment Object generation
 
 %section#model
   %h2 Object Model
   %p Everything is Object
   %p.fragment Fixed sizes
   %p.fragment opaque data, ruby has no access
-  %p.fragment mom instructions to process data
+  %p.fragment slot instructions to process data
 
 %section#types
   %h2 Object has Type
@@ -137,22 +137,6 @@
   %p.fragment Basic oo: Class , Type , Method , Code
   %p.fragment Utils: String, Integer , Array , Hash
   %p.fragment  also, additional builtin methods
-
-%section#calling
-  %h2 Calling convention
-  %p linked list (not stack)
-  %p.fragment object oriented
-  %p.fragment easy to understand
-  %p.fragment exceptions easier
-  %p.fragment binding easier
-
-%section#message
-  %h2 Message Object
-  %p next / caller message
-  %p.fragment frame (locals) + args
-  %p.fragment return address + value
-  %p.fragment method
-  %p.fragment receiver (self)
 
 %section#project
   %h2 Project

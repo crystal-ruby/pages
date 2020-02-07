@@ -61,7 +61,7 @@
     Woodwork
     %small (2010 ecoframe)
   %p
-    %img{:alt => "Villa Taika", "data-src" => image_url("slides/grillrb/villataika.jpg") , height: 400}/
+    %img{:alt => "At Work", "data-src" => image_url("slides/at_work.jpg") , height: 400}/
 
 %section#smallalk
   %h2 1995: Smalltalk
@@ -75,19 +75,8 @@
   %p In memory db
   %p core judy (C), rest ruby
   %p super performance, until used from rails
-  %h3 Ruby has performance issues
+  %h3 MRI has performance issues
 
-%section#pi
-  %h2 2013: PI
-  %p pi becomes an arduino
-  %p.fragment laptop  becomes a pi
-  %p.fragment
-    Speed problem
-    %b 10x
-    possibly
-    %b 30x
-    sometimes
-    %b 100x
 %section#start
   %h2 2013: PI
   %p pi becomes an arduino
@@ -100,25 +89,43 @@
     sometimes
     %b 100x
 %section#start2
-  %p Start 2014 at Frozen ruby
+  %p Start 2014 at Frozen rails
   %p.fragment started vm mindset
   %p.fragment main descisions
   %p.fragment good progress
+
+%section#descision
+  %h2 Early descisions
+  %p OO calling
+  %p memory design: cache size
+  %p kernel calling
+  %p microkernel
+
 %section#no_vm
   %h2 Beginning
   %p learn arm
   %p check llvm and others
   %p 6 classes assembler
   %p 3 classes binary creation
-  %p binaries easy, 1 month
+  %p static binaries easy, 1 month
 %section#calling
   %h2 Calling convention
   %p
     C or
     %span.red  no C
   %p object oriented
-  %p named fields
+  %p named fields / instance vars
   %p simple, not too slow
+  %p
+    kernel calling much simpler:
+    %span.red  no libc
+
+%section#control
+  %h2 Control Structures
+  %p if / while / return
+  %p risc / meta arm
+  %p straight to risc
+  %p relatively easy
 
 %section#sending
   %h2 Dynamic calling
@@ -126,7 +133,7 @@
   %p many failed ideas
   %p "years" of trying
   %h3 decent layers
-  
+
 %section#demo
   %h2
     Demo of

@@ -1,9 +1,4 @@
 %section#next
-  %h2 Plans for RubyX
-  %h2 What can you do
-  %h2 Impact on community
-
-%section#next
   %h2 My next Plans
   %p Benchmarks
   %p Bootstrapping
@@ -12,36 +7,37 @@
 %section#bench
   %h2 Benchmarks
   %p Micro with mixed results
-  %p.fragment Integer ops slightly slower
-  %p.fragment Calling 2x faster
-  %p.fragment Puts faster than c
+  %p Integer ops slightly slower
+  %p Calling 2x slower
+  %p Puts faster than C
 
 %section#bench_conclusion
   %h2 Conclusion from Benchmarks
   %p Bigger benchmarks, more functionality
-  %p.fragment Profiling
-  %p.fragment Macros
-  %p.fragment Inlining
+  %p Profiling
+  %p Macros / better design
+  %p Inlining
 
 %section#better_parf
   %h2 Better Parfait
   %p Integrate existing tests
-  %p.fragment Complement existing classes
-  %p.fragment More classes
-  %p.fragment Optimize
-
-%section#better_parf
-  %h2 Bootstrap
-  %p Compile ruby-x with rubyxc
-  %p.fragment Improving compiler
-  %p.fragment Figure out metacode
-  %p.fragment Integrate ruby spec
+  %p Complement existing classes
+  %p More classes
+  %p Optimize
 
 %section#you
   %h2 Things you can do
   %p Spread the word
-  %p Learn
+  %p Try / learn
   %p Participate
+
+%section#try
+  %h2 Try
+  %p clone https://github.com/ruby-x/rubyx
+  %p bundle
+  %p ruby test/test_all.rb
+  %p ./bin/rubyxc compile/interpret/execute
+  %p compile test/mains/source/10_add__4.rb
 
 %section#participate
   %h2 Participate
@@ -50,12 +46,19 @@
   %p.fragment no pressure
 
 %section#topics
-  %h2 Topics
-  %p.fragment assemblers (architectures)
-  %p.fragment Register allocation
-  %p.fragment digital trees (judy)
-  %p.fragment lock free synchronisation (Dr Cliff)
-  %p.fragment stdlib , pi project , gc , . . . . .
+  %h2 Topics, easy
+  %p String methods
+  %p.fragment other Parfait
+  %p.fragment negative tests
+  %p.fragment error handling
+
+%section#topics
+  %h2 Topics, medium
+  %p break / next
+  %p.fragment switch
+  %p.fragment assembler (eg intel)
+  %p.fragment stdlib (File ?)
+  %p.fragment exception
 
 %section#community
   %h2 Impact on community
@@ -71,3 +74,10 @@
   %p.fragment better gc, better hash
   %p.fragment good thrive etc
   %p.fragment best results when not controlled
+
+%section#community2
+  %h2 Community's ruby
+  %p For and BY the community
+  %p.fragment very pro open source
+  %p.fragment democratic open source
+  %p.fragment everybody must be heard
