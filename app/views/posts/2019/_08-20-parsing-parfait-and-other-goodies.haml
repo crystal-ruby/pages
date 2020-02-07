@@ -29,10 +29,10 @@
 %p
   The overall design has been like in the picture below for a while already.
   Alas, the implementation of this architecture was slightly lacking.
-  To be precise, when mom code was generated, it was immediately converted to risc.
-  In other words the layer existed only conceptually, or in transit.
+  To be precise, when SlotMachine code was generated, it was immediately converted to risc.
+  In other words the layer existed only conceptually, or in transit. (Also it was called mom)
 %p.center.three_width
-  = image_tag "architecture.png" ,  alt: "Architectural layers"
+  = image_tag "architecture.jpg" ,  alt: "Architectural layers"
 %p
   Now the code works
   %em exactly
@@ -145,24 +145,25 @@
   This all stemmed from a misunderstanding, or lack of understanding: Blocks, or should
   i say Lambdas, are constants. Just like a string or integer. They are created once at
   compile time and can not change identity. In fact Methods and Classes are also contants,
-  and i reflected this in the Vool level by calling them Expressions, instead of
+  and i reflected this in the SOL level by calling them Expressions, instead of
   before Statements.
 %p
   So now the Lambda Expression is created and just added as an argument to the send.
   Compiling the Lambda is triggered by the constant creation, ie the step down from
-  vool to mom, and the block compiler added to method compiler automatically.
+  SOL to SlotMachine, and the block compiler added to method compiler automatically.
 
-%h3 Vool coming into focus
+%h3 SOL coming into focus
 %p
-  I've been saying ruby without the fluff, to descibe vool. And while that is true,
-  it is quite vague. Two major things have become clear about vool through the work above.
+  I've been saying ruby without the fluff, to descibe SOL (Previously vool). And while
+  that is true,
+  it is quite vague. Two major things have become clear about SOL through the work above.
 %p
-  Firstly, Vool has no complex or recursive send statements. Arguments must be variables or
+  Firstly, SOL has no complex or recursive send statements. Arguments must be variables or
   constants. Calls are executed before and assigned to a temporary variable. In effect
   recursive calls are flattened into a list, and as such the calling does not rely on a
   stack as in ruby.
 %p
-  Secondly, Vool distinguishes between expressions and statements. Like other lower level
+  Secondly, SOL distinguishes between expressions and statements. Like other lower level
   languages, but not ruby. As a rule of thumb, Statements do things, Expression are things.
   In other words, only expressions have value, statements (like if or while) do not.
 
@@ -172,8 +173,8 @@
 %p
   The Calling can do with work and i noticed two mistakes i did. One is that creating
   a new message for every call is unneccessarily complicated. It is only in the
-  special case that a Proc is created that the return sequence (a mom instruction) needs
-  to keep the message alive.
+  special case that a Proc is created that the return sequence (a SlotMachine instruction)
+  needs to keep the message alive.
 %p
   The other is that having arguments and local variables as seperate arrays may be handy
   and easy to code. But it does add an extra indirection for every access _and_ store.
@@ -187,23 +188,24 @@
   enough to figure out wether an int is passed down. If not loops can be made to
   destructively change the int.
 
-%h4 Mom instruction invocation
+%h4 SlotMachine instruction invocation
 %p
   I have this idea of being able to code more stuff higher up. To make that more
-  efficient i am thinking of macros or instruction invocation at the vool level.
+  efficient i am thinking of macros or instruction invocation at the SOL level.
   Only inside Parfait off course. The basic idea would be to save the call/return
-  code, and have the compiler map eg X.return_jump to the Mom::ReturnJump Instruction. "Just" have
-  to figure out the passing semantics, or how that integrates into the vool code.
+  code, and have the compiler map eg X.return_jump to the Mom::ReturnJump Instruction.
+  "Just" have to figure out the passing semantics, or how that integrates into the SOL code.
 
 %h4 Better Builtin
 %p
   The generation of the current builtin methods has always bothered me a bit.
   It is true that some things just can not be expressed as ruby and so some
-  alternative mechanism is needed (even in c one can embed assembler).
+  alternative mechanism is needed (even in c one can/must embed assembler).
 %p
   The main problem i have is that those methods don't check their arguments and as such
   may cause core dumps. So they are too high level and hopefully all we really need is
-  that previous idea of being able to integrate Mom code into vool. As Mom is extensible
+  that previous idea of being able to integrate SlotMachine code into SOL. As SlotMachine
+  is extensible
   that should take care of any possible need. And we could code the methods normally as
   part of Parfait, make them safe, and just use the lower level inside them. Lets see!
 
@@ -213,7 +215,7 @@
   parse the tests too, and run them as a test for both Prfait and the compiler.
   Off course this will involve writing some mini version of minitest that the compiler
   can actually handle (Why do i have the feeling that the real minitest involves too much
-  mmagic).
+  magic).
 
 %h4 GrillRB conference
 %p
@@ -221,3 +223,6 @@
   =ext_link "Wrocław" , "https://grillrb.com/"
   in about a week. The plan is to make a comparison with rails and focus on the
   possibilities, rather than technical detail. See you there :-)
+%p
+  PS: Talk is now online
+  =link_to "here." , "/slides/grillrb"
