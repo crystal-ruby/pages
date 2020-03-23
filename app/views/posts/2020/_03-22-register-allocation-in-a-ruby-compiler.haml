@@ -2,7 +2,7 @@
   I had put off proper register allocation until now, and somehow the 100 commits
   it took verfies that i wasn't completely wrong. I think there are quite a
   few differences to the normal problem and solution, to warrant an explanation,
-  so here it goes: How RubyX does Static Single Assignent and Register Allocation
+  so here it goes: How RubyX does Static Single Assignment and Register Allocation
   in a ruby compiler.
 
 %h2 Simple register allocation, the old way
@@ -20,11 +20,11 @@
   through to r15.
 %p
   Early on i made two decisions, the current Message object would live in r0. This was
-  one constant hardcoded throughout. The other descision was to design Slot level
+  one constant hardcoded throughout. The other decision was to design Slot level
   instructions such, that each instruction had use of all registers. To use registers
   i implemented a simple stack, but that was reset after every Slot level instruction.
 
-%h2 Motiviation for change
+%h2 Motivation for change
 %p
   There are two major problems with the simple solution outlined above. The first is
   that it is sub-optimal now, the second that it is restrictive in the future.
@@ -40,7 +40,7 @@
   register assumptions being made, but there were implicit, ie could not be checked
   and would only show up if broken.
 %p
-  But the real motiviation for this work came from the future, or the lack of
+  But the real motivation for this work came from the future, or the lack of
   expandability with this approach. Basically i found from benchmarking that inlining
   would have to happen quite soon. Even it would
   %em only
@@ -51,9 +51,7 @@
   was a thing.
 
 %h2 SSA and Register Allocation
-.container
-  %p.full_width
-    =image_tag "register_alloc.png"
+
 %p
   So then we come to the way that it is coded now. The basic idea (followed by most
   compilers) is to assign new names for every new usage of a register. I'll talk
@@ -64,18 +62,18 @@
 %h3 Static Single Assignment
 %p
   A
-  =ext_link "Static Single Assignent form" , "https://en.wikipedia.org/wiki/Static_single_assignment_form"
+  =ext_link "Static Single Assignment form" , "https://en.wikipedia.org/wiki/Static_single_assignment_form"
   of the Instructions is one where every register
   name is assigned only once. Hence the
   %em Single
-  Assignent. The static part means that this single assignment is only true for a static
+  Assignment. The static part means that this single assignment is only true for a static
   analysis, so at run time the code may assign many times.
   But it would be the
   %em same
-  code doing several assignemnts.
+  code doing several assignments.
 %p
   SSA is often achieved by first naming registers according to the variables they hold,
-  and to derive subsequent names by increasing an subsript index. This did not sound
+  and to derive subsequent names by increasing an subscript index. This did not sound
   very fitting. For one, RubyX does not really have "floating" variables (that later
   may get popped on some stack), rather every variable is an instance variable.
   Assigning to a variable does not create a new register value, but needs to be stored
@@ -120,7 +118,7 @@
   ensure that different branches of an
   %b if
   produce the same registers, or the same
-  registers are meaningfully filled after the merge of an
+  registers are meaningfuly filled after the merge of an
   %b if.
   My hope is that the ruby variable argument from above gets us out of that, and for some
   risc functions i added some transfers to ensure things work as they should.
@@ -147,18 +145,18 @@
   %b inlining
   is high up, that's for sure.
 %p
-  But also there is something called escape analysis. This essentially means reclaming
+  But also there is something called escape analysis. This essentially means reclaiming
   objects that are created in a method, but never get passed out. A sort of immediate GC,
   thus not only saving on GC time, but also on allocation. Mostly though it would
   allow to run larger benchmarks, because there is no GC, and integers get created
-  a lot before a meaningfull number of milliseconds has elapsed.
+  a lot before a meaningful number of milliseconds has elapsed.
 %p
   On the register front, some low hanging fruits are redundant transfer elimination and
   double load elimination. Since methods have not grown to exhaust registers,
   unloading register  is undone and thus is looming. Which brings with it code cost
   analysis. So much more fun to be had!!
 %p
-  I am happy to annoounce that RubyX is part of
+  I am happy to announce that RubyX is part of
   =ext_link "Rails Girls Summer of Code" , "https://railsgirlssummerofcode.org/"
   and some interest is being show. Since i have enjoyed my last RGSoC summer,
   i am looking forward to some mentoring, and outside participation.
