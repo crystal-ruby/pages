@@ -27,23 +27,26 @@
 %h2 Motiviation for change
 %p
   There are two major problems with the simple solution outlined above. The first is
-  sub-optimal now, the second restrictive in the future.
+  that it is sub-optimal now, the second that it is restrictive in the future.
 %p
   The current problem, is actually many-fold. There is the obvious difficulty of keeping
-  track of registers as they are used and returned. While i thought that that the by hand
-  approach was not too bad, after finishing i checked the automatic way uses only half the
-  aamount of registers. This is nevertheless peanuts compared to the second problem,
-  which means that the code is forever locked into a subset of the SlotMachine, ie
-  no optimisations can be done across SlotMachine Instruction borders. That is quite
-  serious, and sort of biids in with the third problem. Namely there were some implicit
+  track of registers as they are used and returned. While i thought that the
+  %i by hand
+  approach was not too bad, after finishing this work, i checked the automatic way uses
+  only half the amount of registers. This is nevertheless peanuts compared to the second
+  problem, which means that the code is forever locked into a subset of the SlotMachine,
+  ie no optimisations can be done across SlotMachine Instruction borders. That is quite
+  serious, and sort of binds in with the third problem. Namely there were some implicit
   register assumptions being made, but there were implicit, ie could not be checked
   and would only show up if broken.
 %p
   But the real motiviation for this work came from the future, or the lack of
   expandability with this approach. Basically i found from benchmarking that inlining
-  would have to happen quite soon. Even it would *only* be with more Macros at first.
+  would have to happen quite soon. Even it would
+  %em only
+  be with more Macros at first.
   Inlining with this super simple allocation would not only be super hard, but also
-  much less efficient than could be. After all there are 10+ registers than one can
+  much less efficient than could be. After all there are 10+ registers that one can
   keep things in, thus avoiding reloading, and i already noticed constant loading
   was a thing.
 
@@ -54,7 +57,7 @@
 %p
   So then we come to the way that it is coded now. The basic idea (followed by most
   compilers) is to assign new names for every new usage of a register. I'll talk
-  about that first, then the second step is something called liveliness analysis,
+  about that first. Then the second step is something called liveliness analysis;
   basically determining when register are not used anymore, and the third is the
   allocation.
 
@@ -63,54 +66,64 @@
   A
   =ext_link "Static Single Assignent form" , "https://en.wikipedia.org/wiki/Static_single_assignment_form"
   of the Instructions is one where every register
-  name is assigned only once. Hence the Single Assignent. The static part means that
-  this single sssignment is only true for a static analysis, so at run time the code
-  may assign many times. But it would be the **same** code doing several assignemnts.
+  name is assigned only once. Hence the
+  %em Single
+  Assignent. The static part means that this single assignment is only true for a static
+  analysis, so at run time the code may assign many times.
+  But it would be the
+  %em same
+  code doing several assignemnts.
 %p
   SSA is often achieved by first naming registers according to the variables they hold,
   and to derive subsequent names by increasing an subsript index. This did not sound
   very fitting. For one, RubyX does not really have "floating" variables (that later
   may get popped on some stack), rather every variable is an instance variable.
   Assigning to a variable does not create a new register value, but needs to be stored
-  in memory. In a concurrent environment it is not save to bypass that.
+  in memory. In a concurrent environment it is not safe to bypass that.
 %p
-  New variables may be created by "traversing" into a instane of the object (if type is
+  New variables may be created by "traversing" into a instance of the object (if type is
   known off course). This lead to a dot syntax naming convention, where almost every
-  variable starts off from *message* or as a constant, eg "message.return_value". This
+  variable starts off from
+  %b message
+  or as a constant, eg "message.return_value". This
   is as "single" as we need it to be (i think), and implementing this naming scheme
-  was about half the work.
+  was about half the work (more than half of that in tests, where register names
+  were and are checked).
 %p
-  The great benefit from this renaming of registers is that even the risc code is still
-  quite readable, which is great for both debugging and tests. This is because
-  the registers now have meaningful name (instance variable names), and it is always
-  clear where it came from.
+  The great benefit from this renaming of registers is that even the risc code is now
+  quite readable, which is great for debugging and tests. This is because
+  the registers now have meaningful names (instance variable names), and it is always
+  clear what a register is used for.
 
 %h3 Liveliness
 %p
-  the next big step was to determine liveliness of registers. This is something i have not
+  The next big step was to determine liveliness of registers. This is something i have not
   found good literature on, and in documents about Register Allocation it is often
   taken as the starting point.
 %p
   Basic reasoning lead me to believe that a simple backward scan is at least a safe
   estimate. If you imagine going trough the list of instructions and marking the
-  first occurence of ay register (name) use. By going backwards through the list
-  you thus get the last useage, and that is the point where we can recycle that
+  first occurence of any register use. By going backwards through the list
+  you thus get the last usage, and that is the point where we can recycle that
   register.
 %p
-  I spent some time trying to figure ot if backward branches changes the fact that
+  I spent some time trying to figure out if backward branches changes the fact that
   you can release the register, but could not come to a conclusion (brain melt
   every time i tried). Intuitively i think that you can, because on the first
-  run through such a loop you could not use results from a register that because of
-  the ssa would have had to be created later, but there you go. Even rereading that
+  run through such a loop you could not use results from a register that, because of
+  the ssa, would have had to be created later, but there you go. Even rereading that
   hurts. My final argument was that a backward jump is a while loop, and a ruby
-  while loop would have to store it's data in ruby variables and not new registers
+  while loop would have to store its data in ruby variables and not new registers,
   or so i hope).
 %p
-  I did read about phi nodes in ssa's and i did not implement that. Phi nodes are a way to
-  ensure that different brnaches of an if produce the same registers, or the same
-  registers are meaningfully filled after the merge of an if. My hope is
-  that the ruby variable argument gets us out of that, and for some risc function
-  i added some transfers to ensure things work as they should.
+  I did read about phi nodes in ssa and i did not implement that. Phi nodes are a way to
+  ensure that different branches of an
+  %b if
+  produce the same registers, or the same
+  registers are meaningfully filled after the merge of an
+  %b if.
+  My hope is that the ruby variable argument from above gets us out of that, and for some
+  risc functions i added some transfers to ensure things work as they should.
 
 %h3 Register Allocation
 %p
@@ -124,23 +137,28 @@
   order. But because of the liveliness analysis, we can release registers after their
   last use, and reuse them immediately off course. I noticed that this results in
   surprisingly many registers being used only for a single instruction.
-  And the total number of registers used went **down by half**.
+  And the total number of registers used went
+  %b down by half.
 
 %h2 The future
 %p
   As i said that this was mostly for the future, what is the future going to hold?
+  Well,
+  %b inlining
+  is high up, that's for sure.
 %p
-  Well, **inlining** is number one, that's for sure.
-%p
-  But also there is something called escape analysis. This basically means reclaming
-  objects that get created in a method, but never passed out. A sort of immediate GC,
+  But also there is something called escape analysis. This essentially means reclaming
+  objects that are created in a method, but never get passed out. A sort of immediate GC,
   thus not only saving on GC time, but also on allocation. Mostly though it would
-  allow to run larger benchmarks, because there is no GC and integers get created
+  allow to run larger benchmarks, because there is no GC, and integers get created
   a lot before a meaningfull number of milliseconds has elapsed.
 %p
   On the register front, some low hanging fruits are redundant transfer elimination and
   double load elimination. Since methods have not grown to exhaust registers,
   unloading register  is undone and thus is looming. Which brings with it code cost
-  analysis.
+  analysis. So much more fun to be had!!
 %p
-  So much more fun to be had!!
+  I am happy to annoounce that RubyX is part of
+  =ext_link "Rails Girls Summer of Code" , "https://railsgirlssummerofcode.org/"
+  and some interest is being show. Since i have enjoyed my last RGSoC summer,
+  i am looking forward to some mentoring, and outside participation.

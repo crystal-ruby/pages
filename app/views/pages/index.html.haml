@@ -76,8 +76,8 @@
           =link_to "classes, types" , "/rubyx/parfait.html"
         methods and basic types.
       %li
-        =ext_link "Risc machine abstraction" , "https://github.com/ruby-x/rubyx/tree/master/lib/risc"
-        (includes extensible instruction)
+        =ext_link "Risc machine abstraction" , "/rubyx/layers.html#risc"
+        (with SSA and register allocation)
       %li
         A minimal ARM and ELF implementation to create
         = succeed "." do
@@ -86,10 +86,11 @@
     %p
       But there is still a lot of work, here are some of the next few topics
       %ul
-        %li Dynamic Memory management
-        %li Benchmarks for calling and integer
+        %li Inlining and static memory analysis
         %li Start stdlib with String and files
-      By then we may be in the foothills, but nowhere near even basecamp, let alone there.
+        %li Dynamic Memory management
+      There are also many small things anybody can
+      =ext_link "start with." , "https://github.com/ruby-x/rubyx/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+newbie%22"
   .tripple
     %h2.center Docs
     %p
